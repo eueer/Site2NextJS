@@ -308,59 +308,59 @@ export default function Home() {
       {/* Dynamic Ambient Hero Background (Shader grid + Particle Mesh + Orange Glows) */}
       <HeroBackground />
 
-      {/* Navigation Header */}
-      <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-xl bg-black/60">
-        <div className="mx-auto max-w-6xl px-6 h-20 flex items-center justify-between">
+      {/* Floating Navigation Header (Framer-exact framer-1s20bs2-container) */}
+      <div className="fixed top-4 sm:top-5 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl pointer-events-auto">
+        <header className="squircle-pill px-5 sm:px-7 py-3 sm:py-3.5 bg-black/40 backdrop-blur-2xl border border-white/10 shadow-2xl flex items-center justify-between transition-all">
           <div className="flex items-center gap-3">
-            <SiteLogo className="w-8 h-8" />
-            <div className="flex items-center gap-2.5">
-              <span className="font-sans font-semibold text-2xl tracking-tight text-white">
+            <SiteLogo className="w-7 h-7 sm:w-8 sm:h-8" />
+            <div className="flex items-center gap-2">
+              <span className="font-sans font-semibold text-lg sm:text-xl tracking-tight text-white">
                 Site2NextJS
               </span>
-              <span className="squircle-pill px-2.5 py-0.5 text-[11px] font-medium bg-[#F65023]/15 text-[#F65023] border border-[#F65023]/30">
+              <span className="hidden sm:inline-flex squircle-pill px-2 py-0.5 text-[10px] font-medium bg-[#F65023]/15 text-[#F65023] border border-[#F65023]/30">
                 Universal Parity
               </span>
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-8 text-sm text-white/70 font-medium">
-            <a href="#how-it-works" className="hover:text-[#F65023] transition-colors">
+          <nav className="hidden md:flex items-center gap-7 text-xs sm:text-sm text-white/70 font-medium">
+            <a href="#how-it-works" className="hover:text-white transition-colors">
               How it works
             </a>
-            <a href="#about" className="hover:text-[#F65023] transition-colors">
+            <a href="#about" className="hover:text-white transition-colors">
               About
             </a>
-            <a href="#architecture" className="hover:text-[#F65023] transition-colors">
+            <a href="#architecture" className="hover:text-white transition-colors">
               Architecture
             </a>
-            <a href="#faq" className="hover:text-[#F65023] transition-colors">
+            <a href="#faq" className="hover:text-white transition-colors">
               FAQ
             </a>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <a
               href="https://github.com/surajkale/framer2nextjs"
               target="_blank"
               rel="noopener noreferrer"
-              className="squircle-pill inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold bg-white/[0.08] border border-white/10 text-white/90 hover:text-white hover:border-[#F65023]/50 transition-all"
+              className="squircle-pill inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 text-xs font-semibold bg-white/[0.08] border border-white/10 text-white/90 hover:text-white hover:border-[#F65023]/50 transition-all"
             >
-              <HugeiconsIcon icon={GithubIcon} size={15} />
-              <span>GitHub</span>
+              <HugeiconsIcon icon={GithubIcon} size={14} />
+              <span className="hidden sm:inline">GitHub</span>
             </a>
             <a
               href="#converter"
-              className="squircle-pill inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-[#F65023] hover:bg-[#e04318] text-white shadow-lg shadow-[#F65023]/25 transition-all"
+              className="squircle-pill inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs font-semibold bg-[#F65023] hover:bg-[#e04318] text-white shadow-lg shadow-[#F65023]/25 transition-all"
             >
               <span>Convert Site</span>
-              <HugeiconsIcon icon={ArrowRight01Icon} size={14} />
+              <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
             </a>
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
 
       {/* Main Container */}
-      <main className="relative z-10 flex-1 mx-auto max-w-6xl px-6 pt-16 pb-28 w-full">
+      <main className="relative z-10 flex-1 mx-auto max-w-6xl px-6 pt-28 sm:pt-32 pb-28 w-full">
         {/* Hero Section */}
         <section id="converter" className="text-center max-w-3xl mx-auto mb-10">
           {/* H1 Heading ONLY uses Geist Pixel */}
