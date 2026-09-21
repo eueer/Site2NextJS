@@ -1,33 +1,34 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Globe,
-  ArrowRight,
-  Download,
-  Github,
-  CheckCircle2,
-  Sparkles,
-  Layers,
-  Zap,
-  ShieldCheck,
-  Smartphone,
-  Tablet,
-  Monitor,
-  ExternalLink,
-  ChevronDown,
-  ChevronUp,
-  RefreshCw,
-  AlertCircle,
-  Code2,
-  Sliders,
-  Copy,
-  Check,
-  FileCode,
-  Gauge,
-  Lock,
-} from "lucide-react";
-import { SiteLogo, SparkleIcon } from "@/components/SiteLogo";
+  Globe02Icon,
+  ArrowRight01Icon,
+  AiSparklesIcon,
+  Settings02Icon,
+  RefreshIcon,
+  CheckmarkCircle02Icon,
+  Tick02Icon,
+  AlertCircleIcon,
+  Download01Icon,
+  GithubIcon,
+  ComputerIcon,
+  Tablet01Icon,
+  SmartPhone01Icon,
+  Layers01Icon,
+  FlashIcon,
+  SecurityCheckIcon,
+  DashboardSpeed01Icon,
+  LockIcon,
+  ArrowDown01Icon,
+  ArrowUp01Icon,
+  Copy01Icon,
+  CodeIcon,
+  LinkSquare01Icon,
+} from "@hugeicons/core-free-icons";
+import { SiteLogo } from "@/components/SiteLogo";
+import { HeroBackground } from "@/components/HeroBackground";
 
 interface StatItem {
   label: string;
@@ -304,19 +305,16 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-[#000000] text-slate-100 flex flex-col font-sans selection:bg-[#F65023] selection:text-white">
-      {/* Framer-inspired ambient top glowing rays */}
-      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[700px] overflow-hidden opacity-40">
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-[#F65023]/20 blur-[130px]" />
-        <div className="absolute top-10 left-1/3 w-[350px] h-[350px] rounded-full bg-[#F65023]/10 blur-[100px]" />
-      </div>
+      {/* Dynamic Ambient Hero Background (Shader grid + Particle Mesh + Orange Glows) */}
+      <HeroBackground />
 
       {/* Navigation Header */}
-      <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-xl bg-black/70">
-        <div className="mx-auto max-w-6xl px-6 h-18 flex items-center justify-between">
+      <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-xl bg-black/60">
+        <div className="mx-auto max-w-6xl px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <SiteLogo className="w-8 h-8" />
             <div className="flex items-center gap-2.5">
-              <span className="font-pixel text-xl font-bold tracking-tight text-white">
+              <span className="font-sans font-semibold text-2xl tracking-tight text-white">
                 Site2NextJS
               </span>
               <span className="squircle-pill px-2.5 py-0.5 text-[11px] font-medium bg-[#F65023]/15 text-[#F65023] border border-[#F65023]/30">
@@ -325,7 +323,7 @@ export default function Home() {
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-8 text-sm text-slate-300 font-medium">
+          <nav className="hidden md:flex items-center gap-8 text-sm text-white/70 font-medium">
             <a href="#how-it-works" className="hover:text-[#F65023] transition-colors">
               How it works
             </a>
@@ -345,9 +343,9 @@ export default function Home() {
               href="https://github.com/surajkale/framer2nextjs"
               target="_blank"
               rel="noopener noreferrer"
-              className="squircle-pill inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold bg-[#1a1a1a] border border-white/10 text-slate-200 hover:text-white hover:border-[#F65023]/40 transition-all"
+              className="squircle-pill inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold bg-white/[0.08] border border-white/10 text-white/90 hover:text-white hover:border-[#F65023]/50 transition-all"
             >
-              <Github className="w-3.5 h-3.5 text-slate-300" />
+              <HugeiconsIcon icon={GithubIcon} size={15} />
               <span>GitHub</span>
             </a>
             <a
@@ -355,7 +353,7 @@ export default function Home() {
               className="squircle-pill inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-[#F65023] hover:bg-[#e04318] text-white shadow-lg shadow-[#F65023]/25 transition-all"
             >
               <span>Convert Site</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <HugeiconsIcon icon={ArrowRight01Icon} size={14} />
             </a>
           </div>
         </div>
@@ -364,13 +362,14 @@ export default function Home() {
       {/* Main Container */}
       <main className="relative z-10 flex-1 mx-auto max-w-6xl px-6 pt-16 pb-28 w-full">
         {/* Hero Section */}
-        <section id="converter" className="text-center max-w-3xl mx-auto mb-12">
+        <section id="converter" className="text-center max-w-3xl mx-auto mb-10">
           {/* Section Tag */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-[#1a1a1a] border border-white/10 text-xs font-medium text-slate-300 mb-6 shadow-sm">
-            <SparkleIcon className="w-3.5 h-3.5 text-[#F65023]" />
-            <span>Universal Site Conversion • 100% Fidelity</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-white/[0.08] border border-white/10 text-xs font-medium text-white/80 mb-6 shadow-sm backdrop-blur-md">
+            <HugeiconsIcon icon={AiSparklesIcon} size={14} className="text-[#F65023]" />
+            <span>Automated Growth Systems</span>
           </div>
 
+          {/* H1 Heading ONLY uses Geist Pixel */}
           <h1 className="font-pixel text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.12] text-white">
             Convert any website to{" "}
             <span className="text-[#F65023]">
@@ -378,57 +377,65 @@ export default function Home() {
             </span>
           </h1>
 
-          <p className="mt-5 text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-5 text-base sm:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed font-sans">
             Transform Framer, Webflow, or static sites into optimized Next.js App Router codebases
             with preserved animations and 0 monthly fees.
           </p>
         </section>
 
-        {/* Hero Prompt Card Input Container (Framer Gp1HwNMZ3 style) */}
-        <div className="max-w-2xl mx-auto">
+        {/* Framer-exact Prompt Box Container (framer-dw6nb0 style) */}
+        <div className="max-w-[550px] mx-auto">
           <form
             onSubmit={handleConvert}
-            className="p-3 squircle-2xl bg-[#1a1a1a] border border-white/10 shadow-2xl focus-within:border-[#F65023]/60 focus-within:ring-2 focus-within:ring-[#F65023]/20 transition-all"
+            className="p-3 sm:p-3.5 squircle-2xl bg-white/[0.08] backdrop-blur-2xl border border-white/10 shadow-2xl flex flex-col justify-between gap-14 sm:gap-20 transition-all focus-within:border-[#F65023]/60 focus-within:ring-2 focus-within:ring-[#F65023]/20"
           >
-            {/* Top URL Input Row */}
-            <div className="relative flex items-center px-3 py-2">
-              <Globe className="w-5 h-5 text-slate-400 shrink-0 mr-3" />
-              <input
-                type="text"
+            {/* Top Prompt Input Area */}
+            <div className="flex items-start gap-2.5 pt-1 px-1">
+              <HugeiconsIcon icon={Globe02Icon} size={17} className="text-white/40 shrink-0 mt-1" />
+              <textarea
+                rows={2}
                 placeholder="Enter Site URL (e.g. https://portfolio.framer.website or https://example.com)"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleConvert(e);
+                  }
+                }}
                 disabled={loading}
-                className="w-full bg-transparent border-0 p-0 text-slate-100 placeholder:text-slate-500 text-sm focus:outline-none focus:ring-0"
+                className="w-full bg-transparent border-0 p-0 text-white placeholder:text-white/40 text-sm font-sans resize-none focus:outline-none focus:ring-0 leading-relaxed"
               />
             </div>
 
-            {/* Bottom Action Row */}
-            <div className="flex items-center justify-between pt-3 mt-2 border-t border-white/5">
+            {/* Bottom Action Menu Row */}
+            <div className="flex items-center justify-between pt-1">
+              {/* Left: Advanced Settings Pill Toggle */}
               <button
                 type="button"
                 onClick={() => setShowOptions(!showOptions)}
-                className="squircle-pill inline-flex items-center gap-1.5 px-3 py-1.5 text-xs text-slate-400 hover:text-white bg-black/40 border border-white/5 hover:border-white/15 transition-all"
+                className="squircle-pill inline-flex items-center gap-1.5 px-3 py-1.5 text-xs text-white/80 hover:text-white bg-white/[0.08] hover:bg-white/[0.14] border border-white/10 transition-all font-sans"
               >
-                <Sliders className="w-3.5 h-3.5 text-[#F65023]" />
+                <HugeiconsIcon icon={Settings02Icon} size={13} className="text-white" />
                 <span>Advanced Settings</span>
-                {showOptions ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                <HugeiconsIcon icon={showOptions ? ArrowUp01Icon : ArrowDown01Icon} size={11} className="text-white/60" />
               </button>
 
+              {/* Right: Convert to NextJS Pill Button */}
               <button
                 type="submit"
                 disabled={loading || !url.trim()}
-                className="squircle-pill inline-flex items-center gap-2 px-6 py-2.5 bg-[#F65023] hover:bg-[#e04318] text-white text-xs font-semibold shadow-md shadow-[#F65023]/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="squircle-pill inline-flex items-center gap-1.5 h-[28px] px-3.5 bg-[#F65023] hover:bg-[#e04318] text-white text-xs font-semibold shadow-lg shadow-[#F65023]/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-sans"
               >
                 {loading ? (
                   <>
-                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <HugeiconsIcon icon={RefreshIcon} size={13} className="animate-spin text-white" />
                     <span>Converting...</span>
                   </>
                 ) : (
                   <>
                     <span>Convert to NextJS</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <HugeiconsIcon icon={ArrowRight01Icon} size={13} className="text-white" />
                   </>
                 )}
               </button>
@@ -436,45 +443,45 @@ export default function Home() {
 
             {/* Expandable Advanced Options Panel */}
             {showOptions && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3 pt-3 border-t border-white/5 text-xs text-slate-300">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-white/10 text-xs text-white/80">
                 <div>
-                  <label className="block mb-1.5 font-medium text-slate-400">Max Pages to Crawl</label>
+                  <label className="block mb-1.5 font-medium text-white/60">Max Pages to Crawl</label>
                   <input
                     type="number"
                     min={1}
                     max={40}
                     value={maxPages}
                     onChange={(e) => setMaxPages(e.target.value)}
-                    className="w-full squircle-md bg-black/60 border border-white/10 px-3 py-2 text-slate-200 focus:border-[#F65023] focus:outline-none"
+                    className="w-full squircle-md bg-black/60 border border-white/15 px-3 py-2 text-white focus:border-[#F65023] focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block mb-1.5 font-medium text-slate-400">WebP Image Quality (1-100)</label>
+                  <label className="block mb-1.5 font-medium text-white/60">WebP Image Quality (1-100)</label>
                   <input
                     type="number"
                     min={50}
                     max={100}
                     value={imageQuality}
                     onChange={(e) => setImageQuality(e.target.value)}
-                    className="w-full squircle-md bg-black/60 border border-white/10 px-3 py-2 text-slate-200 focus:border-[#F65023] focus:outline-none"
+                    className="w-full squircle-md bg-black/60 border border-white/15 px-3 py-2 text-white focus:border-[#F65023] focus:outline-none"
                   />
                 </div>
               </div>
             )}
           </form>
 
-          {/* Sub-bullets / pills under input (Framer style) */}
-          <div className="flex flex-wrap items-center justify-center gap-6 mt-4 text-xs text-slate-400">
+          {/* Sub-bullets / pills under input (Framer framer-1493hyp style) */}
+          <div className="flex flex-wrap items-center justify-center gap-5 mt-4 text-xs text-white/70">
             <div className="flex items-center gap-1.5">
-              <SparkleIcon className="w-3 h-3 text-[#F65023]" />
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} className="text-[#F65023]" />
               <span>Works with any site</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <SparkleIcon className="w-3 h-3 text-[#F65023]" />
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} className="text-[#F65023]" />
               <span>100% animation parity</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <SparkleIcon className="w-3 h-3 text-[#F65023]" />
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} className="text-[#F65023]" />
               <span>Zero lock-in</span>
             </div>
           </div>
@@ -482,7 +489,7 @@ export default function Home() {
           {/* Error Alert */}
           {error && (
             <div className="mt-6 p-4 squircle-xl bg-red-950/40 border border-red-900/60 text-red-200 flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+              <HugeiconsIcon icon={AlertCircleIcon} size={18} className="text-red-400 shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-red-300 text-sm">Conversion Error</p>
                 <p className="text-xs text-red-300/90 mt-0.5">{error}</p>
@@ -529,15 +536,15 @@ export default function Home() {
                         ? "text-emerald-400"
                         : isCurrent
                         ? "text-[#F65023] font-medium animate-pulse-subtle"
-                        : "text-slate-600"
+                        : "text-white/40"
                     }`}
                   >
                     {isDone ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <HugeiconsIcon icon={CheckmarkCircle02Icon} size={15} className="text-emerald-400 shrink-0" />
                     ) : isCurrent ? (
-                      <RefreshCw className="w-4 h-4 text-[#F65023] animate-spin shrink-0" />
+                      <HugeiconsIcon icon={RefreshIcon} size={15} className="text-[#F65023] animate-spin shrink-0" />
                     ) : (
-                      <div className="w-4 h-4 squircle-pill border border-slate-700 shrink-0" />
+                      <div className="w-4 h-4 squircle-pill border border-white/20 shrink-0" />
                     )}
                     <span>{text}</span>
                   </div>
@@ -557,14 +564,15 @@ export default function Home() {
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-white/10">
                 <div>
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 squircle-pill text-xs font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 mb-3">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} />
                     <span>{conversionData.platform ? `${conversionData.platform} • ` : ""}Conversion Ready • 100% Parity</span>
                   </div>
-                  <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                  {/* H2 heading using semibold Figtree */}
+                  <h2 className="font-sans font-semibold text-2xl sm:text-3xl text-white tracking-tight">
                     Successfully Generated Next.js Code
                   </h2>
-                  <p className="text-sm text-slate-400 mt-1">
-                    Source: <span className="text-slate-200 font-mono text-xs">{conversionData.sourceUrl}</span> •{" "}
+                  <p className="text-sm text-white/60 mt-1">
+                    Source: <span className="text-white/90 font-mono text-xs">{conversionData.sourceUrl}</span> •{" "}
                     <span className="text-[#F65023] font-medium">{conversionData.fileCount}</span> total project files generated
                   </p>
                 </div>
@@ -575,7 +583,7 @@ export default function Home() {
                     onClick={handleDownload}
                     className="squircle-pill inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#F65023] hover:bg-[#e04318] text-white text-sm font-semibold shadow-lg shadow-[#F65023]/25 transition-all"
                   >
-                    <Download className="w-4 h-4" />
+                    <HugeiconsIcon icon={Download01Icon} size={16} />
                     <span>Download Project (.ZIP)</span>
                   </button>
 
@@ -583,15 +591,15 @@ export default function Home() {
                     onClick={() => setShowGitModal(true)}
                     className="squircle-pill inline-flex items-center justify-center gap-2 px-5 py-3 bg-black/60 border border-white/15 hover:border-[#F65023]/60 text-white text-sm font-medium transition-all"
                   >
-                    <Github className="w-4 h-4" />
+                    <HugeiconsIcon icon={GithubIcon} size={16} />
                     <span>Push to GitHub</span>
                   </button>
 
                   <button
                     onClick={handleReset}
-                    className="squircle-pill inline-flex items-center justify-center gap-1.5 px-4 py-3 text-slate-400 hover:text-white text-xs transition-colors"
+                    className="squircle-pill inline-flex items-center justify-center gap-1.5 px-4 py-3 text-white/60 hover:text-white text-xs transition-colors"
                   >
-                    <RefreshCw className="w-3.5 h-3.5" />
+                    <HugeiconsIcon icon={RefreshIcon} size={13} />
                     <span>Convert Another</span>
                   </button>
                 </div>
@@ -600,15 +608,15 @@ export default function Home() {
               {/* 4 Stats Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
                 <div className="p-5 squircle-2xl bg-black/50 border border-white/5 relative overflow-hidden">
-                  <p className="text-xs text-slate-400">Pages Converted</p>
-                  <p className="font-pixel text-2xl font-bold text-white mt-1">{conversionData.pages.length}</p>
+                  <p className="text-xs text-white/50">Pages Converted</p>
+                  <p className="font-sans font-semibold text-3xl text-white mt-1">{conversionData.pages.length}</p>
                   <p className="text-[11px] text-emerald-400 mt-1">Statically prerendered</p>
                 </div>
 
                 {conversionData.stats.find((s) => s.label === "Image payload") && (
                   <div className="p-5 squircle-2xl bg-black/50 border border-white/5 relative overflow-hidden">
-                    <p className="text-xs text-slate-400">Image Payload</p>
-                    <p className="font-pixel text-2xl font-bold text-[#F65023] mt-1">
+                    <p className="text-xs text-white/50">Image Payload</p>
+                    <p className="font-sans font-semibold text-3xl text-[#F65023] mt-1">
                       {formatBytes(
                         conversionData.stats.find((s) => s.label === "Image payload")?.after || 0
                       )}
@@ -618,27 +626,27 @@ export default function Home() {
                 )}
 
                 <div className="p-5 squircle-2xl bg-black/50 border border-white/5 relative overflow-hidden">
-                  <p className="text-xs text-slate-400">Animations & State</p>
-                  <p className="font-pixel text-2xl font-bold text-emerald-400 mt-1">100%</p>
-                  <p className="text-[11px] text-slate-400 mt-1">Preserved hydration</p>
+                  <p className="text-xs text-white/50">Animations & State</p>
+                  <p className="font-sans font-semibold text-3xl text-emerald-400 mt-1">100%</p>
+                  <p className="text-[11px] text-white/50 mt-1">Preserved hydration</p>
                 </div>
 
                 <div className="p-5 squircle-2xl bg-black/50 border border-white/5 relative overflow-hidden">
-                  <p className="text-xs text-slate-400">Monthly CMS Lock-in</p>
-                  <p className="font-pixel text-2xl font-bold text-[#F65023] mt-1">$0 / mo</p>
-                  <p className="text-[11px] text-slate-400 mt-1">Free Vercel / Netlify</p>
+                  <p className="text-xs text-white/50">Monthly CMS Lock-in</p>
+                  <p className="font-sans font-semibold text-3xl text-[#F65023] mt-1">$0 / mo</p>
+                  <p className="text-[11px] text-white/50 mt-1">Free Vercel / Netlify</p>
                 </div>
               </div>
 
               {/* Optimization Highlights */}
               <div className="mt-6 pt-6 border-t border-white/5">
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
+                <p className="text-xs font-semibold uppercase tracking-wider text-white/50 mb-3">
                   Applied Optimizations
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-white/80">
                   {conversionData.notes.map((note) => (
                     <div key={note} className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#F65023] shrink-0" />
+                      <HugeiconsIcon icon={Tick02Icon} size={14} className="text-[#F65023] shrink-0" />
                       <span>{note}</span>
                     </div>
                   ))}
@@ -650,11 +658,11 @@ export default function Home() {
             <div className="p-6 squircle-3xl bg-[#1a1a1a] border border-white/10 shadow-2xl">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
                 <div>
-                  <h3 className="font-pixel text-lg font-bold text-white flex items-center gap-2">
-                    <Monitor className="w-5 h-5 text-[#F65023]" />
+                  <h3 className="font-sans font-semibold text-lg sm:text-xl text-white flex items-center gap-2">
+                    <HugeiconsIcon icon={ComputerIcon} size={20} className="text-[#F65023]" />
                     <span>Live Preview of Converted Next.js Site</span>
                   </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <p className="text-xs text-white/50 mt-0.5">
                     Testing local route handler rendering with all self-hosted assets & animations intact.
                   </p>
                 </div>
@@ -666,10 +674,10 @@ export default function Home() {
                     className={`squircle-pill inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all ${
                       previewDevice === "desktop"
                         ? "bg-[#F65023] text-white shadow-sm"
-                        : "text-slate-400 hover:text-white"
+                        : "text-white/60 hover:text-white"
                     }`}
                   >
-                    <Monitor className="w-3.5 h-3.5" />
+                    <HugeiconsIcon icon={ComputerIcon} size={14} />
                     <span>Desktop</span>
                   </button>
                   <button
@@ -677,10 +685,10 @@ export default function Home() {
                     className={`squircle-pill inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all ${
                       previewDevice === "tablet"
                         ? "bg-[#F65023] text-white shadow-sm"
-                        : "text-slate-400 hover:text-white"
+                        : "text-white/60 hover:text-white"
                     }`}
                   >
-                    <Tablet className="w-3.5 h-3.5" />
+                    <HugeiconsIcon icon={Tablet01Icon} size={14} />
                     <span>Tablet</span>
                   </button>
                   <button
@@ -688,10 +696,10 @@ export default function Home() {
                     className={`squircle-pill inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all ${
                       previewDevice === "mobile"
                         ? "bg-[#F65023] text-white shadow-sm"
-                        : "text-slate-400 hover:text-white"
+                        : "text-white/60 hover:text-white"
                     }`}
                   >
-                    <Smartphone className="w-3.5 h-3.5" />
+                    <HugeiconsIcon icon={SmartPhone01Icon} size={14} />
                     <span>Mobile</span>
                   </button>
                 </div>
@@ -726,8 +734,8 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Pages Column */}
               <div className="p-6 squircle-2xl bg-[#1a1a1a] border border-white/10">
-                <h3 className="font-pixel text-sm font-semibold text-white mb-3 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-[#F65023]" />
+                <h3 className="font-sans font-semibold text-sm text-white mb-3 flex items-center gap-2">
+                  <HugeiconsIcon icon={Layers01Icon} size={16} className="text-[#F65023]" />
                   <span>Converted Routes ({conversionData.pages.length})</span>
                 </h3>
                 <ul className="space-y-1.5 max-h-56 overflow-y-auto pr-2">
@@ -737,7 +745,7 @@ export default function Home() {
                       className="px-3 py-2 squircle-md bg-black/50 border border-white/5 flex items-center justify-between text-xs"
                     >
                       <span className="font-mono text-orange-300">{p.route}</span>
-                      <span className="text-slate-500 font-mono text-[11px]">app{p.route === "/" ? "" : p.route}/route.ts</span>
+                      <span className="text-white/40 font-mono text-[11px]">app{p.route === "/" ? "" : p.route}/route.ts</span>
                     </li>
                   ))}
                 </ul>
@@ -746,25 +754,25 @@ export default function Home() {
               {/* CLI Run instructions */}
               <div className="lg:col-span-2 p-6 squircle-2xl bg-[#1a1a1a] border border-white/10">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-pixel text-sm font-semibold text-white flex items-center gap-2">
-                    <Code2 className="w-4 h-4 text-[#F65023]" />
+                  <h3 className="font-sans font-semibold text-sm text-white flex items-center gap-2">
+                    <HugeiconsIcon icon={CodeIcon} size={16} className="text-[#F65023]" />
                     <span>Run Locally in 3 Steps</span>
                   </h3>
                   <button
                     onClick={() => copyCommand("npm install && npm run dev")}
-                    className="squircle-pill px-3 py-1 bg-black/40 border border-white/10 text-xs text-slate-300 hover:text-[#F65023] flex items-center gap-1.5 transition-colors"
+                    className="squircle-pill px-3 py-1 bg-black/40 border border-white/10 text-xs text-white/70 hover:text-[#F65023] flex items-center gap-1.5 transition-colors"
                   >
-                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copied ? <HugeiconsIcon icon={Tick02Icon} size={13} className="text-emerald-400" /> : <HugeiconsIcon icon={Copy01Icon} size={13} />}
                     <span>{copied ? "Copied" : "Copy commands"}</span>
                   </button>
                 </div>
 
                 <div className="bg-black/70 p-4 squircle-xl border border-white/5 font-mono text-xs text-slate-300 space-y-2">
-                  <p className="text-slate-500"># 1. Unzip and enter the project folder</p>
+                  <p className="text-white/40"># 1. Unzip and enter the project folder</p>
                   <p className="text-[#F65023]">cd my-site-nextjs</p>
-                  <p className="text-slate-500 mt-2"># 2. Install dependencies & run development server</p>
+                  <p className="text-white/40 mt-2"># 2. Install dependencies & run development server</p>
                   <p className="text-[#F65023]">npm install && npm run dev</p>
-                  <p className="text-slate-500 mt-2"># 3. Production build (ready for Vercel/Netlify)</p>
+                  <p className="text-white/40 mt-2"># 3. Production build (ready for Vercel/Netlify)</p>
                   <p className="text-emerald-400">npm run build && npm start</p>
                 </div>
               </div>
@@ -779,13 +787,13 @@ export default function Home() {
               <div className="flex items-center justify-between pb-4 border-b border-white/10">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 squircle-md bg-black/60 flex items-center justify-center text-[#F65023] border border-white/10">
-                    <Github className="w-5 h-5 text-[#F65023]" />
+                    <HugeiconsIcon icon={GithubIcon} size={18} />
                   </div>
-                  <h3 className="font-pixel text-lg font-bold text-white">Push Code to GitHub</h3>
+                  <h3 className="font-sans font-semibold text-lg text-white">Push Code to GitHub</h3>
                 </div>
                 <button
                   onClick={() => setShowGitModal(false)}
-                  className="text-slate-400 hover:text-white text-lg"
+                  className="text-white/60 hover:text-white text-lg"
                 >
                   ✕
                 </button>
@@ -794,10 +802,10 @@ export default function Home() {
               {gitSuccessUrl ? (
                 <div className="py-8 text-center space-y-4">
                   <div className="w-14 h-14 squircle-pill bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-400">
-                    <CheckCircle2 className="w-8 h-8" />
+                    <HugeiconsIcon icon={CheckmarkCircle02Icon} size={32} />
                   </div>
-                  <h4 className="font-pixel text-xl font-bold text-white">Repository Created!</h4>
-                  <p className="text-sm text-slate-400">
+                  <h4 className="font-sans font-semibold text-xl text-white">Repository Created!</h4>
+                  <p className="text-sm text-white/60">
                     All converted Next.js files and assets have been successfully pushed to your GitHub account.
                   </p>
                   <a
@@ -807,13 +815,13 @@ export default function Home() {
                     className="squircle-pill inline-flex items-center gap-2 px-6 py-3 bg-[#F65023] hover:bg-[#e04318] text-white text-sm font-semibold shadow-lg shadow-[#F65023]/25 transition-all"
                   >
                     <span>Open in GitHub</span>
-                    <ExternalLink className="w-4 h-4" />
+                    <HugeiconsIcon icon={LinkSquare01Icon} size={15} />
                   </a>
                 </div>
               ) : (
                 <form onSubmit={handlePushToGithub} className="mt-5 space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    <label className="block text-xs font-semibold text-white/80 mb-1.5">
                       GitHub Personal Access Token
                     </label>
                     <input
@@ -828,9 +836,9 @@ export default function Home() {
                           localStorage.setItem("framer2nextjs_github_token", val.trim());
                         } catch {}
                       }}
-                      className="w-full bg-black/60 border border-white/10 squircle-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-[#F65023] focus:outline-none"
+                      className="w-full bg-black/60 border border-white/10 squircle-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-white/30 focus:border-[#F65023] focus:outline-none"
                     />
-                    <p className="text-[11px] text-slate-500 mt-1">
+                    <p className="text-[11px] text-white/50 mt-1">
                       Needs <code>repo</code> scope.{" "}
                       <a
                         href="https://github.com/settings/tokens/new?scopes=repo&description=Site2NextJS"
@@ -844,7 +852,7 @@ export default function Home() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    <label className="block text-xs font-semibold text-white/80 mb-1.5">
                       Repository Name
                     </label>
                     <input
@@ -852,7 +860,7 @@ export default function Home() {
                       required
                       value={repoName}
                       onChange={(e) => setRepoName(e.target.value)}
-                      className="w-full bg-black/60 border border-white/10 squircle-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-[#F65023] focus:outline-none"
+                      className="w-full bg-black/60 border border-white/10 squircle-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-white/30 focus:border-[#F65023] focus:outline-none"
                     />
                   </div>
 
@@ -864,7 +872,7 @@ export default function Home() {
                       onChange={(e) => setIsPrivate(e.target.checked)}
                       className="rounded bg-black border-white/20 text-[#F65023] focus:ring-[#F65023] accent-[#F65023]"
                     />
-                    <label htmlFor="isPrivate" className="text-xs text-slate-300 cursor-pointer">
+                    <label htmlFor="isPrivate" className="text-xs text-white/80 cursor-pointer">
                       Make repository private
                     </label>
                   </div>
@@ -881,7 +889,7 @@ export default function Home() {
                           }}
                           className="squircle-pill px-3 py-1 bg-[#F65023] hover:bg-[#e04318] text-white text-xs font-medium"
                         >
-                          <RefreshCw className="w-3 h-3 inline mr-1" />
+                          <HugeiconsIcon icon={RefreshIcon} size={12} className="inline mr-1" />
                           <span>Start Fresh Conversion</span>
                         </button>
                       )}
@@ -892,7 +900,7 @@ export default function Home() {
                     <button
                       type="button"
                       onClick={() => setShowGitModal(false)}
-                      className="squircle-pill px-4 py-2 text-xs text-slate-400 hover:text-white"
+                      className="squircle-pill px-4 py-2 text-xs text-white/60 hover:text-white"
                     >
                       Cancel
                     </button>
@@ -903,12 +911,12 @@ export default function Home() {
                     >
                       {gitPushing ? (
                         <>
-                          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                          <HugeiconsIcon icon={RefreshIcon} size={14} className="animate-spin" />
                           <span>Pushing to GitHub...</span>
                         </>
                       ) : (
                         <>
-                          <Github className="w-3.5 h-3.5" />
+                          <HugeiconsIcon icon={GithubIcon} size={15} />
                           <span>Create & Push Repo</span>
                         </>
                       )}
@@ -923,33 +931,34 @@ export default function Home() {
         {/* About / Stats Section (Matching Framer AboutUs & StatsCard style) */}
         <section id="about" className="mt-32 pt-16 border-t border-white/10">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-[#1a1a1a] border border-white/10 text-xs font-medium text-slate-300 mb-4">
-              <SparkleIcon className="w-3.5 h-3.5 text-[#F65023]" />
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-white/[0.08] border border-white/10 text-xs font-medium text-white/80 mb-4 backdrop-blur-md">
+              <HugeiconsIcon icon={AiSparklesIcon} size={14} className="text-[#F65023]" />
               <span>About Site to NextJS</span>
             </div>
-            <h2 className="font-pixel text-3xl sm:text-4xl font-normal text-white">
+            {/* H2 heading using semibold Figtree */}
+            <h2 className="font-sans font-semibold text-3xl sm:text-4xl text-white tracking-tight">
               Engineered for speed, fidelity, and developer freedom
             </h2>
-            <p className="text-slate-400 text-sm mt-3">
+            <p className="text-white/60 text-sm mt-3">
               Why designers, agencies, and engineering teams are migrating their sites to standard Next.js.
             </p>
           </div>
 
-          {/* 4 Stats Cards Grid */}
+          {/* 4 Stats Cards Grid (Matching Framer StatsCard style) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 relative overflow-hidden flex flex-col justify-between group hover:border-[#F65023]/40 transition-all">
               <div className="absolute top-0 right-0 w-36 h-36 bg-[#F65023]/10 rounded-full blur-[45px] pointer-events-none" />
               <div>
-                <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
-                  <SparkleIcon className="w-5 h-5 text-[#F65023]" />
+                <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
+                  <HugeiconsIcon icon={AiSparklesIcon} size={20} className="text-[#F65023]" />
                 </div>
-                <div className="font-pixel text-4xl font-bold text-white mb-2 tracking-tight">
+                <div className="font-sans font-semibold text-4xl text-white mb-2 tracking-tight">
                   10K+
                 </div>
-                <div className="font-medium text-slate-200 text-base mb-2">
+                <div className="font-sans font-semibold text-slate-200 text-base mb-2">
                   Projects Delivered
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-white/60 leading-relaxed font-sans">
                   Developers and agencies worldwide rely on our conversion engine to migrate websites seamlessly.
                 </p>
               </div>
@@ -958,16 +967,16 @@ export default function Home() {
             <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 relative overflow-hidden flex flex-col justify-between group hover:border-[#F65023]/40 transition-all">
               <div className="absolute top-0 right-0 w-36 h-36 bg-[#F65023]/10 rounded-full blur-[45px] pointer-events-none" />
               <div>
-                <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
-                  <Zap className="w-5 h-5 text-[#F65023]" />
+                <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
+                  <HugeiconsIcon icon={FlashIcon} size={20} className="text-[#F65023]" />
                 </div>
-                <div className="font-pixel text-4xl font-bold text-white mb-2 tracking-tight">
+                <div className="font-sans font-semibold text-4xl text-white mb-2 tracking-tight">
                   100%
                 </div>
-                <div className="font-medium text-slate-200 text-base mb-2">
+                <div className="font-sans font-semibold text-slate-200 text-base mb-2">
                   Animation Parity
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-white/60 leading-relaxed font-sans">
                   Preserved React Suspense markers, Framer Motion springs, and responsive layouts automatically.
                 </p>
               </div>
@@ -976,16 +985,16 @@ export default function Home() {
             <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 relative overflow-hidden flex flex-col justify-between group hover:border-[#F65023]/40 transition-all">
               <div className="absolute top-0 right-0 w-36 h-36 bg-[#F65023]/10 rounded-full blur-[45px] pointer-events-none" />
               <div>
-                <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
-                  <Gauge className="w-5 h-5 text-[#F65023]" />
+                <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
+                  <HugeiconsIcon icon={DashboardSpeed01Icon} size={20} className="text-[#F65023]" />
                 </div>
-                <div className="font-pixel text-4xl font-bold text-white mb-2 tracking-tight">
+                <div className="font-sans font-semibold text-4xl text-white mb-2 tracking-tight">
                   70%
                 </div>
-                <div className="font-medium text-slate-200 text-base mb-2">
+                <div className="font-sans font-semibold text-slate-200 text-base mb-2">
                   Payload Reduction
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-white/60 leading-relaxed font-sans">
                   Sharp WebP image re-encoding and self-hosted local fonts completely eliminate layout shift.
                 </p>
               </div>
@@ -994,16 +1003,16 @@ export default function Home() {
             <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 relative overflow-hidden flex flex-col justify-between group hover:border-[#F65023]/40 transition-all">
               <div className="absolute top-0 right-0 w-36 h-36 bg-[#F65023]/10 rounded-full blur-[45px] pointer-events-none" />
               <div>
-                <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
-                  <Lock className="w-5 h-5 text-[#F65023]" />
+                <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
+                  <HugeiconsIcon icon={LockIcon} size={20} className="text-[#F65023]" />
                 </div>
-                <div className="font-pixel text-4xl font-bold text-white mb-2 tracking-tight">
+                <div className="font-sans font-semibold text-4xl text-white mb-2 tracking-tight">
                   $0
                 </div>
-                <div className="font-medium text-slate-200 text-base mb-2">
+                <div className="font-sans font-semibold text-slate-200 text-base mb-2">
                   Monthly CMS Fees
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-white/60 leading-relaxed font-sans">
                   Eliminate recurring per-site subscription fees by deploying free to Vercel, Netlify, or Cloudflare.
                 </p>
               </div>
@@ -1014,25 +1023,27 @@ export default function Home() {
         {/* How It Works / Technical Architecture Section */}
         <section id="architecture" className="mt-32 pt-16 border-t border-white/10">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-[#1a1a1a] border border-white/10 text-xs font-medium text-slate-300 mb-4">
-              <SparkleIcon className="w-3.5 h-3.5 text-[#F65023]" />
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-white/[0.08] border border-white/10 text-xs font-medium text-white/80 mb-4 backdrop-blur-md">
+              <HugeiconsIcon icon={AiSparklesIcon} size={14} className="text-[#F65023]" />
               <span>Architecture & Runtime</span>
             </div>
-            <h2 className="font-pixel text-3xl sm:text-4xl font-normal text-white">
+            {/* H2 heading using semibold Figtree */}
+            <h2 className="font-sans font-semibold text-3xl sm:text-4xl text-white tracking-tight">
               How Site2NextJS Works
             </h2>
-            <p className="text-slate-400 text-sm mt-3">
+            <p className="text-white/60 text-sm mt-3 font-sans">
               The reverse-engineered secret behind 100% animation, hover, and interaction fidelity.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 hover:border-[#F65023]/40 transition-all">
-              <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-5">
-                <Layers className="w-5 h-5 text-[#F65023]" />
+              <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-5">
+                <HugeiconsIcon icon={Layers01Icon} size={20} />
               </div>
-              <h3 className="font-pixel text-lg font-bold text-white mb-2">Preserved Comment Markers</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              {/* H3 heading using semibold Figtree */}
+              <h3 className="font-sans font-semibold text-lg text-white mb-2">Preserved Comment Markers</h3>
+              <p className="text-xs text-white/60 leading-relaxed font-sans">
                 Framer’s runtime relies on React Suspense HTML comment markers (<code>&lt;!--$--&gt;</code>) to hydrate
                 instantly. Converting to raw JSX strips these comments, breaking hydration. Site2NextJS uses App Router
                 Route Handlers to deliver identical markup and instant hydration.
@@ -1040,11 +1051,12 @@ export default function Home() {
             </div>
 
             <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 hover:border-[#F65023]/40 transition-all">
-              <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-5">
-                <Zap className="w-5 h-5 text-[#F65023]" />
+              <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-5">
+                <HugeiconsIcon icon={FlashIcon} size={20} />
               </div>
-              <h3 className="font-pixel text-lg font-bold text-white mb-2">WebP & Font Optimization</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              {/* H3 heading using semibold Figtree */}
+              <h3 className="font-sans font-semibold text-lg text-white mb-2">WebP & Font Optimization</h3>
+              <p className="text-xs text-white/60 leading-relaxed font-sans">
                 All raster images from external CDNs are compressed to modern WebP format using Sharp (cutting payload by up to
                 70%). Web fonts are downloaded to <code>public/assets/fonts/</code> with <code>font-display: swap</code> forced
                 to eliminate layout shift.
@@ -1052,11 +1064,12 @@ export default function Home() {
             </div>
 
             <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 hover:border-[#F65023]/40 transition-all">
-              <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-5">
-                <ShieldCheck className="w-5 h-5 text-[#F65023]" />
+              <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-5">
+                <HugeiconsIcon icon={SecurityCheckIcon} size={20} />
               </div>
-              <h3 className="font-pixel text-lg font-bold text-white mb-2">Zero Monthly Hosting Fees</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              {/* H3 heading using semibold Figtree */}
+              <h3 className="font-sans font-semibold text-lg text-white mb-2">Zero Monthly Hosting Fees</h3>
+              <p className="text-xs text-white/60 leading-relaxed font-sans">
                 No monthly Framer or CMS subscriptions. Statically prerendered App Router outputs can be hosted completely
                 free on Vercel, Netlify, or Cloudflare Pages with zero bandwidth caps and enterprise global edge caching.
               </p>
@@ -1067,14 +1080,15 @@ export default function Home() {
         {/* FAQ Accordion Section (Matching Framer FAQ style) */}
         <section id="faq" className="mt-32 pt-16 border-t border-white/10">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-[#1a1a1a] border border-white/10 text-xs font-medium text-slate-300 mb-4">
-              <SparkleIcon className="w-3.5 h-3.5 text-[#F65023]" />
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-white/[0.08] border border-white/10 text-xs font-medium text-white/80 mb-4 backdrop-blur-md">
+              <HugeiconsIcon icon={AiSparklesIcon} size={14} className="text-[#F65023]" />
               <span>FAQ&apos;s</span>
             </div>
-            <h2 className="font-pixel text-3xl sm:text-4xl font-normal text-white">
+            {/* H2 heading using semibold Figtree */}
+            <h2 className="font-sans font-semibold text-3xl sm:text-4xl text-white tracking-tight">
               Helpful answers for your site conversion needs
             </h2>
-            <p className="text-slate-400 text-sm mt-3">
+            <p className="text-white/60 text-sm mt-3 font-sans">
               Everything you need to know about exporting, animation parity, and hosting.
             </p>
           </div>
@@ -1090,15 +1104,15 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                    className="w-full p-6 text-left flex items-center justify-between text-white hover:text-[#F65023] font-semibold text-base transition-colors"
+                    className="w-full p-6 text-left flex items-center justify-between text-white hover:text-[#F65023] font-semibold text-base transition-colors font-sans"
                   >
                     <span>{item.q}</span>
-                    <span className="ml-4 shrink-0 w-8 h-8 squircle-pill bg-black/50 border border-white/10 flex items-center justify-center text-slate-400">
-                      {isOpen ? <ChevronUp className="w-4 h-4 text-[#F65023]" /> : <ChevronDown className="w-4 h-4" />}
+                    <span className="ml-4 shrink-0 w-8 h-8 squircle-pill bg-white/[0.06] border border-white/10 flex items-center justify-center text-white/70">
+                      <HugeiconsIcon icon={isOpen ? ArrowUp01Icon : ArrowDown01Icon} size={15} className={isOpen ? "text-[#F65023]" : "text-white/70"} />
                     </span>
                   </button>
                   {isOpen && (
-                    <div className="px-6 pb-6 text-sm text-slate-400 leading-relaxed border-t border-white/5 pt-4">
+                    <div className="px-6 pb-6 text-sm text-white/60 leading-relaxed border-t border-white/5 pt-4 font-sans">
                       {item.a}
                     </div>
                   )}
@@ -1114,16 +1128,16 @@ export default function Home() {
         <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
             <SiteLogo className="w-7 h-7" />
-            <span className="font-pixel text-lg font-bold text-white">
+            <span className="font-sans font-semibold text-xl text-white tracking-tight">
               Site2NextJS
             </span>
           </div>
 
-          <p className="text-xs text-slate-400 text-center md:text-left max-w-md">
+          <p className="text-xs text-white/50 text-center md:text-left max-w-md font-sans">
             Universal site converter crafted to transform any website into clean, production-ready Next.js App Router code.
           </p>
 
-          <div className="flex items-center gap-4 text-xs text-slate-500">
+          <div className="flex items-center gap-4 text-xs text-white/50 font-sans">
             <span>© All rights reserved</span>
             <span>•</span>
             <span>
@@ -1132,7 +1146,7 @@ export default function Home() {
                 href="https://x.com/Suraj_kaleux"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-slate-300 hover:text-[#F65023] underline transition-colors"
+                className="text-white hover:text-[#F65023] underline transition-colors"
               >
                 Suraj
               </a>

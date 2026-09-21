@@ -26,6 +26,9 @@ export default function RootLayout({
       lang="en"
       className={`dark ${figtree.variable} ${GeistPixelSquare.variable}`}
     >
+      <head>
+        <link rel="stylesheet" href="https://sets.hugeicons.com/YOUR-SET-ID.css" />
+      </head>
       <body
         className={`${figtree.className} min-h-screen bg-[#000000] text-slate-100 antialiased selection:bg-[#F65023] selection:text-white`}
       >
