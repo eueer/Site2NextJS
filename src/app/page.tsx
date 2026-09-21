@@ -308,9 +308,9 @@ export default function Home() {
       {/* Dynamic Ambient Hero Background (Shader grid + Particle Mesh + Orange Glows) */}
       <HeroBackground />
 
-      {/* Floating Navigation Header (Sleek floating pill) */}
+      {/* Floating Navigation Header (Sleek floating pill with uniform padding on all sides) */}
       <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[1200px] pointer-events-auto">
-        <header className="squircle-pill px-6 sm:px-7 py-3.5 sm:py-4 bg-white/[0.08] backdrop-blur-[30px] border border-white/10 shadow-2xl flex items-center justify-between transition-all">
+        <header className="squircle-pill p-3.5 sm:p-4 bg-white/[0.08] backdrop-blur-[30px] border border-white/10 shadow-2xl flex items-center justify-between transition-all">
           {/* Logo Section */}
           <a href="#" className="flex items-center gap-1.5 cursor-pointer select-none">
             <SiteLogo className="w-7 h-7 sm:w-[30px] sm:h-[30px]" />
