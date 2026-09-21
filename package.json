@@ -1,0 +1,43 @@
+{
+  "name": "framer2nextjs",
+  "version": "1.0.0",
+  "private": true,
+  "bin": {
+    "framer2nextjs": "src/cli.ts"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "tsx test/test-pipeline.mjs"
+  },
+  "dependencies": {
+    "@floating-ui/react": "^0.27.20",
+    "@octokit/rest": "^21.0.2",
+    "@tailgrids/icons": "^2.0.1",
+    "@tailwindcss/postcss": "^4.3.3",
+    "cheerio": "^1.0.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "geist": "^1.7.2",
+    "jszip": "^3.10.1",
+    "lucide-react": "^0.460.0",
+    "next": "14.2.24",
+    "react": "^18.3.1",
+    "react-aria-components": "^1.21.1",
+    "react-dom": "^18.3.1",
+    "sharp": "^0.33.5",
+    "tailwind-merge": "^2.6.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.11",
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.4.5"
+  }
+}
