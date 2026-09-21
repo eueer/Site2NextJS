@@ -308,20 +308,20 @@ export default function Home() {
       {/* Dynamic Ambient Hero Background (Shader grid + Particle Mesh + Orange Glows) */}
       <HeroBackground />
 
-      {/* Floating Navigation Header (Framer-exact framer-1s20bs2-container: top 16px, width 90%, max 1200px) */}
+      {/* Floating Navigation Header (Sleek floating pill) */}
       <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[1200px] pointer-events-auto">
-        <header className="squircle-pill px-6 py-6 bg-white/[0.08] backdrop-blur-[30px] border border-white/10 shadow-2xl flex items-center justify-between transition-all">
-          {/* Logo Section (framer-kbkj1k: gap-1.5, 30px icon, clean typography) */}
+        <header className="squircle-pill px-6 sm:px-7 py-3.5 sm:py-4 bg-white/[0.08] backdrop-blur-[30px] border border-white/10 shadow-2xl flex items-center justify-between transition-all">
+          {/* Logo Section */}
           <a href="#" className="flex items-center gap-1.5 cursor-pointer select-none">
-            <SiteLogo className="w-[30px] h-[30px]" />
-            <span className="font-sans font-medium text-xl sm:text-2xl tracking-tight text-white">
+            <SiteLogo className="w-7 h-7 sm:w-[30px] sm:h-[30px]" />
+            <span className="font-sans font-medium text-lg sm:text-xl tracking-tight text-white">
               Site2NextJS
             </span>
           </a>
 
-          {/* Navigation Links (framer-gpi5w4: gap 28px, links gap 20px) */}
-          <div className="flex items-center gap-7">
-            <nav className="hidden md:flex items-center gap-5 text-[15px] text-white/60 font-medium">
+          {/* Navigation Links */}
+          <div className="flex items-center gap-6 sm:gap-7">
+            <nav className="hidden md:flex items-center gap-5 text-sm text-white/60 font-medium">
               <a href="#how-it-works" className="hover:text-white transition-colors">
                 How it works
               </a>
@@ -345,20 +345,20 @@ export default function Home() {
               </a>
             </nav>
 
-            {/* CTA Button (framer-u7v8j: padding 8px 18px, squircle-pill) */}
+            {/* CTA Button */}
             <a
               href="#converter"
-              className="squircle-pill inline-flex items-center gap-1.5 px-[18px] py-2 text-[15px] font-medium bg-[#F65023] hover:bg-[#e04318] text-white shadow-lg shadow-[#F65023]/25 transition-all"
+              className="squircle-pill inline-flex items-center gap-1.5 px-4 sm:px-[18px] py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-[#F65023] hover:bg-[#e04318] text-white shadow-lg shadow-[#F65023]/25 transition-all"
             >
               <span>Convert Site</span>
-              <HugeiconsIcon icon={ArrowRight01Icon} size={14} />
+              <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
             </a>
           </div>
         </header>
       </div>
 
-      {/* Main Container (Framer-exact hero section padding: 200px 0 142px) */}
-      <main className="relative z-10 flex-1 mx-auto max-w-6xl px-6 pt-44 sm:pt-48 pb-28 w-full">
+      {/* Main Container */}
+      <main className="relative z-10 flex-1 mx-auto max-w-6xl px-6 pt-32 sm:pt-36 pb-28 w-full">
         {/* Hero Section */}
         <section id="converter" className="text-center max-w-3xl mx-auto mb-10">
           {/* H1 Heading ONLY uses Geist Pixel */}
