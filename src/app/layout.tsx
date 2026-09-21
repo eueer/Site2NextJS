@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { Figtree } from "next/font/google";
+import { GeistPixelSquare } from "geist/font/pixel";
 import "./globals.css";
 
+const figtree = Figtree({
+  subsets: ["latin"],
+  variable: "--font-figtree",
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700", "800"],
+});
+
 export const metadata: Metadata = {
-  title: "Framer2NextJS | Convert Framer Sites to 100% Fidelity Next.js",
+  title: "Site2NextJS | Convert Any Site to 100% Fidelity Next.js",
   description:
-    "Convert any published Framer website into a production-ready Next.js project with 100% fidelity, optimized WebP images, self-hosted fonts, and zero vendor lock-in.",
+    "Convert any Framer, Webflow, or public website into a production-ready Next.js project with 100% fidelity, optimized WebP images, self-hosted fonts, and zero vendor lock-in.",
 };
 
 export default function RootLayout({
@@ -15,11 +22,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`dark ${GeistSans.variable} ${GeistMono.variable}`}>
-      <body className={`${GeistSans.className} min-h-screen bg-[#07080d] text-slate-100 antialiased selection:bg-[#FF7300] selection:text-white`}>
+    <html
+      lang="en"
+      className={`dark ${figtree.variable} ${GeistPixelSquare.variable}`}
+    >
+      <body
+        className={`${figtree.className} min-h-screen bg-[#000000] text-slate-100 antialiased selection:bg-[#F65023] selection:text-white`}
+      >
         {children}
       </body>
     </html>
   );
 }
-

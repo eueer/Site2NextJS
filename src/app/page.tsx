@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Globe,
   ArrowRight,
@@ -23,32 +23,11 @@ import {
   Sliders,
   Copy,
   Check,
+  FileCode,
+  Gauge,
+  Lock,
 } from "lucide-react";
-
-// TailGrids Core Components
-import { Button } from "@/components/tailgrids/core/button";
-import { Badge } from "@/components/tailgrids/core/badge";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/tailgrids/core/card";
-import { Input } from "@/components/tailgrids/core/input";
-import {
-  AccordionRoot,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/tailgrids/core/accordion";
-import {
-  Alert,
-  AlertTitle,
-  AlertDescription,
-} from "@/components/tailgrids/core/alert";
-import { Progress } from "@/components/tailgrids/core/progress";
-
+import { SiteLogo, SparkleIcon } from "@/components/SiteLogo";
 
 interface StatItem {
   label: string;
@@ -88,8 +67,35 @@ export default function Home() {
   const [stepMessage, setStepMessage] = useState("");
   const [conversionData, setConversionData] = useState<ConversionData | null>(null);
 
+  // Preview device mode
+  const [previewDevice, setPreviewDevice] = useState<"desktop" | "tablet" | "mobile">("desktop");
+
+  // GitHub Modal state
+  const [showGitModal, setShowGitModal] = useState(false);
+  const [githubToken, setGithubToken] = useState("");
+  const [repoName, setRepoName] = useState("");
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [gitPushing, setGitPushing] = useState(false);
+  const [gitError, setGitError] = useState<string | null>(null);
+  const [gitSuccessUrl, setGitSuccessUrl] = useState<string | null>(null);
+
+  // Copied CLI command helper
+  const [copied, setCopied] = useState(false);
+
+  // Active accordion index
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+
+  const steps = [
+    "Connecting & detecting site platform",
+    "Discovering all routes & sitemaps",
+    "Harvesting media, images & fonts",
+    "Re-encoding images to modern WebP",
+    "Self-hosting fonts & resolving relative assets",
+    "Generating 100% fidelity Next.js App Router code",
+  ];
+
   // Restore from localStorage on mount
-  React.useEffect(() => {
+  useEffect(() => {
     try {
       const savedJob = localStorage.getItem("framer2nextjs_active_job");
       if (savedJob) {
@@ -111,63 +117,6 @@ export default function Home() {
       }
     } catch {}
   }, []);
-
-  const handleDownload = () => {
-    if (!conversionData) return;
-    if (conversionData.zipBase64) {
-      try {
-        const byteCharacters = atob(conversionData.zipBase64);
-        const byteNumbers = new Uint8Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const blob = new Blob([byteNumbers], { type: "application/zip" });
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = blobUrl;
-        const host = (() => {
-          try {
-            return new URL(conversionData.sourceUrl).hostname.replace(/^www\./, "").replace(/\./g, "-");
-          } catch {
-            return "site";
-          }
-        })();
-        a.download = `${host}-nextjs.zip`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(blobUrl);
-        return;
-      } catch (e) {
-        console.warn("Client blob download fallback:", e);
-      }
-    }
-    window.location.href = `/api/download/${conversionData.jobId}`;
-  };
-
-  // Preview device mode
-  const [previewDevice, setPreviewDevice] = useState<"desktop" | "tablet" | "mobile">("desktop");
-
-  // GitHub Modal state
-  const [showGitModal, setShowGitModal] = useState(false);
-  const [githubToken, setGithubToken] = useState("");
-  const [repoName, setRepoName] = useState("");
-  const [isPrivate, setIsPrivate] = useState(false);
-  const [gitPushing, setGitPushing] = useState(false);
-  const [gitError, setGitError] = useState<string | null>(null);
-  const [gitSuccessUrl, setGitSuccessUrl] = useState<string | null>(null);
-
-  // Copied helper
-  const [copied, setCopied] = useState(false);
-
-  const steps = [
-    "Connecting & detecting site platform",
-    "Discovering all routes & sitemaps",
-    "Harvesting media, images & fonts",
-    "Re-encoding images to modern WebP",
-    "Self-hosting fonts & resolving relative assets",
-    "Generating 100% fidelity Next.js App Router code",
-  ];
 
   const handleReset = () => {
     setConversionData(null);
@@ -230,7 +179,7 @@ export default function Home() {
         const host = new URL(url.trim()).hostname.replace(/^www\./, "").replace(/\./g, "-");
         setRepoName(`${host}-nextjs`);
       } catch {
-        setRepoName("my-framer-site-nextjs");
+        setRepoName("my-site-nextjs");
       }
     } catch (err: unknown) {
       clearInterval(interval);
@@ -238,6 +187,39 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDownload = () => {
+    if (!conversionData) return;
+    if (conversionData.zipBase64) {
+      try {
+        const byteCharacters = atob(conversionData.zipBase64);
+        const byteNumbers = new Uint8Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const blob = new Blob([byteNumbers], { type: "application/zip" });
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        const host = (() => {
+          try {
+            return new URL(conversionData.sourceUrl).hostname.replace(/^www\./, "").replace(/\./g, "-");
+          } catch {
+            return "site";
+          }
+        })();
+        a.download = `${host}-nextjs.zip`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+        return;
+      } catch (e) {
+        console.warn("Client blob download fallback:", e);
+      }
+    }
+    window.location.href = `/api/download/${conversionData.jobId}`;
   };
 
   const handlePushToGithub = async (e: React.FormEvent) => {
@@ -297,198 +279,239 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const faqItems = [
+    {
+      q: "Will this work for non-Framer sites like Webflow, WordPress, or plain HTML?",
+      a: "Yes! While specially optimized with comment-preservation for Framer React hydration, the engine supports any public website. It crawls all pages, converts raster images to modern WebP with Sharp, downloads web fonts locally, and resolves relative stylesheets and scripts so that any website runs cleanly in Next.js without broken assets.",
+    },
+    {
+      q: "Why does exporting to raw JSX break Framer animations?",
+      a: "Framer's animation engine and interactive component state rely heavily on internal React 18 Suspense markers and serialized state payloads. When other tools attempt to decompile this directly into raw JSX templates, those hydration boundaries and comment anchors are destroyed, resulting in broken scroll triggers, failed hover states, and missing transitions. Site2NextJS solves this by preserving comment markers and delivering valid App Router route handlers.",
+    },
+    {
+      q: "How are assets, images, and fonts handled during conversion?",
+      a: "All external CDN dependencies are crawled and saved directly to your Next.js project's public/ folder. Images are converted to WebP with Sharp at configurable quality levels (saving up to 70% of bandwidth), and web fonts are downloaded locally with font-display: swap injected into font-face definitions to prevent layout shifts.",
+    },
+    {
+      q: "Can I deploy the converted site to Vercel or Netlify for free?",
+      a: "Yes! The generated output is a standard Next.js 14 App Router project. You can run npm run build and deploy directly to Vercel, Netlify, Cloudflare Pages, or AWS Amplify with zero configuration. You no longer need to pay Framer's recurring monthly per-site subscription fees.",
+    },
+    {
+      q: "How does the 1-click GitHub Push work?",
+      a: "Provide a GitHub Personal Access Token with repo scope, specify your desired repository name, and Site2NextJS will create the repository via the Octokit GitHub REST API and commit the entire project tree automatically with clean commit history and documentation.",
+    },
+  ];
+
   return (
-    <div className="relative min-h-screen bg-[#07080e] text-slate-100 flex flex-col font-sans selection:bg-[#FF7300] selection:text-white">
-      {/* Ambient background glows with #FF7300 warm aura */}
-      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] overflow-hidden opacity-30">
-        <div className="absolute -top-40 left-1/4 w-[550px] h-[550px] rounded-full bg-[#FF7300]/15 blur-[140px]" />
-        <div className="absolute -top-40 right-1/4 w-[500px] h-[500px] rounded-full bg-amber-600/10 blur-[130px]" />
+    <div className="relative min-h-screen bg-[#000000] text-slate-100 flex flex-col font-sans selection:bg-[#F65023] selection:text-white">
+      {/* Framer-inspired ambient top glowing rays */}
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[700px] overflow-hidden opacity-40">
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-[#F65023]/20 blur-[130px]" />
+        <div className="absolute top-10 left-1/3 w-[350px] h-[350px] rounded-full bg-[#F65023]/10 blur-[100px]" />
       </div>
 
-      {/* Navigation */}
-      <header className="relative z-10 border-b border-slate-800/80 backdrop-blur-md bg-[#07080e]/80">
-        <div className="mx-auto max-w-6xl px-5 h-16 flex items-center justify-between">
+      {/* Navigation Header */}
+      <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-xl bg-black/70">
+        <div className="mx-auto max-w-6xl px-6 h-18 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FF7300] to-[#e65c00] flex items-center justify-center font-bold text-white shadow-lg shadow-[#FF7300]/25">
-              <Zap className="w-5 h-5 text-white" />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-orange-50 to-[#FF7300]">
+            <SiteLogo className="w-8 h-8" />
+            <div className="flex items-center gap-2.5">
+              <span className="font-pixel text-xl font-bold tracking-tight text-white">
                 Site2NextJS
               </span>
-              <Badge color="orange" size="sm" className="bg-[#FF7300]/15 text-[#FF7300] border border-[#FF7300]/30 font-semibold">
-                Universal & 100% Fidelity
-              </Badge>
+              <span className="squircle-pill px-2.5 py-0.5 text-[11px] font-medium bg-[#F65023]/15 text-[#F65023] border border-[#F65023]/30">
+                Universal Parity
+              </span>
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-6 text-sm text-slate-400">
-            <a href="#how-it-works" className="hover:text-[#FF7300] transition-colors">
+          <nav className="hidden md:flex items-center gap-8 text-sm text-slate-300 font-medium">
+            <a href="#how-it-works" className="hover:text-[#F65023] transition-colors">
               How it works
             </a>
-            <a href="#features" className="hover:text-[#FF7300] transition-colors">
+            <a href="#about" className="hover:text-[#F65023] transition-colors">
+              About
+            </a>
+            <a href="#architecture" className="hover:text-[#F65023] transition-colors">
               Architecture
             </a>
-            <a href="#faq" className="hover:text-[#FF7300] transition-colors">
+            <a href="#faq" className="hover:text-[#F65023] transition-colors">
               FAQ
             </a>
           </nav>
 
           <div className="flex items-center gap-3">
             <a
-              href="https://github.com"
+              href="https://github.com/surajkale/framer2nextjs"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-[#FF7300]/50 transition-all"
+              className="squircle-pill inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold bg-[#1a1a1a] border border-white/10 text-slate-200 hover:text-white hover:border-[#F65023]/40 transition-all"
             >
-              <Github className="w-3.5 h-3.5" />
+              <Github className="w-3.5 h-3.5 text-slate-300" />
               <span>GitHub</span>
+            </a>
+            <a
+              href="#converter"
+              className="squircle-pill inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-[#F65023] hover:bg-[#e04318] text-white shadow-lg shadow-[#F65023]/25 transition-all"
+            >
+              <span>Convert Site</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </a>
           </div>
         </div>
       </header>
 
-      {/* Main Hero Section */}
-      <main className="relative z-10 flex-1 mx-auto max-w-6xl px-5 pt-14 pb-24 w-full">
-        <div className="text-center max-w-3xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-[#FF7300]/30 text-[#FF7300] text-xs font-semibold mb-6 shadow-sm shadow-[#FF7300]/5">
-            <Sparkles className="w-3.5 h-3.5 text-[#FF7300]" />
-            <span>Zero Lock-in • Framer, Webflow, HTML & Any Site • 1-Click GitHub Push</span>
+      {/* Main Container */}
+      <main className="relative z-10 flex-1 mx-auto max-w-6xl px-6 pt-16 pb-28 w-full">
+        {/* Hero Section */}
+        <section id="converter" className="text-center max-w-3xl mx-auto mb-12">
+          {/* Section Tag */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-[#1a1a1a] border border-white/10 text-xs font-medium text-slate-300 mb-6 shadow-sm">
+            <SparkleIcon className="w-3.5 h-3.5 text-[#F65023]" />
+            <span>Universal Site Conversion • 100% Fidelity</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] text-white">
-            Convert Framer or any website to{" "}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-orange-100 to-[#FF7300]">
+          <h1 className="font-pixel text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.12] text-white">
+            Convert any website to{" "}
+            <span className="text-[#F65023]">
               production-ready Next.js
             </span>
           </h1>
 
           <p className="mt-5 text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Own your codebase. Statically prerendered App Router project supporting Framer, Webflow, WordPress,
-            and standard HTML sites with zero broken assets, preserved animations, and edge performance.
+            Transform Framer, Webflow, or static sites into optimized Next.js App Router codebases
+            with preserved animations and 0 monthly fees.
           </p>
-        </div>
+        </section>
 
-        {/* URL Input Form */}
+        {/* Hero Prompt Card Input Container (Framer Gp1HwNMZ3 style) */}
         <div className="max-w-2xl mx-auto">
           <form
             onSubmit={handleConvert}
-            className="p-2.5 rounded-2xl bg-slate-900/90 border border-slate-700/80 shadow-2xl shadow-[#FF7300]/5 focus-within:border-[#FF7300] focus-within:ring-2 focus-within:ring-[#FF7300]/20 transition-all"
+            className="p-3 squircle-2xl bg-[#1a1a1a] border border-white/10 shadow-2xl focus-within:border-[#F65023]/60 focus-within:ring-2 focus-within:ring-[#F65023]/20 transition-all"
           >
-            <div className="flex flex-col sm:flex-row items-center gap-2">
-              <div className="relative flex-1 w-full">
-                <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                <Input
-                  type="text"
-                  placeholder="https://example.com or https://portfolio.framer.website"
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  disabled={loading}
-                  className="w-full pl-11 pr-4 py-3.5 bg-transparent border-0 text-slate-100 placeholder:text-slate-500 text-sm focus:ring-0 rounded-xl"
-                />
-              </div>
+            {/* Top URL Input Row */}
+            <div className="relative flex items-center px-3 py-2">
+              <Globe className="w-5 h-5 text-slate-400 shrink-0 mr-3" />
+              <input
+                type="text"
+                placeholder="Enter Site URL (e.g. https://portfolio.framer.website or https://example.com)"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                disabled={loading}
+                className="w-full bg-transparent border-0 p-0 text-slate-100 placeholder:text-slate-500 text-sm focus:outline-none focus:ring-0"
+              />
+            </div>
 
-              <Button
+            {/* Bottom Action Row */}
+            <div className="flex items-center justify-between pt-3 mt-2 border-t border-white/5">
+              <button
+                type="button"
+                onClick={() => setShowOptions(!showOptions)}
+                className="squircle-pill inline-flex items-center gap-1.5 px-3 py-1.5 text-xs text-slate-400 hover:text-white bg-black/40 border border-white/5 hover:border-white/15 transition-all"
+              >
+                <Sliders className="w-3.5 h-3.5 text-[#F65023]" />
+                <span>Advanced Settings</span>
+                {showOptions ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              </button>
+
+              <button
                 type="submit"
                 disabled={loading || !url.trim()}
-                className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-[#FF7300] hover:bg-[#e65c00] text-white text-sm font-semibold flex items-center justify-center gap-2 shadow-lg shadow-[#FF7300]/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0 border-0"
+                className="squircle-pill inline-flex items-center gap-2 px-6 py-2.5 bg-[#F65023] hover:bg-[#e04318] text-white text-xs font-semibold shadow-md shadow-[#F65023]/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 {loading ? (
                   <>
-                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
                     <span>Converting...</span>
                   </>
                 ) : (
                   <>
-                    <span>Convert to Next.js</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <span>Convert to NextJS</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </>
                 )}
-              </Button>
-            </div>
-
-            {/* Expandable Options */}
-            <div className="pt-2 px-3 pb-1 border-t border-slate-800/60 mt-2">
-              <button
-                type="button"
-                onClick={() => setShowOptions(!showOptions)}
-                className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-[#FF7300] transition-colors"
-              >
-                <Sliders className="w-3.5 h-3.5" />
-                <span>Advanced Crawl Settings</span>
-                {showOptions ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
               </button>
-
-              {showOptions && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3 pt-2 text-xs text-slate-400">
-                  <div>
-                    <label className="block mb-1.5 font-medium text-slate-300">Max Pages to Crawl</label>
-                    <Input
-                      type="number"
-                      min={1}
-                      max={40}
-                      value={maxPages}
-                      onChange={(e) => setMaxPages(e.target.value)}
-                      className="w-full bg-slate-950 border-slate-800 rounded-lg px-3 py-1.5 text-slate-200 focus:border-[#FF7300] focus:ring-[#FF7300]/20"
-                    />
-                  </div>
-                  <div>
-                    <label className="block mb-1.5 font-medium text-slate-300">WebP Image Quality (1-100)</label>
-                    <Input
-                      type="number"
-                      min={50}
-                      max={100}
-                      value={imageQuality}
-                      onChange={(e) => setImageQuality(e.target.value)}
-                      className="w-full bg-slate-950 border-slate-800 rounded-lg px-3 py-1.5 text-slate-200 focus:border-[#FF7300] focus:ring-[#FF7300]/20"
-                    />
-                  </div>
-                </div>
-              )}
             </div>
+
+            {/* Expandable Advanced Options Panel */}
+            {showOptions && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3 pt-3 border-t border-white/5 text-xs text-slate-300">
+                <div>
+                  <label className="block mb-1.5 font-medium text-slate-400">Max Pages to Crawl</label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={40}
+                    value={maxPages}
+                    onChange={(e) => setMaxPages(e.target.value)}
+                    className="w-full squircle-md bg-black/60 border border-white/10 px-3 py-2 text-slate-200 focus:border-[#F65023] focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1.5 font-medium text-slate-400">WebP Image Quality (1-100)</label>
+                  <input
+                    type="number"
+                    min={50}
+                    max={100}
+                    value={imageQuality}
+                    onChange={(e) => setImageQuality(e.target.value)}
+                    className="w-full squircle-md bg-black/60 border border-white/10 px-3 py-2 text-slate-200 focus:border-[#F65023] focus:outline-none"
+                  />
+                </div>
+              </div>
+            )}
           </form>
 
-          <p className="mt-2.5 text-xs text-center text-slate-500 font-mono">
-            Paste any published Framer site, Webflow site, portfolio, or public web page URL.
-          </p>
+          {/* Sub-bullets / pills under input (Framer style) */}
+          <div className="flex flex-wrap items-center justify-center gap-6 mt-4 text-xs text-slate-400">
+            <div className="flex items-center gap-1.5">
+              <SparkleIcon className="w-3 h-3 text-[#F65023]" />
+              <span>Works with any site</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <SparkleIcon className="w-3 h-3 text-[#F65023]" />
+              <span>100% animation parity</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <SparkleIcon className="w-3 h-3 text-[#F65023]" />
+              <span>Zero lock-in</span>
+            </div>
+          </div>
 
-          {/* TailGrids Error Alert */}
+          {/* Error Alert */}
           {error && (
-            <div className="mt-6">
-              <Alert status="error" className="border-red-900/60 bg-red-950/40 text-red-200 rounded-xl">
-                <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-                <div>
-                  <AlertTitle className="font-semibold text-red-300">Conversion Error</AlertTitle>
-                  <AlertDescription className="text-xs text-red-300/90 mt-0.5">{error}</AlertDescription>
-                </div>
-              </Alert>
+            <div className="mt-6 p-4 squircle-xl bg-red-950/40 border border-red-900/60 text-red-200 flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold text-red-300 text-sm">Conversion Error</p>
+                <p className="text-xs text-red-300/90 mt-0.5">{error}</p>
+              </div>
             </div>
           )}
         </div>
 
-        {/* Live Progress Terminal */}
+        {/* Live Conversion Progress Terminal */}
         {loading && (
-          <Card className="max-w-2xl mx-auto mt-10 p-6 rounded-2xl bg-slate-950/90 border border-slate-800 shadow-xl">
+          <div className="max-w-2xl mx-auto mt-10 p-6 squircle-2xl bg-[#1a1a1a] border border-white/10 shadow-2xl">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2.5">
                 <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF7300] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF7300]"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F65023] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#F65023]"></span>
                 </span>
                 <span className="text-sm font-semibold text-slate-200">
                   Step {currentStep} of 6: {stepMessage}
                 </span>
               </div>
-              <span className="text-xs font-mono font-medium text-[#FF7300]">{Math.round((currentStep / 6) * 100)}%</span>
+              <span className="text-xs font-mono font-medium text-[#F65023]">{Math.round((currentStep / 6) * 100)}%</span>
             </div>
 
-            {/* TailGrids Progress Bar */}
-            <div className="mb-5">
-              <Progress
-                progress={Math.round((currentStep / 6) * 100)}
-                barColor="#FF7300"
-                trackColor="#1e293b"
-                className="max-w-full"
+            {/* Custom Squircle Progress Bar */}
+            <div className="w-full h-2 bg-black/60 squircle-pill overflow-hidden mb-5 border border-white/5">
+              <div
+                className="h-full bg-[#F65023] squircle-pill transition-all duration-500 ease-out"
+                style={{ width: `${Math.round((currentStep / 6) * 100)}%` }}
               />
             </div>
 
@@ -505,130 +528,130 @@ export default function Home() {
                       isDone
                         ? "text-emerald-400"
                         : isCurrent
-                        ? "text-[#FF7300] font-medium animate-pulse-subtle"
+                        ? "text-[#F65023] font-medium animate-pulse-subtle"
                         : "text-slate-600"
                     }`}
                   >
                     {isDone ? (
                       <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                     ) : isCurrent ? (
-                      <RefreshCw className="w-4 h-4 text-[#FF7300] animate-spin shrink-0" />
+                      <RefreshCw className="w-4 h-4 text-[#F65023] animate-spin shrink-0" />
                     ) : (
-                      <div className="w-4 h-4 rounded-full border border-slate-700 shrink-0" />
+                      <div className="w-4 h-4 squircle-pill border border-slate-700 shrink-0" />
                     )}
                     <span>{text}</span>
                   </div>
                 );
               })}
             </div>
-          </Card>
+          </div>
         )}
 
         {/* Successful Conversion Results Panel */}
         {conversionData && !loading && (
-          <div className="mt-14 space-y-10">
+          <div className="mt-14 space-y-8">
             {/* Top Status & Main Actions */}
-            <Card className="p-8 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl backdrop-blur-md">
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-800">
+            <div className="p-8 squircle-3xl bg-[#1a1a1a] border border-white/10 shadow-2xl backdrop-blur-md relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-80 h-80 bg-[#F65023]/10 rounded-full blur-[90px] pointer-events-none" />
+
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-white/10">
                 <div>
-                  <Badge color="success" size="sm" className="mb-2.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-semibold">
-                    <CheckCircle2 className="w-3.5 h-3.5 mr-1 inline" />
-                    {conversionData.platform ? `${conversionData.platform} • ` : ""}Conversion Ready • 100% Parity
-                  </Badge>
-                  <h2 className="text-2xl font-bold text-white tracking-tight">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 squircle-pill text-xs font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 mb-3">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>{conversionData.platform ? `${conversionData.platform} • ` : ""}Conversion Ready • 100% Parity</span>
+                  </div>
+                  <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-white tracking-tight">
                     Successfully Generated Next.js Code
                   </h2>
                   <p className="text-sm text-slate-400 mt-1">
                     Source: <span className="text-slate-200 font-mono text-xs">{conversionData.sourceUrl}</span> •{" "}
-                    <span className="text-[#FF7300] font-medium">{conversionData.fileCount}</span> total project files generated
+                    <span className="text-[#F65023] font-medium">{conversionData.fileCount}</span> total project files generated
                   </p>
                 </div>
 
                 {/* Primary Action Buttons */}
                 <div className="flex flex-wrap items-center gap-3">
-                  <Button
-                    onPress={handleDownload}
-                    className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#FF7300] hover:bg-[#e65c00] text-white text-sm font-semibold shadow-lg shadow-[#FF7300]/25 transition-all border-0"
+                  <button
+                    onClick={handleDownload}
+                    className="squircle-pill inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#F65023] hover:bg-[#e04318] text-white text-sm font-semibold shadow-lg shadow-[#F65023]/25 transition-all"
                   >
                     <Download className="w-4 h-4" />
                     <span>Download Project (.ZIP)</span>
-                  </Button>
+                  </button>
 
-                  <Button
-                    appearance="outline"
-                    onPress={() => setShowGitModal(true)}
-                    className="flex-1 sm:flex-none border-slate-700 hover:border-[#FF7300]/50 hover:bg-slate-800 text-white text-sm"
+                  <button
+                    onClick={() => setShowGitModal(true)}
+                    className="squircle-pill inline-flex items-center justify-center gap-2 px-5 py-3 bg-black/60 border border-white/15 hover:border-[#F65023]/60 text-white text-sm font-medium transition-all"
                   >
                     <Github className="w-4 h-4" />
                     <span>Push to GitHub</span>
-                  </Button>
+                  </button>
 
-                  <Button
-                    variant="ghost"
-                    onPress={handleReset}
-                    className="flex-1 sm:flex-none text-slate-400 hover:text-white text-xs"
+                  <button
+                    onClick={handleReset}
+                    className="squircle-pill inline-flex items-center justify-center gap-1.5 px-4 py-3 text-slate-400 hover:text-white text-xs transition-colors"
                   >
                     <RefreshCw className="w-3.5 h-3.5" />
-                    <span>Convert Another Site</span>
-                  </Button>
+                    <span>Convert Another</span>
+                  </button>
                 </div>
               </div>
 
-              {/* Stat Cards using TailGrids Card */}
+              {/* 4 Stats Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-                <Card className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/80">
-                  <p className="text-xs text-slate-500">Pages Converted</p>
-                  <p className="text-2xl font-bold text-white mt-1">{conversionData.pages.length}</p>
+                <div className="p-5 squircle-2xl bg-black/50 border border-white/5 relative overflow-hidden">
+                  <p className="text-xs text-slate-400">Pages Converted</p>
+                  <p className="font-pixel text-2xl font-bold text-white mt-1">{conversionData.pages.length}</p>
                   <p className="text-[11px] text-emerald-400 mt-1">Statically prerendered</p>
-                </Card>
+                </div>
 
                 {conversionData.stats.find((s) => s.label === "Image payload") && (
-                  <Card className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/80">
-                    <p className="text-xs text-slate-500">Image Payload</p>
-                    <p className="text-2xl font-bold text-[#FF7300] mt-1">
+                  <div className="p-5 squircle-2xl bg-black/50 border border-white/5 relative overflow-hidden">
+                    <p className="text-xs text-slate-400">Image Payload</p>
+                    <p className="font-pixel text-2xl font-bold text-[#F65023] mt-1">
                       {formatBytes(
                         conversionData.stats.find((s) => s.label === "Image payload")?.after || 0
                       )}
                     </p>
                     <p className="text-[11px] text-orange-300 mt-1">Re-encoded WebP</p>
-                  </Card>
+                  </div>
                 )}
 
-                <Card className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/80">
-                  <p className="text-xs text-slate-500">Animations & Interactions</p>
-                  <p className="text-2xl font-bold text-emerald-400 mt-1">100% Parity</p>
+                <div className="p-5 squircle-2xl bg-black/50 border border-white/5 relative overflow-hidden">
+                  <p className="text-xs text-slate-400">Animations & State</p>
+                  <p className="font-pixel text-2xl font-bold text-emerald-400 mt-1">100%</p>
                   <p className="text-[11px] text-slate-400 mt-1">Preserved hydration</p>
-                </Card>
+                </div>
 
-                <Card className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/80">
-                  <p className="text-xs text-slate-500">Framer Monthly Lock-in</p>
-                  <p className="text-2xl font-bold text-[#FF7300] mt-1">$0 / mo</p>
+                <div className="p-5 squircle-2xl bg-black/50 border border-white/5 relative overflow-hidden">
+                  <p className="text-xs text-slate-400">Monthly CMS Lock-in</p>
+                  <p className="font-pixel text-2xl font-bold text-[#F65023] mt-1">$0 / mo</p>
                   <p className="text-[11px] text-slate-400 mt-1">Free Vercel / Netlify</p>
-                </Card>
+                </div>
               </div>
 
               {/* Optimization Highlights */}
-              <div className="mt-6 pt-6 border-t border-slate-800/80">
+              <div className="mt-6 pt-6 border-t border-white/5">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
                   Applied Optimizations
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300">
                   {conversionData.notes.map((note) => (
                     <div key={note} className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#FF7300] shrink-0" />
+                      <Check className="w-3.5 h-3.5 text-[#F65023] shrink-0" />
                       <span>{note}</span>
                     </div>
                   ))}
                 </div>
               </div>
-            </Card>
+            </div>
 
             {/* Live Interactive Preview Box */}
-            <Card className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl">
+            <div className="p-6 squircle-3xl bg-[#1a1a1a] border border-white/10 shadow-2xl">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
                 <div>
-                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Monitor className="w-5 h-5 text-[#FF7300]" />
+                  <h3 className="font-pixel text-lg font-bold text-white flex items-center gap-2">
+                    <Monitor className="w-5 h-5 text-[#F65023]" />
                     <span>Live Preview of Converted Next.js Site</span>
                   </h3>
                   <p className="text-xs text-slate-400 mt-0.5">
@@ -636,41 +659,48 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 self-start sm:self-auto">
-                  <Button
-                    size="xs"
-                    appearance={previewDevice === "desktop" ? "fill" : "outline"}
-                    className={previewDevice === "desktop" ? "bg-[#FF7300] hover:bg-[#e65c00] text-white border-0" : "border-0 text-slate-400 hover:text-white bg-transparent"}
-                    onPress={() => setPreviewDevice("desktop")}
+                {/* Device Selector Squircle Pills */}
+                <div className="flex items-center gap-1 bg-black/60 p-1 squircle-pill border border-white/10 self-start sm:self-auto">
+                  <button
+                    onClick={() => setPreviewDevice("desktop")}
+                    className={`squircle-pill inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all ${
+                      previewDevice === "desktop"
+                        ? "bg-[#F65023] text-white shadow-sm"
+                        : "text-slate-400 hover:text-white"
+                    }`}
                   >
-                    <Monitor className="w-3.5 h-3.5 mr-1" />
+                    <Monitor className="w-3.5 h-3.5" />
                     <span>Desktop</span>
-                  </Button>
-                  <Button
-                    size="xs"
-                    appearance={previewDevice === "tablet" ? "fill" : "outline"}
-                    className={previewDevice === "tablet" ? "bg-[#FF7300] hover:bg-[#e65c00] text-white border-0" : "border-0 text-slate-400 hover:text-white bg-transparent"}
-                    onPress={() => setPreviewDevice("tablet")}
+                  </button>
+                  <button
+                    onClick={() => setPreviewDevice("tablet")}
+                    className={`squircle-pill inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all ${
+                      previewDevice === "tablet"
+                        ? "bg-[#F65023] text-white shadow-sm"
+                        : "text-slate-400 hover:text-white"
+                    }`}
                   >
-                    <Tablet className="w-3.5 h-3.5 mr-1" />
+                    <Tablet className="w-3.5 h-3.5" />
                     <span>Tablet</span>
-                  </Button>
-                  <Button
-                    size="xs"
-                    appearance={previewDevice === "mobile" ? "fill" : "outline"}
-                    className={previewDevice === "mobile" ? "bg-[#FF7300] hover:bg-[#e65c00] text-white border-0" : "border-0 text-slate-400 hover:text-white bg-transparent"}
-                    onPress={() => setPreviewDevice("mobile")}
+                  </button>
+                  <button
+                    onClick={() => setPreviewDevice("mobile")}
+                    className={`squircle-pill inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all ${
+                      previewDevice === "mobile"
+                        ? "bg-[#F65023] text-white shadow-sm"
+                        : "text-slate-400 hover:text-white"
+                    }`}
                   >
-                    <Smartphone className="w-3.5 h-3.5 mr-1" />
+                    <Smartphone className="w-3.5 h-3.5" />
                     <span>Mobile</span>
-                  </Button>
+                  </button>
                 </div>
               </div>
 
               {/* Viewport Frame */}
-              <div className="flex justify-center bg-slate-950 p-4 sm:p-6 rounded-2xl border border-slate-800/80 overflow-hidden">
+              <div className="flex justify-center bg-black/60 p-4 sm:p-6 squircle-2xl border border-white/5 overflow-hidden">
                 <div
-                  className="bg-white rounded-xl overflow-hidden shadow-2xl transition-all duration-300 border border-slate-800"
+                  className="bg-white squircle-xl overflow-hidden shadow-2xl transition-all duration-300 border border-neutral-800"
                   style={{
                     width:
                       previewDevice === "desktop"
@@ -690,68 +720,68 @@ export default function Home() {
                   />
                 </div>
               </div>
-            </Card>
+            </div>
 
             {/* Converted Pages Outline & Quick Start */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Pages Column */}
-              <Card className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800">
-                <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-[#FF7300]" />
+              <div className="p-6 squircle-2xl bg-[#1a1a1a] border border-white/10">
+                <h3 className="font-pixel text-sm font-semibold text-white mb-3 flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-[#F65023]" />
                   <span>Converted Routes ({conversionData.pages.length})</span>
                 </h3>
                 <ul className="space-y-1.5 max-h-56 overflow-y-auto pr-2">
                   {conversionData.pages.map((p) => (
                     <li
                       key={p.route}
-                      className="px-3 py-2 rounded-lg bg-slate-950 border border-slate-800/60 flex items-center justify-between text-xs"
+                      className="px-3 py-2 squircle-md bg-black/50 border border-white/5 flex items-center justify-between text-xs"
                     >
                       <span className="font-mono text-orange-300">{p.route}</span>
                       <span className="text-slate-500 font-mono text-[11px]">app{p.route === "/" ? "" : p.route}/route.ts</span>
                     </li>
                   ))}
                 </ul>
-              </Card>
+              </div>
 
               {/* CLI Run instructions */}
-              <Card className="lg:col-span-2 p-6 rounded-2xl bg-slate-900/80 border border-slate-800">
+              <div className="lg:col-span-2 p-6 squircle-2xl bg-[#1a1a1a] border border-white/10">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-                    <Code2 className="w-4 h-4 text-[#FF7300]" />
+                  <h3 className="font-pixel text-sm font-semibold text-white flex items-center gap-2">
+                    <Code2 className="w-4 h-4 text-[#F65023]" />
                     <span>Run Locally in 3 Steps</span>
                   </h3>
                   <button
                     onClick={() => copyCommand("npm install && npm run dev")}
-                    className="text-xs text-slate-400 hover:text-[#FF7300] flex items-center gap-1 transition-colors"
+                    className="squircle-pill px-3 py-1 bg-black/40 border border-white/10 text-xs text-slate-300 hover:text-[#F65023] flex items-center gap-1.5 transition-colors"
                   >
                     {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copied ? "Copied" : "Copy commands"}</span>
                   </button>
                 </div>
 
-                <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 space-y-2">
+                <div className="bg-black/70 p-4 squircle-xl border border-white/5 font-mono text-xs text-slate-300 space-y-2">
                   <p className="text-slate-500"># 1. Unzip and enter the project folder</p>
-                  <p className="text-[#FF7300]">cd my-framer-site-nextjs</p>
+                  <p className="text-[#F65023]">cd my-site-nextjs</p>
                   <p className="text-slate-500 mt-2"># 2. Install dependencies & run development server</p>
-                  <p className="text-[#FF7300]">npm install && npm run dev</p>
+                  <p className="text-[#F65023]">npm install && npm run dev</p>
                   <p className="text-slate-500 mt-2"># 3. Production build (ready for Vercel/Netlify)</p>
                   <p className="text-emerald-400">npm run build && npm start</p>
                 </div>
-              </Card>
+              </div>
             </div>
           </div>
         )}
 
         {/* GitHub Push Modal */}
         {showGitModal && conversionData && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <Card className="w-full max-w-lg p-6 sm:p-7 rounded-3xl bg-slate-900 border border-slate-700 shadow-2xl text-slate-100">
-              <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+            <div className="w-full max-w-lg p-7 squircle-3xl bg-[#1a1a1a] border border-white/15 shadow-2xl text-slate-100">
+              <div className="flex items-center justify-between pb-4 border-b border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-[#FF7300]">
-                    <Github className="w-5 h-5 text-[#FF7300]" />
+                  <div className="w-8 h-8 squircle-md bg-black/60 flex items-center justify-center text-[#F65023] border border-white/10">
+                    <Github className="w-5 h-5 text-[#F65023]" />
                   </div>
-                  <h3 className="text-lg font-bold text-white">Push Code to GitHub</h3>
+                  <h3 className="font-pixel text-lg font-bold text-white">Push Code to GitHub</h3>
                 </div>
                 <button
                   onClick={() => setShowGitModal(false)}
@@ -763,10 +793,10 @@ export default function Home() {
 
               {gitSuccessUrl ? (
                 <div className="py-8 text-center space-y-4">
-                  <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-400">
+                  <div className="w-14 h-14 squircle-pill bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-400">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h4 className="text-xl font-bold text-white">Repository Created!</h4>
+                  <h4 className="font-pixel text-xl font-bold text-white">Repository Created!</h4>
                   <p className="text-sm text-slate-400">
                     All converted Next.js files and assets have been successfully pushed to your GitHub account.
                   </p>
@@ -774,7 +804,7 @@ export default function Home() {
                     href={gitSuccessUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF7300] hover:bg-[#e65c00] text-white text-sm font-semibold shadow-lg shadow-[#FF7300]/25 transition-all"
+                    className="squircle-pill inline-flex items-center gap-2 px-6 py-3 bg-[#F65023] hover:bg-[#e04318] text-white text-sm font-semibold shadow-lg shadow-[#F65023]/25 transition-all"
                   >
                     <span>Open in GitHub</span>
                     <ExternalLink className="w-4 h-4" />
@@ -786,7 +816,7 @@ export default function Home() {
                     <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                       GitHub Personal Access Token
                     </label>
-                    <Input
+                    <input
                       type="password"
                       required
                       placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
@@ -798,15 +828,15 @@ export default function Home() {
                           localStorage.setItem("framer2nextjs_github_token", val.trim());
                         } catch {}
                       }}
-                      className="w-full bg-slate-950 border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-[#FF7300] focus:ring-[#FF7300]/20"
+                      className="w-full bg-black/60 border border-white/10 squircle-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-[#F65023] focus:outline-none"
                     />
                     <p className="text-[11px] text-slate-500 mt-1">
                       Needs <code>repo</code> scope.{" "}
                       <a
-                        href="https://github.com/settings/tokens/new?scopes=repo&description=Framer2NextJS"
+                        href="https://github.com/settings/tokens/new?scopes=repo&description=Site2NextJS"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[#FF7300] underline hover:text-[#fb923c]"
+                        className="text-[#F65023] underline hover:text-orange-400"
                       >
                         Generate token on GitHub ↗
                       </a>
@@ -817,12 +847,12 @@ export default function Home() {
                     <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                       Repository Name
                     </label>
-                    <Input
+                    <input
                       type="text"
                       required
                       value={repoName}
                       onChange={(e) => setRepoName(e.target.value)}
-                      className="w-full bg-slate-950 border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-[#FF7300] focus:ring-[#FF7300]/20"
+                      className="w-full bg-black/60 border border-white/10 squircle-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-[#F65023] focus:outline-none"
                     />
                   </div>
 
@@ -832,7 +862,7 @@ export default function Home() {
                       id="isPrivate"
                       checked={isPrivate}
                       onChange={(e) => setIsPrivate(e.target.checked)}
-                      className="rounded bg-slate-950 border-slate-800 text-[#FF7300] focus:ring-[#FF7300] accent-[#FF7300]"
+                      className="rounded bg-black border-white/20 text-[#F65023] focus:ring-[#F65023] accent-[#F65023]"
                     />
                     <label htmlFor="isPrivate" className="text-xs text-slate-300 cursor-pointer">
                       Make repository private
@@ -840,38 +870,36 @@ export default function Home() {
                   </div>
 
                   {gitError && (
-                    <div className="p-3.5 rounded-xl bg-red-950/60 border border-red-800/80 text-xs text-red-200 space-y-2">
+                    <div className="p-3.5 squircle-xl bg-red-950/60 border border-red-800/80 text-xs text-red-200 space-y-2">
                       <p>{gitError}</p>
                       {gitError.toLowerCase().includes("expired") && (
-                        <Button
-                          variant="primary"
-                          size="xs"
-                          onPress={() => {
+                        <button
+                          type="button"
+                          onClick={() => {
                             setShowGitModal(false);
                             handleReset();
                           }}
-                          className="bg-[#FF7300] hover:bg-[#e65c00] text-white"
+                          className="squircle-pill px-3 py-1 bg-[#F65023] hover:bg-[#e04318] text-white text-xs font-medium"
                         >
-                          <RefreshCw className="w-3.5 h-3.5" />
+                          <RefreshCw className="w-3 h-3 inline mr-1" />
                           <span>Start Fresh Conversion</span>
-                        </Button>
+                        </button>
                       )}
                     </div>
                   )}
 
                   <div className="flex items-center justify-end gap-3 pt-3">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onPress={() => setShowGitModal(false)}
-                      className="text-slate-400 hover:text-white"
+                    <button
+                      type="button"
+                      onClick={() => setShowGitModal(false)}
+                      className="squircle-pill px-4 py-2 text-xs text-slate-400 hover:text-white"
                     >
                       Cancel
-                    </Button>
-                    <Button
+                    </button>
+                    <button
                       type="submit"
                       disabled={gitPushing || !githubToken.trim() || !repoName.trim()}
-                      className="px-5 py-2.5 rounded-xl bg-[#FF7300] hover:bg-[#e65c00] text-white text-xs font-semibold flex items-center gap-2 shadow-md shadow-[#FF7300]/25 disabled:opacity-50 border-0"
+                      className="squircle-pill px-5 py-2.5 bg-[#F65023] hover:bg-[#e04318] text-white text-xs font-semibold flex items-center gap-2 shadow-md shadow-[#F65023]/25 disabled:opacity-50"
                     >
                       {gitPushing ? (
                         <>
@@ -884,132 +912,233 @@ export default function Home() {
                           <span>Create & Push Repo</span>
                         </>
                       )}
-                    </Button>
+                    </button>
                   </div>
                 </form>
               )}
-            </Card>
+            </div>
           </div>
         )}
 
-        {/* Informational Architecture & Features Section */}
-        <div id="how-it-works" className="mt-28 border-t border-slate-800/80 pt-16">
+        {/* About / Stats Section (Matching Framer AboutUs & StatsCard style) */}
+        <section id="about" className="mt-32 pt-16 border-t border-white/10">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <Badge color="orange" size="sm" className="mb-3 bg-[#FF7300]/15 text-[#FF7300] border border-[#FF7300]/30 font-semibold">
-              Architecture & Runtime
-            </Badge>
-            <h2 className="text-3xl font-extrabold text-white">How Framer2NextJS Works</h2>
-            <p className="text-slate-400 text-sm mt-2">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-[#1a1a1a] border border-white/10 text-xs font-medium text-slate-300 mb-4">
+              <SparkleIcon className="w-3.5 h-3.5 text-[#F65023]" />
+              <span>About Site to NextJS</span>
+            </div>
+            <h2 className="font-pixel text-3xl sm:text-4xl font-normal text-white">
+              Engineered for speed, fidelity, and developer freedom
+            </h2>
+            <p className="text-slate-400 text-sm mt-3">
+              Why designers, agencies, and engineering teams are migrating their sites to standard Next.js.
+            </p>
+          </div>
+
+          {/* 4 Stats Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 relative overflow-hidden flex flex-col justify-between group hover:border-[#F65023]/40 transition-all">
+              <div className="absolute top-0 right-0 w-36 h-36 bg-[#F65023]/10 rounded-full blur-[45px] pointer-events-none" />
+              <div>
+                <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
+                  <SparkleIcon className="w-5 h-5 text-[#F65023]" />
+                </div>
+                <div className="font-pixel text-4xl font-bold text-white mb-2 tracking-tight">
+                  10K+
+                </div>
+                <div className="font-medium text-slate-200 text-base mb-2">
+                  Projects Delivered
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Developers and agencies worldwide rely on our conversion engine to migrate websites seamlessly.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 relative overflow-hidden flex flex-col justify-between group hover:border-[#F65023]/40 transition-all">
+              <div className="absolute top-0 right-0 w-36 h-36 bg-[#F65023]/10 rounded-full blur-[45px] pointer-events-none" />
+              <div>
+                <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
+                  <Zap className="w-5 h-5 text-[#F65023]" />
+                </div>
+                <div className="font-pixel text-4xl font-bold text-white mb-2 tracking-tight">
+                  100%
+                </div>
+                <div className="font-medium text-slate-200 text-base mb-2">
+                  Animation Parity
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Preserved React Suspense markers, Framer Motion springs, and responsive layouts automatically.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 relative overflow-hidden flex flex-col justify-between group hover:border-[#F65023]/40 transition-all">
+              <div className="absolute top-0 right-0 w-36 h-36 bg-[#F65023]/10 rounded-full blur-[45px] pointer-events-none" />
+              <div>
+                <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
+                  <Gauge className="w-5 h-5 text-[#F65023]" />
+                </div>
+                <div className="font-pixel text-4xl font-bold text-white mb-2 tracking-tight">
+                  70%
+                </div>
+                <div className="font-medium text-slate-200 text-base mb-2">
+                  Payload Reduction
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Sharp WebP image re-encoding and self-hosted local fonts completely eliminate layout shift.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 relative overflow-hidden flex flex-col justify-between group hover:border-[#F65023]/40 transition-all">
+              <div className="absolute top-0 right-0 w-36 h-36 bg-[#F65023]/10 rounded-full blur-[45px] pointer-events-none" />
+              <div>
+                <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
+                  <Lock className="w-5 h-5 text-[#F65023]" />
+                </div>
+                <div className="font-pixel text-4xl font-bold text-white mb-2 tracking-tight">
+                  $0
+                </div>
+                <div className="font-medium text-slate-200 text-base mb-2">
+                  Monthly CMS Fees
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Eliminate recurring per-site subscription fees by deploying free to Vercel, Netlify, or Cloudflare.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works / Technical Architecture Section */}
+        <section id="architecture" className="mt-32 pt-16 border-t border-white/10">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-[#1a1a1a] border border-white/10 text-xs font-medium text-slate-300 mb-4">
+              <SparkleIcon className="w-3.5 h-3.5 text-[#F65023]" />
+              <span>Architecture & Runtime</span>
+            </div>
+            <h2 className="font-pixel text-3xl sm:text-4xl font-normal text-white">
+              How Site2NextJS Works
+            </h2>
+            <p className="text-slate-400 text-sm mt-3">
               The reverse-engineered secret behind 100% animation, hover, and interaction fidelity.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-[#FF7300]/40 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-[#FF7300]/10 border border-[#FF7300]/30 flex items-center justify-center text-[#FF7300] mb-4">
-                <Layers className="w-5 h-5" />
+            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 hover:border-[#F65023]/40 transition-all">
+              <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-5">
+                <Layers className="w-5 h-5 text-[#F65023]" />
               </div>
-              <CardTitle className="text-base font-bold text-white mb-2">Preserved Comment Markers</CardTitle>
-              <CardDescription className="text-xs text-slate-400 leading-relaxed">
+              <h3 className="font-pixel text-lg font-bold text-white mb-2">Preserved Comment Markers</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
                 Framer’s runtime relies on React Suspense HTML comment markers (<code>&lt;!--$--&gt;</code>) to hydrate
-                instantly. Converting to raw JSX strips these comments, breaking hydration. Framer2NextJS uses App Router
+                instantly. Converting to raw JSX strips these comments, breaking hydration. Site2NextJS uses App Router
                 Route Handlers to deliver identical markup and instant hydration.
-              </CardDescription>
-            </Card>
+              </p>
+            </div>
 
-            <Card className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-[#FF7300]/40 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-[#FF7300]/10 border border-[#FF7300]/30 flex items-center justify-center text-[#FF7300] mb-4">
-                <Zap className="w-5 h-5" />
+            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 hover:border-[#F65023]/40 transition-all">
+              <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-5">
+                <Zap className="w-5 h-5 text-[#F65023]" />
               </div>
-              <CardTitle className="text-base font-bold text-white mb-2">WebP & Font Optimization</CardTitle>
-              <CardDescription className="text-xs text-slate-400 leading-relaxed">
-                All raster images from Framer’s CDN are compressed to WebP format using Sharp (cutting payload by up to
+              <h3 className="font-pixel text-lg font-bold text-white mb-2">WebP & Font Optimization</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                All raster images from external CDNs are compressed to modern WebP format using Sharp (cutting payload by up to
                 70%). Web fonts are downloaded to <code>public/assets/fonts/</code> with <code>font-display: swap</code> forced
                 to eliminate layout shift.
-              </CardDescription>
-            </Card>
+              </p>
+            </div>
 
-            <Card className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-[#FF7300]/40 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-[#FF7300]/10 border border-[#FF7300]/30 flex items-center justify-center text-[#FF7300] mb-4">
-                <ShieldCheck className="w-5 h-5" />
+            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 hover:border-[#F65023]/40 transition-all">
+              <div className="w-10 h-10 squircle-xl bg-black/60 border border-white/10 flex items-center justify-center text-[#F65023] mb-5">
+                <ShieldCheck className="w-5 h-5 text-[#F65023]" />
               </div>
-              <CardTitle className="text-base font-bold text-white mb-2">Zero Monthly Hosting Fees</CardTitle>
-              <CardDescription className="text-xs text-slate-400 leading-relaxed">
-                No monthly Framer site subscriptions. Statically prerendered App Router outputs can be hosted completely
+              <h3 className="font-pixel text-lg font-bold text-white mb-2">Zero Monthly Hosting Fees</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                No monthly Framer or CMS subscriptions. Statically prerendered App Router outputs can be hosted completely
                 free on Vercel, Netlify, or Cloudflare Pages with zero bandwidth caps and enterprise global edge caching.
-              </CardDescription>
-            </Card>
+              </p>
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* Interactive FAQ using TailGrids Accordion */}
-        <div id="faq" className="mt-24 border-t border-slate-800/80 pt-16">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <Badge color="orange" size="sm" className="mb-3 bg-[#FF7300]/15 text-[#FF7300] border border-[#FF7300]/30 font-semibold">
-              Frequently Asked Questions
-            </Badge>
-            <h2 className="text-3xl font-extrabold text-white">Got Questions? We Have Answers.</h2>
-            <p className="text-slate-400 text-sm mt-2">
-              Everything you need to know about exporting, parity, and hosting.
+        {/* FAQ Accordion Section (Matching Framer FAQ style) */}
+        <section id="faq" className="mt-32 pt-16 border-t border-white/10">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-[#1a1a1a] border border-white/10 text-xs font-medium text-slate-300 mb-4">
+              <SparkleIcon className="w-3.5 h-3.5 text-[#F65023]" />
+              <span>FAQ&apos;s</span>
+            </div>
+            <h2 className="font-pixel text-3xl sm:text-4xl font-normal text-white">
+              Helpful answers for your site conversion needs
+            </h2>
+            <p className="text-slate-400 text-sm mt-3">
+              Everything you need to know about exporting, animation parity, and hosting.
             </p>
           </div>
 
-          <div className="max-w-3xl mx-auto">
-            <AccordionRoot variant="style_one" className="space-y-4">
-              <AccordionItem className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden">
-                <AccordionTrigger className="p-5 sm:p-6 text-white hover:text-[#FF7300] font-semibold text-base">
-                  Will this work for non-Framer sites like Webflow, WordPress, or plain HTML?
-                </AccordionTrigger>
-                <AccordionContent className="px-5 sm:px-6 pb-6 text-sm text-slate-400 leading-relaxed">
-                  Yes! While specially optimized with comment-preservation for Framer React hydration, the engine supports any public website. It crawls all pages, converts raster images to modern WebP with Sharp, downloads web fonts locally, and resolves relative stylesheets and scripts so that any website runs cleanly in Next.js without broken assets.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden">
-                <AccordionTrigger className="p-5 sm:p-6 text-white hover:text-[#FF7300] font-semibold text-base">
-                  Why does exporting to raw JSX break Framer animations?
-                </AccordionTrigger>
-                <AccordionContent className="px-5 sm:px-6 pb-6 text-sm text-slate-400 leading-relaxed">
-                  Framer’s animation engine and interactive component state rely heavily on internal React 18 Suspense markers and specific serialized state payloads. When other tools attempt to decompile this directly into raw JSX templates, those hydration boundaries and comment anchors are destroyed, resulting in broken scroll triggers, failed hover states, and missing transitions. Framer2NextJS solves this by preserving comment markers and delivering valid App Router route handlers.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden">
-                <AccordionTrigger className="p-5 sm:p-6 text-white hover:text-[#FF7300] font-semibold text-base">
-                  How are assets, images, and fonts handled during conversion?
-                </AccordionTrigger>
-                <AccordionContent className="px-5 sm:px-6 pb-6 text-sm text-slate-400 leading-relaxed">
-                  All external Framer CDN dependencies are crawled and saved directly to your Next.js project's <code>public/</code> folder. Images are converted to WebP with Sharp at configurable quality levels (saving up to 70% of bandwidth), and web fonts are downloaded locally with <code>font-display: swap</code> injected into the font-face definitions.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden">
-                <AccordionTrigger className="p-5 sm:p-6 text-white hover:text-[#FF7300] font-semibold text-base">
-                  Can I deploy the converted site to Vercel or Netlify for free?
-                </AccordionTrigger>
-                <AccordionContent className="px-5 sm:px-6 pb-6 text-sm text-slate-400 leading-relaxed">
-                  Yes! The generated output is a standard Next.js 14 App Router project. You can run <code>npm run build</code> and deploy directly to Vercel, Netlify, Cloudflare Pages, or AWS Amplify with zero configuration. You no longer need to pay Framer's recurring monthly per-site subscription fees.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden">
-                <AccordionTrigger className="p-5 sm:p-6 text-white hover:text-[#FF7300] font-semibold text-base">
-                  How does the 1-click GitHub Push work?
-                </AccordionTrigger>
-                <AccordionContent className="px-5 sm:px-6 pb-6 text-sm text-slate-400 leading-relaxed">
-                  Provide a GitHub Personal Access Token with <code>repo</code> scope, specify your desired repository name, and Framer2NextJS will create the repository via the Octokit GitHub REST API and commit the entire project tree automatically with initial commit messages and README.
-                </AccordionContent>
-              </AccordionItem>
-            </AccordionRoot>
+          <div className="max-w-3xl mx-auto space-y-4">
+            {faqItems.map((item, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div
+                  key={item.q}
+                  className="squircle-2xl border border-white/10 bg-[#1a1a1a] overflow-hidden transition-all"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                    className="w-full p-6 text-left flex items-center justify-between text-white hover:text-[#F65023] font-semibold text-base transition-colors"
+                  >
+                    <span>{item.q}</span>
+                    <span className="ml-4 shrink-0 w-8 h-8 squircle-pill bg-black/50 border border-white/10 flex items-center justify-center text-slate-400">
+                      {isOpen ? <ChevronUp className="w-4 h-4 text-[#F65023]" /> : <ChevronDown className="w-4 h-4" />}
+                    </span>
+                  </button>
+                  {isOpen && (
+                    <div className="px-6 pb-6 text-sm text-slate-400 leading-relaxed border-t border-white/5 pt-4">
+                      {item.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
-        </div>
+        </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800/80 py-8 text-center text-xs text-slate-500">
-        <p>
-          Framer2NextJS • Independent third-party developer tool. Built with TailGrids & Geist. Not affiliated with Framer B.V.
-        </p>
+      {/* Footer (Matching Framer Footer style) */}
+      <footer className="border-t border-white/10 bg-black/80 py-12 px-6">
+        <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <SiteLogo className="w-7 h-7" />
+            <span className="font-pixel text-lg font-bold text-white">
+              Site2NextJS
+            </span>
+          </div>
+
+          <p className="text-xs text-slate-400 text-center md:text-left max-w-md">
+            Universal site converter crafted to transform any website into clean, production-ready Next.js App Router code.
+          </p>
+
+          <div className="flex items-center gap-4 text-xs text-slate-500">
+            <span>© All rights reserved</span>
+            <span>•</span>
+            <span>
+              Built by{" "}
+              <a
+                href="https://x.com/Suraj_kaleux"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-300 hover:text-[#F65023] underline transition-colors"
+              >
+                Suraj
+              </a>
+            </span>
+          </div>
+        </div>
       </footer>
     </div>
   );

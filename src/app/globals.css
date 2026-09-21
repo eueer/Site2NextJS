@@ -2,25 +2,26 @@
 @plugin '@tailwindcss/forms';
 
 @theme {
-  --font-sans: var(--font-geist-sans), "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: var(--font-geist-mono), monospace;
+  --font-sans: var(--font-figtree), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-pixel: var(--font-geist-pixel-square), monospace;
+  --font-mono: var(--font-geist-pixel-square), monospace;
 
-  /* Primary #FF7300 */
-  --color-primary: #FF7300;
-  --color-primary-50: #fff7ed;
-  --color-primary-100: #ffeed5;
-  --color-primary-200: #fed7aa;
-  --color-primary-300: #fdba74;
-  --color-primary-400: #fb923c;
-  --color-primary-500: #FF7300;
-  --color-primary-600: #e65c00;
-  --color-primary-700: #cc4e00;
-  --color-primary-800: #a33c00;
-  --color-primary-900: #7a2b00;
-  --color-primary-950: #451700;
+  /* Framer Brand Orange #F65023 */
+  --color-primary: #F65023;
+  --color-primary-50: #fff5f2;
+  --color-primary-100: #ffe8e2;
+  --color-primary-200: #ffd4c7;
+  --color-primary-300: #ffb4a0;
+  --color-primary-400: #f87d5e;
+  --color-primary-500: #F65023;
+  --color-primary-600: #e04318;
+  --color-primary-700: #ba3310;
+  --color-primary-800: #962c12;
+  --color-primary-900: #7c2914;
+  --color-primary-950: #441105;
 
   --color-primary-text: white;
-  --color-neutral-brand-color: #ff8c33;
+  --color-neutral-brand-color: #f87d5e;
 
 
   /* Text Color */
@@ -476,15 +477,82 @@
 }
 
 :root {
-  --brand-color: #FF7300;
+  --brand-color: #F65023;
   color-scheme: dark;
 }
 
+/* 50% squircle smoothing across all rounded elements */
+*, ::before, ::after {
+  -webkit-corner-smoothing: 50%;
+  corner-smoothing: 50%;
+  corner-shape: superellipse(1.5);
+}
+
+.squircle {
+  -webkit-corner-smoothing: 50%;
+  corner-smoothing: 50%;
+  corner-shape: superellipse(1.5);
+}
+
+.squircle-pill {
+  -webkit-corner-smoothing: 50%;
+  corner-smoothing: 50%;
+  corner-shape: superellipse(1.5);
+  border-radius: 9999px;
+}
+
+.squircle-sm {
+  -webkit-corner-smoothing: 50%;
+  corner-smoothing: 50%;
+  corner-shape: superellipse(1.5);
+  border-radius: 0.5rem;
+}
+
+.squircle-md {
+  -webkit-corner-smoothing: 50%;
+  corner-smoothing: 50%;
+  corner-shape: superellipse(1.5);
+  border-radius: 0.75rem;
+}
+
+.squircle-lg {
+  -webkit-corner-smoothing: 50%;
+  corner-smoothing: 50%;
+  corner-shape: superellipse(1.5);
+  border-radius: 1rem;
+}
+
+.squircle-xl {
+  -webkit-corner-smoothing: 50%;
+  corner-smoothing: 50%;
+  corner-shape: superellipse(1.5);
+  border-radius: 1.25rem;
+}
+
+.squircle-2xl {
+  -webkit-corner-smoothing: 50%;
+  corner-smoothing: 50%;
+  corner-shape: superellipse(1.5);
+  border-radius: 1.5rem;
+}
+
+.squircle-3xl {
+  -webkit-corner-smoothing: 50%;
+  corner-smoothing: 50%;
+  corner-shape: superellipse(1.5);
+  border-radius: 2rem;
+}
+
+.font-pixel {
+  font-family: var(--font-geist-pixel-square), monospace;
+  letter-spacing: -0.02em;
+}
+
 body {
-  accent-color: #FF7300;
-  color: var(--color-foreground-50);
-  background: var(--color-background-50);
-  font-family: var(--font-geist-sans), sans-serif;
+  accent-color: #F65023;
+  color: #ffffff;
+  background: #000000;
+  font-family: var(--font-figtree), system-ui, sans-serif;
   overflow-x: hidden;
 }
 
@@ -503,14 +571,14 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #030712;
+  background: #000000;
 }
 ::-webkit-scrollbar-thumb {
-  background: #374151;
+  background: #262626;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #FF7300;
+  background: #F65023;
 }
 
 button:not(:disabled),
