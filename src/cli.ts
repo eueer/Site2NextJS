@@ -8,30 +8,30 @@ const url = args[0];
 
 if (!url || url === "-h" || url === "--help") {
   console.log(`
-Framer2NextJS — Convert published Framer sites to 100% fidelity Next.js projects
+Site2NextJS / Framer2NextJS — Convert Framer, Webflow, or any website to 100% fidelity Next.js projects
 
 Usage:
   npx framer2nextjs <url> [options]
 
 Arguments:
-  <url>               Published Framer site URL (e.g. https://portfolio.framer.website)
+  <url>               Published site URL (e.g. https://portfolio.framer.website or https://example.com)
 
 Options:
-  -o, --out <dir>     Output directory (default: ./framer-export)
+  -o, --out <dir>     Output directory (default: ./site-export)
   --max-pages <n>     Max pages to crawl (default: 20)
   -h, --help          Show help
   `);
   process.exit(url ? 0 : 1);
 }
 
-let outDir = "./framer-export";
+let outDir = "./site-export";
 const outIdx = args.indexOf("-o") !== -1 ? args.indexOf("-o") : args.indexOf("--out");
 if (outIdx !== -1 && args[outIdx + 1]) {
   outDir = args[outIdx + 1];
 }
 
 async function main() {
-  console.log(`\n🚀 Framer2NextJS: Converting ${url}...\n`);
+  console.log(`\n🚀 Site2NextJS: Converting ${url}...\n`);
 
   try {
     const report = await convertSite(url, {}, (msg) => {

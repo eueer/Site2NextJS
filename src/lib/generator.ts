@@ -137,10 +137,10 @@ export function netlifyHeaders(): string {
   ].join("\n");
 }
 
-export function readme(sourceUrl: string, pageCount: number): string {
-  return `# Next.js Project (Converted from Framer)
+export function readme(sourceUrl: string, pageCount: number, platform = "Website"): string {
+  return `# Next.js Project (Converted from ${platform})
 
-Exported from **${sourceUrl}** using [Framer2NextJS](https://github.com).
+Exported from **${sourceUrl}** using [Site2NextJS / Framer2NextJS](https://github.com).
 Includes **${pageCount} page(s)** statically prerendered as Next.js App Router routes.
 
 ## Quick Start
@@ -160,16 +160,16 @@ npm start
 
 ## Features & Optimizations Included
 
-- **100% Animation & Interaction Parity**: Served through App Router static route handlers (\`app/<route>/route.ts\`) preserving React Suspense comment markers (\`<!--$-->\`) for instant client hydration.
+- **100% Fidelity Static Route Handlers**: Served through App Router static route handlers (\`app/<route>/route.ts\`) preserving markup, styles, scripts, and hydration markers for instant client hydration.
 - **Image Optimization**: Images are re-encoded to WebP and self-hosted under \`public/assets/img/\`.
 - **Font Self-Hosting**: Web fonts downloaded locally to \`public/assets/fonts/\` with \`font-display: swap\` forced.
 - **SEO & Accessibility**: Prioritized LCP hero image (\`fetchpriority="high"\`), added \`lang="en"\`, descriptive \`title\` tags for iframes, accessibility labels for icon links.
-- **Badge & Tracker Stripping**: Removed "Made in Framer" badge and Framer telemetry trackers.
+- **Asset Resolving**: Relative stylesheets and script references resolved to avoid broken links.
 - **Zero Vendor Lock-in**: Deploy to **Vercel**, **Netlify**, or **Cloudflare Pages** in one click.
 `;
 }
 
-export function getScaffoldFiles(hostName: string, sourceUrl: string, pageCount: number): ProjectFile[] {
+export function getScaffoldFiles(hostName: string, sourceUrl: string, pageCount: number, platform = "Website"): ProjectFile[] {
   return [
     { path: "package.json", content: packageJson(`${hostName}-nextjs`) },
     { path: "next.config.js", content: NEXT_CONFIG },
@@ -177,6 +177,6 @@ export function getScaffoldFiles(hostName: string, sourceUrl: string, pageCount:
     { path: ".gitignore", content: GITIGNORE },
     { path: "vercel.json", content: vercelJson() },
     { path: "_headers", content: netlifyHeaders() },
-    { path: "README.md", content: readme(sourceUrl, pageCount) },
+    { path: "README.md", content: readme(sourceUrl, pageCount, platform) },
   ];
 }

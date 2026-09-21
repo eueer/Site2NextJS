@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 import { convertSite } from "@/lib/converter";
 import { saveJob } from "@/lib/store";
 
-export const maxDuration = 120; // Allow sufficient time for multi-page crawl & WebP encoding
+export const maxDuration = 60; // Compatible with standard Vercel serverless functions
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,15 +11,15 @@ export async function POST(req: NextRequest) {
     const { url, maxPages, maxImages } = body;
 
     if (!url || typeof url !== "string") {
-      return NextResponse.json({ error: "Please provide a valid Framer site URL." }, { status: 400 });
+      return NextResponse.json({ error: "Please provide a valid website URL (e.g. https://example.com)." }, { status: 400 });
     }
 
     const logs: string[] = [];
     const report = await convertSite(
       url,
       {
-        maxPages: maxPages ? Math.min(Number(maxPages), 30) : 15,
-        maxImages: maxImages ? Math.min(Number(maxImages), 300) : 200,
+        maxPages: maxPages ? Math.min(Number(maxPages), 25) : 15,
+        maxImages: maxImages ? Math.min(Number(maxImages), 200) : 150,
       },
       (msg) => {
         logs.push(msg);
@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       jobId,
       sourceUrl: report.sourceUrl,
+      platform: report.platform,
       pages: report.pages,
       stats: report.stats,
       notes: report.notes,

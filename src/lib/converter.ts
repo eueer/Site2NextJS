@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { detectFramer, extractMeta, collectStyleText } from "./detector";
+import { detectPlatform, extractMeta, collectStyleText } from "./detector";
 import { discoverPages, normalizeRoute } from "./discover";
 import { fetchBinary, fetchText, normalizeUrl } from "./fetcher";
 import { collectFontUrls, fontLocalPath } from "./fonts";
@@ -49,12 +49,8 @@ export async function convertSite(
   }
 
   const $first = cheerio.load(first.text);
-  const detection = detectFramer($first);
-  if (!detection.isFramer) {
-    throw new Error(
-      "The specified URL does not appear to be a published Framer website."
-    );
-  }
+  const detection = detectPlatform($first);
+  onProgress(`Detected site: ${detection.label}`, 1, 6);
 
   const siteMeta = extractMeta($first);
   onProgress("Discovering all site pages...", 2, 6);
@@ -86,11 +82,12 @@ export async function convertSite(
   const imageUrls = new Set<string>();
   const fontUrls = new Set<string>();
 
-  for (const html of pageHtmlMap.values()) {
+  for (const [route, html] of pageHtmlMap.entries()) {
     const $ = cheerio.load(html);
     const css = collectStyleText($);
-    collectImageUrls($, css).forEach((u) => imageUrls.add(u));
-    collectFontUrls(css).forEach((u) => fontUrls.add(u));
+    const pageUrl = discoveredPages.find((p) => p.route === route)?.url || start.toString();
+    collectImageUrls($, css, pageUrl).forEach((u) => imageUrls.add(u));
+    collectFontUrls(css, pageUrl).forEach((u) => fontUrls.add(u));
   }
 
   const assetMap = new Map<string, string>();
@@ -157,7 +154,8 @@ export async function convertSite(
   let homePreviewHtml = "";
 
   for (const [route, html] of pageHtmlMap.entries()) {
-    const processedHtml = processDocument(html, route, assetMap);
+    const pageUrl = discoveredPages.find((p) => p.route === route)?.url || start.toString();
+    const processedHtml = processDocument(html, route, assetMap, pageUrl, detection.isFramer);
     if (route === "/") {
       homePreviewHtml = processedHtml;
     }
@@ -168,7 +166,9 @@ export async function convertSite(
   }
 
   if (!homePreviewHtml && pageHtmlMap.size > 0) {
-    homePreviewHtml = processDocument(Array.from(pageHtmlMap.values())[0], "/", assetMap);
+    const firstUrl = Array.from(pageHtmlMap.keys())[0];
+    const firstHtml = Array.from(pageHtmlMap.values())[0];
+    homePreviewHtml = processDocument(firstHtml, "/", assetMap, start.toString(), detection.isFramer);
   }
 
   // Generate Project Scaffolding
@@ -176,11 +176,11 @@ export async function convertSite(
     try {
       return new URL(start.toString()).hostname.replace(/^www\./, "").replace(/\./g, "-");
     } catch {
-      return "framer-site";
+      return "site";
     }
   })();
 
-  const scaffoldFiles = getScaffoldFiles(host, start.toString(), pageHtmlMap.size);
+  const scaffoldFiles = getScaffoldFiles(host, start.toString(), pageHtmlMap.size, detection.label);
   files.push(...scaffoldFiles);
 
   const pageCount = pageHtmlMap.size;
@@ -195,18 +195,22 @@ export async function convertSite(
   ];
 
   const notes = [
-    "100% fidelity Next.js App Router project (one statically-prerendered route per page)",
-    "Framer React hydration comment nodes preserved for instant hydration and zero flicker",
+    `100% fidelity Next.js App Router project (${detection.label} conversion)`,
+    detection.isFramer
+      ? "Framer React hydration comment nodes preserved for instant hydration and zero flicker"
+      : "Static HTML prerendered with App Router route handlers and preserved interactivity",
     `Images self-hosted & re-encoded to WebP under public/assets/img/ (${imagesHosted} files)`,
     ...(fontsHosted ? [`Fonts self-hosted (${fontsHosted} files) with font-display:swap forced`] : []),
     "LCP hero image prioritized (fetchpriority=high); offscreen images deferred (loading=lazy)",
-    "Framer watermark badges & analytics beacons removed",
+    ...(detection.isFramer ? ["Framer watermark badges & analytics beacons removed"] : []),
+    "Relative stylesheets, scripts and assets resolved to preserve full page styling",
     "Accessibility: html[lang], iframe titles, role=main, and icon link aria-labels added",
     "Ready for instant deployment to Vercel, Netlify, or Cloudflare Pages",
   ];
 
   return {
     sourceUrl: start.toString(),
+    platform: detection.label,
     pages: Array.from(pageHtmlMap.keys()).map((route) => ({
       route,
       url: discoveredPages.find((p) => p.route === route)?.url || start.toString(),

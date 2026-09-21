@@ -65,6 +65,7 @@ interface PageInfo {
 interface ConversionData {
   jobId: string;
   sourceUrl: string;
+  platform?: string;
   pages: PageInfo[];
   stats: StatItem[];
   notes: string[];
@@ -100,7 +101,7 @@ export default function Home() {
                   const host = new URL(parsed.sourceUrl).hostname.replace(/^www\./, "").replace(/\./g, "-");
                   setRepoName(`${host}-nextjs`);
                 } catch {
-                  setRepoName("my-framer-site-nextjs");
+                  setRepoName("my-site-nextjs");
                 }
               } else {
                 console.warn("Cached job expired or missing on server, clearing stale cache.");
@@ -136,11 +137,11 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
 
   const steps = [
-    "Connecting & verifying Framer signatures",
+    "Connecting & detecting site platform",
     "Discovering all routes & sitemaps",
     "Harvesting media, images & fonts",
     "Re-encoding images to modern WebP",
-    "Self-hosting fonts & forcing swap",
+    "Self-hosting fonts & resolving relative assets",
     "Generating 100% fidelity Next.js App Router code",
   ];
 
@@ -287,10 +288,10 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-orange-50 to-[#FF7300]">
-                Framer2NextJS
+                Site2NextJS
               </span>
               <Badge color="orange" size="sm" className="bg-[#FF7300]/15 text-[#FF7300] border border-[#FF7300]/30 font-semibold">
-                100% Fidelity
+                Universal & 100% Fidelity
               </Badge>
             </div>
           </div>
@@ -326,19 +327,19 @@ export default function Home() {
         <div className="text-center max-w-3xl mx-auto mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-[#FF7300]/30 text-[#FF7300] text-xs font-semibold mb-6 shadow-sm shadow-[#FF7300]/5">
             <Sparkles className="w-3.5 h-3.5 text-[#FF7300]" />
-            <span>Zero Lock-in • Pixel Identical • 1-Click GitHub Push</span>
+            <span>Zero Lock-in • Framer, Webflow, HTML & Any Site • 1-Click GitHub Push</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] text-white">
-            Convert any Framer site to{" "}
+            Convert Framer or any website to{" "}
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-orange-100 to-[#FF7300]">
               production-ready Next.js
             </span>
           </h1>
 
           <p className="mt-5 text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Own your codebase. Statically prerendered App Router project preserving Framer’s React
-            hydration comment markers so every animation, hover, and interaction stays 100% identical.
+            Own your codebase. Statically prerendered App Router project supporting Framer, Webflow, WordPress,
+            and standard HTML sites with zero broken assets, preserved animations, and edge performance.
           </p>
         </div>
 
@@ -353,7 +354,7 @@ export default function Home() {
                 <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
                 <Input
                   type="text"
-                  placeholder="https://your-site.framer.website"
+                  placeholder="https://example.com or https://portfolio.framer.website"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   disabled={loading}
@@ -422,7 +423,7 @@ export default function Home() {
           </form>
 
           <p className="mt-2.5 text-xs text-center text-slate-500 font-mono">
-            Paste any published Framer site URL (e.g. <code>https://portfolio.framer.website</code>).
+            Paste any published Framer site, Webflow site, portfolio, or public web page URL.
           </p>
 
           {/* TailGrids Error Alert */}
@@ -506,7 +507,7 @@ export default function Home() {
                 <div>
                   <Badge color="success" size="sm" className="mb-2.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-semibold">
                     <CheckCircle2 className="w-3.5 h-3.5 mr-1 inline" />
-                    Conversion Ready • 100% Parity
+                    {conversionData.platform ? `${conversionData.platform} • ` : ""}Conversion Ready • 100% Parity
                   </Badge>
                   <h2 className="text-2xl font-bold text-white tracking-tight">
                     Successfully Generated Next.js Code
@@ -928,6 +929,15 @@ export default function Home() {
 
           <div className="max-w-3xl mx-auto">
             <AccordionRoot variant="style_one" className="space-y-4">
+              <AccordionItem className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden">
+                <AccordionTrigger className="p-5 sm:p-6 text-white hover:text-[#FF7300] font-semibold text-base">
+                  Will this work for non-Framer sites like Webflow, WordPress, or plain HTML?
+                </AccordionTrigger>
+                <AccordionContent className="px-5 sm:px-6 pb-6 text-sm text-slate-400 leading-relaxed">
+                  Yes! While specially optimized with comment-preservation for Framer React hydration, the engine supports any public website. It crawls all pages, converts raster images to modern WebP with Sharp, downloads web fonts locally, and resolves relative stylesheets and scripts so that any website runs cleanly in Next.js without broken assets.
+                </AccordionContent>
+              </AccordionItem>
+
               <AccordionItem className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden">
                 <AccordionTrigger className="p-5 sm:p-6 text-white hover:text-[#FF7300] font-semibold text-base">
                   Why does exporting to raw JSX break Framer animations?

@@ -9,24 +9,18 @@ export function boostLcpImage($: cheerio.CheerioAPI) {
   const hero = imgs.find((el) => {
     const $el = $(el);
     const w = parseInt($el.attr("width") || "0", 10);
-    const ref = ($el.attr("src") || "") + ($el.attr("srcset") || "");
-    return /framerusercontent\.com\/images\//.test(ref) && (w >= 400 || w === 0);
+    const h = parseInt($el.attr("height") || "0", 10);
+    const src = $el.attr("src") || "";
+    if (src.startsWith("data:") || /icon|badge|avatar/i.test(src)) return false;
+    if (w > 0 && w < 250) return false;
+    if (h > 0 && h < 150) return false;
+    return true;
   });
 
   if (!hero) return;
-  const ref = ($(hero).attr("src") || "") + ($(hero).attr("srcset") || "");
-  const m = ref.match(/framerusercontent\.com\/images\/([A-Za-z0-9]+)[.?]/);
-  if (!m) return;
-  const id = m[1];
-
-  $("img").each((_, el) => {
-    const $el = $(el);
-    const s = ($el.attr("src") || "") + ($el.attr("srcset") || "");
-    if (s.includes(id)) {
-      $el.attr("fetchpriority", "high");
-      if ($el.attr("loading") === "lazy") $el.removeAttr("loading");
-    }
-  });
+  const $hero = $(hero);
+  $hero.attr("fetchpriority", "high");
+  if ($hero.attr("loading") === "lazy") $hero.removeAttr("loading");
 }
 
 export function deferOffscreenMedia($: cheerio.CheerioAPI) {
@@ -130,7 +124,46 @@ export function removeBadgesAndTrackers($: cheerio.CheerioAPI) {
   $('script[src^="https://events.framer.com/"]').remove();
 }
 
-export function processDocument(html: string, route: string, assetMap: Map<string, string>): string {
+export function resolveRelativeAssets($: cheerio.CheerioAPI, originUrl?: string) {
+  if (!originUrl) return;
+
+  const resolveAttr = (el: any, attr: string) => {
+    const $el = $(el);
+    const val = ($el.attr(attr) || "").trim();
+    if (
+      !val ||
+      val.startsWith("#") ||
+      val.startsWith("data:") ||
+      val.startsWith("blob:") ||
+      val.startsWith("javascript:") ||
+      val.startsWith("/assets/")
+    ) {
+      return;
+    }
+    if (!/^https?:\/\//i.test(val) && !val.startsWith("//")) {
+      try {
+        const abs = new URL(val, originUrl).toString();
+        $el.attr(attr, abs);
+      } catch {}
+    }
+  };
+
+  // Resolve stylesheets & links
+  $("link[href]").each((_, el) => resolveAttr(el, "href"));
+  // Resolve scripts
+  $("script[src]").each((_, el) => resolveAttr(el, "src"));
+  // Resolve media sources
+  $("video[src], audio[src], source[src]").each((_, el) => resolveAttr(el, "src"));
+  $("video[poster]").each((_, el) => resolveAttr(el, "poster"));
+}
+
+export function processDocument(
+  html: string,
+  route: string,
+  assetMap: Map<string, string>,
+  originUrl?: string,
+  isFramer?: boolean
+): string {
   const $ = cheerio.load(html);
   const path = route || "/";
 
@@ -149,9 +182,14 @@ export function processDocument(html: string, route: string, assetMap: Map<strin
   boostLcpImage($);
   deferOffscreenMedia($);
 
-  // Remap assets
+  // Remap local assets (images, fonts, etc.)
   if (assetMap.size) {
-    rewriteImageRefs($, assetMap);
+    rewriteImageRefs($, assetMap, originUrl);
+  }
+
+  // Resolve any remaining relative assets (external CSS, JS, etc.) to the origin URL
+  if (originUrl) {
+    resolveRelativeAssets($, originUrl);
   }
 
   // Optimize fonts
@@ -164,11 +202,13 @@ export function processDocument(html: string, route: string, assetMap: Map<strin
   ensureMainLandmark($);
   fixUnlabeledLinks($);
 
-  // Clean up Framer badges & tracking beacons
+  // Clean up Framer badges & tracking beacons if it's a Framer site or badges are found
   removeBadgesAndTrackers($);
 
-  // Preconnect to Framer CDN for fast chunk loading
-  $("head").prepend('<link rel="preconnect" href="https://framerusercontent.com">');
+  // Preconnect to Framer CDN if it's a Framer site
+  if (isFramer) {
+    $("head").prepend('<link rel="preconnect" href="https://framerusercontent.com">');
+  }
 
   // Dynamic canonical upgrader script
   $("head").append(CANONICAL_SCRIPT);

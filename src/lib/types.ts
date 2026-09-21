@@ -24,6 +24,7 @@ export interface ProjectFile {
 
 export interface ConversionReport {
   sourceUrl: string;
+  platform?: string;
   pages: PageInfo[];
   stats: StatItem[];
   notes: string[];

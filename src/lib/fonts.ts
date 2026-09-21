@@ -1,14 +1,27 @@
 import * as cheerio from "cheerio";
 import crypto from "node:crypto";
 
-const FONT_URL_REGEX =
-  /https?:\/\/(?:framerusercontent\.com|fonts\.gstatic\.com)\/[^'")\s]+\.(?:woff2|woff|ttf|otf)/gi;
-
-export function collectFontUrls(css: string): Set<string> {
+export function collectFontUrls(css: string, baseUrl?: string): Set<string> {
   const out = new Set<string>();
-  for (const m of css.matchAll(FONT_URL_REGEX)) {
+  
+  // 1. Match font url(...) expressions in CSS
+  for (const m of css.matchAll(/url\(\s*['"]?([^'")]+?\.(?:woff2|woff|ttf|otf)(?:\?[^'")\s]*)?)['"]?\s*\)/gi)) {
+    const raw = m[1].trim();
+    if (raw.startsWith("data:") || raw.startsWith("blob:")) continue;
+    try {
+      if (/^https?:\/\//i.test(raw)) {
+        out.add(raw);
+      } else if (baseUrl) {
+        out.add(new URL(raw, baseUrl).toString());
+      }
+    } catch {}
+  }
+
+  // 2. Also match direct absolute font URLs
+  for (const m of css.matchAll(/https?:\/\/[^'")\s]+\.(?:woff2|woff|ttf|otf)(?:\?[^'")\s]*)?/gi)) {
     out.add(m[0]);
   }
+
   return out;
 }
 

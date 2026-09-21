@@ -84,4 +84,42 @@ const zipBuffer = await createProjectZip(filesToZip);
 assert.ok(zipBuffer.length > 0, "ZIP buffer must be non-empty");
 console.log(`✔ JSZip archive generation passed (${zipBuffer.length} bytes generated)`);
 
+// 6. Test Universal Platform Detection
+const sampleWebflowHtml = `<!DOCTYPE html><html data-wf-page="123" data-wf-site="456"><head><title>Webflow</title></head><body><h1>Webflow Site</h1></body></html>`;
+const sampleWpHtml = `<!DOCTYPE html><html><head><meta name="generator" content="WordPress 6.4"></head><body><h1>WP Site</h1></body></html>`;
+const sampleGenericHtml = `<!DOCTYPE html><html><head><title>Custom Portfolio</title><link rel="stylesheet" href="/styles/main.css"><script src="/scripts/app.js"></script></head><body><img src="/images/hero.jpg" width="800" height="450" /></body></html>`;
+
+import { detectPlatform } from "../src/lib/detector.ts";
+import { resolveRelativeAssets } from "../src/lib/transform.ts";
+
+const webflowDetect = detectPlatform(cheerio.load(sampleWebflowHtml));
+assert.strictEqual(webflowDetect.platform, "webflow", "Should accurately detect Webflow platform");
+
+const wpDetect = detectPlatform(cheerio.load(sampleWpHtml));
+assert.strictEqual(wpDetect.platform, "wordpress", "Should accurately detect WordPress platform");
+
+const genericDetect = detectPlatform(cheerio.load(sampleGenericHtml));
+assert.strictEqual(genericDetect.platform, "html", "Should identify standard HTML platform without throwing");
+assert.strictEqual(genericDetect.isFramer, false, "Generic HTML is not Framer");
+console.log("✔ Universal platform detection passed (Framer, Webflow, WordPress, HTML)");
+
+// 7. Test Generic HTML DOM Transform & Relative Asset Resolution
+const genericAssetMap = new Map([
+  ["https://my-site.com/images/hero.jpg", "/assets/img/hero.webp"],
+]);
+const processedGeneric = processDocument(
+  sampleGenericHtml,
+  "/",
+  genericAssetMap,
+  "https://my-site.com",
+  false
+);
+
+assert.ok(processedGeneric.includes("/assets/img/hero.webp"), "Should rewrite generic images to WebP");
+assert.ok(processedGeneric.includes('href="https://my-site.com/styles/main.css"'), "Should resolve relative stylesheet links to origin");
+assert.ok(processedGeneric.includes('src="https://my-site.com/scripts/app.js"'), "Should resolve relative script links to origin");
+assert.ok(processedGeneric.includes('fetchpriority="high"'), "Should prioritize LCP hero image on generic sites");
+assert.ok(!processedGeneric.includes("framerusercontent.com"), "Should not inject Framer CDN preconnect on generic sites");
+console.log("✔ Generic HTML transformation and relative asset resolution passed");
+
 console.log("\n🎉 ALL TESTS PASSED SUCCESSFULLY!");

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "node:fs";
 import path from "node:path";
-import { ASSETS_DIR } from "@/lib/store";
+import { ASSETS_DIR, getCachedAsset } from "@/lib/store";
+import os from "node:os";
 
 const MIME_TYPES: Record<string, string> = {
   ".webp": "image/webp",
@@ -36,17 +37,32 @@ export async function GET(
       return new NextResponse("Forbidden", { status: 403 });
     }
 
-    // 1. Try global cache ASSETS_DIR
+    const ext = path.extname(relPath).toLowerCase();
+    const contentType = MIME_TYPES[ext] || "application/octet-stream";
+
+    // 1. Try in-memory asset cache (ultra-fast, zero-disk)
+    const memData = getCachedAsset(`/assets/${relPath}`);
+    if (memData) {
+      return new Response(new Uint8Array(memData), {
+        headers: {
+          "Content-Type": contentType,
+          "Cache-Control": "public, max-age=31536000, immutable",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+    }
+
+    // 2. Try global cache ASSETS_DIR in tmp
     let target = path.join(ASSETS_DIR, relPath);
 
-    // 2. Try host app public/assets
+    // 3. Try host app public/assets if exists
     if (!fs.existsSync(target)) {
       target = path.join(process.cwd(), "public", "assets", relPath);
     }
 
-    // 3. Fallback: search in jobs directory
+    // 4. Fallback: search in jobs directory in tmp
     if (!fs.existsSync(target)) {
-      const jobsDir = path.join(process.cwd(), ".framer-cache", "jobs");
+      const jobsDir = path.join(os.tmpdir(), "site2nextjs-cache", "jobs");
       if (fs.existsSync(jobsDir)) {
         const jobs = fs.readdirSync(jobsDir);
         for (const j of jobs) {
@@ -63,13 +79,13 @@ export async function GET(
       return new NextResponse("Asset not found", { status: 404 });
     }
 
-    const ext = path.extname(target).toLowerCase();
-    const contentType = MIME_TYPES[ext] || "application/octet-stream";
+    const fileExt = path.extname(target).toLowerCase();
+    const resolvedContentType = MIME_TYPES[fileExt] || contentType;
     const data = fs.readFileSync(target);
 
-    return new NextResponse(data, {
+    return new Response(new Uint8Array(data), {
       headers: {
-        "Content-Type": contentType,
+        "Content-Type": resolvedContentType,
         "Cache-Control": "public, max-age=31536000, immutable",
         "Access-Control-Allow-Origin": "*",
       },

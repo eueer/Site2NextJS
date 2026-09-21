@@ -1,23 +1,43 @@
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
 import { ConversionReport, ProjectFile } from "./types";
 
-const CACHE_ROOT = path.join(process.cwd(), ".framer-cache");
+// On Vercel / serverless, process.cwd() is read-only.
+// Use os.tmpdir() which is always writable.
+const CACHE_ROOT = path.join(os.tmpdir(), "site2nextjs-cache");
 const JOBS_DIR = path.join(CACHE_ROOT, "jobs");
 export const ASSETS_DIR = path.join(CACHE_ROOT, "assets");
 
-// Ensure storage directories exist
+// Ensure storage directories exist safely
 try {
   fs.mkdirSync(JOBS_DIR, { recursive: true });
   fs.mkdirSync(ASSETS_DIR, { recursive: true });
 } catch {}
 
-// In-memory L1 cache for instant retrieval within process
+// In-memory L1 cache for instant retrieval within serverless worker
 const memoryCache = new Map<string, ConversionReport>();
+const assetCache = new Map<string, Buffer>();
+
+export function getCachedAsset(assetPath: string): Buffer | null {
+  const normalized = assetPath.startsWith("/") ? assetPath : `/${assetPath}`;
+  return assetCache.get(normalized) || null;
+}
 
 export function saveJob(id: string, report: ConversionReport) {
   // 1. Save to L1 memory cache
   memoryCache.set(id, report);
+
+  // Cache assets in memory for zero-latency serverless serving
+  for (const f of report.files) {
+    if (f.path.startsWith("public/assets/")) {
+      const assetKey = f.path.replace(/^public/, "");
+      const buf = f.binary || (typeof f.content === "string" ? Buffer.from(f.content, "utf8") : null);
+      if (buf) {
+        assetCache.set(assetKey, buf);
+      }
+    }
+  }
 
   try {
     const jobDir = path.join(JOBS_DIR, id);
@@ -27,6 +47,7 @@ export function saveJob(id: string, report: ConversionReport) {
     const meta = {
       id,
       sourceUrl: report.sourceUrl,
+      platform: report.platform,
       pages: report.pages,
       stats: report.stats,
       notes: report.notes,
@@ -54,7 +75,7 @@ export function saveJob(id: string, report: ConversionReport) {
         fs.writeFileSync(fullPath, f.binary);
       }
 
-      // If file is an asset under public/assets/, also mirror to ASSETS_DIR
+      // If file is an asset under public/assets/, also mirror to ASSETS_DIR in tmp
       if (f.path.startsWith("public/assets/")) {
         const relAssetPath = f.path.replace(/^public\/assets\//, "");
         const globalAssetPath = path.join(ASSETS_DIR, relAssetPath);
@@ -67,15 +88,17 @@ export function saveJob(id: string, report: ConversionReport) {
       }
     }
 
-    // 5. Also copy to host app's public/assets so static server has them immediately
-    try {
-      const sourceAssetsDir = path.join(filesDir, "public", "assets");
-      if (fs.existsSync(sourceAssetsDir)) {
-        const appPublicAssets = path.join(process.cwd(), "public", "assets");
-        fs.mkdirSync(appPublicAssets, { recursive: true });
-        fs.cpSync(sourceAssetsDir, appPublicAssets, { recursive: true });
-      }
-    } catch {}
+    // 5. If local development (not Vercel read-only filesystem), mirror to host public/assets
+    if (!process.env.VERCEL && process.env.NODE_ENV !== "production") {
+      try {
+        const sourceAssetsDir = path.join(filesDir, "public", "assets");
+        if (fs.existsSync(sourceAssetsDir)) {
+          const appPublicAssets = path.join(process.cwd(), "public", "assets");
+          fs.mkdirSync(appPublicAssets, { recursive: true });
+          fs.cpSync(sourceAssetsDir, appPublicAssets, { recursive: true });
+        }
+      } catch {}
+    }
   } catch (err) {
     console.error(`Failed to persist job ${id} to disk:`, err);
   }
@@ -125,6 +148,7 @@ export function getJob(id: string): ConversionReport | null {
 
     const report: ConversionReport = {
       sourceUrl: meta.sourceUrl,
+      platform: meta.platform,
       pages: meta.pages,
       stats: meta.stats,
       notes: meta.notes,
