@@ -363,12 +363,6 @@ export default function Home() {
       <main className="relative z-10 flex-1 mx-auto max-w-6xl px-6 pt-16 pb-28 w-full">
         {/* Hero Section */}
         <section id="converter" className="text-center max-w-3xl mx-auto mb-10">
-          {/* Section Tag */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-white/[0.08] border border-white/10 text-xs font-medium text-white/80 mb-6 shadow-sm backdrop-blur-md">
-            <HugeiconsIcon icon={AiSparklesIcon} size={14} className="text-[#F65023]" />
-            <span>Automated Growth Systems</span>
-          </div>
-
           {/* H1 Heading ONLY uses Geist Pixel */}
           <h1 className="font-pixel text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.12] text-white">
             Convert any website to{" "}
