@@ -335,7 +335,7 @@ export default function Home() {
                 FAQ
               </a>
               <a
-                href="https://github.com/surajkale/framer2nextjs"
+                href="https://github.com/eueer/Site2NextJS"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-white transition-colors inline-flex items-center gap-1.5"
