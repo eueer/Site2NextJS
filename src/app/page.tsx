@@ -71,6 +71,9 @@ interface ConversionData {
   notes: string[];
   logs: string[];
   fileCount: number;
+  previewHtml?: string;
+  zipBase64?: string;
+  files?: Array<{ path: string; content?: string; binaryBase64?: string }>;
 }
 
 export default function Home() {
@@ -85,33 +88,21 @@ export default function Home() {
   const [stepMessage, setStepMessage] = useState("");
   const [conversionData, setConversionData] = useState<ConversionData | null>(null);
 
-  // Restore from localStorage on mount and verify job exists on backend
+  // Restore from localStorage on mount
   React.useEffect(() => {
     try {
       const savedJob = localStorage.getItem("framer2nextjs_active_job");
       if (savedJob) {
         const parsed = JSON.parse(savedJob);
         if (parsed?.jobId) {
-          fetch(`/api/preview/${parsed.jobId}`, { method: "HEAD" })
-            .then((res) => {
-              if (res.ok) {
-                setConversionData(parsed);
-                if (parsed.sourceUrl) setUrl(parsed.sourceUrl);
-                try {
-                  const host = new URL(parsed.sourceUrl).hostname.replace(/^www\./, "").replace(/\./g, "-");
-                  setRepoName(`${host}-nextjs`);
-                } catch {
-                  setRepoName("my-site-nextjs");
-                }
-              } else {
-                console.warn("Cached job expired or missing on server, clearing stale cache.");
-                localStorage.removeItem("framer2nextjs_active_job");
-                if (parsed.sourceUrl) setUrl(parsed.sourceUrl);
-              }
-            })
-            .catch(() => {
-              setConversionData(parsed);
-            });
+          setConversionData(parsed);
+          if (parsed.sourceUrl) setUrl(parsed.sourceUrl);
+          try {
+            const host = new URL(parsed.sourceUrl).hostname.replace(/^www\./, "").replace(/\./g, "-");
+            setRepoName(`${host}-nextjs`);
+          } catch {
+            setRepoName("my-site-nextjs");
+          }
         }
       }
       const savedToken = localStorage.getItem("framer2nextjs_github_token");
@@ -120,6 +111,39 @@ export default function Home() {
       }
     } catch {}
   }, []);
+
+  const handleDownload = () => {
+    if (!conversionData) return;
+    if (conversionData.zipBase64) {
+      try {
+        const byteCharacters = atob(conversionData.zipBase64);
+        const byteNumbers = new Uint8Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const blob = new Blob([byteNumbers], { type: "application/zip" });
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        const host = (() => {
+          try {
+            return new URL(conversionData.sourceUrl).hostname.replace(/^www\./, "").replace(/\./g, "-");
+          } catch {
+            return "site";
+          }
+        })();
+        a.download = `${host}-nextjs.zip`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+        return;
+      } catch (e) {
+        console.warn("Client blob download fallback:", e);
+      }
+    }
+    window.location.href = `/api/download/${conversionData.jobId}`;
+  };
 
   // Preview device mode
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "tablet" | "mobile">("desktop");
@@ -233,6 +257,8 @@ export default function Home() {
           token: githubToken.trim(),
           repoName: repoName.trim(),
           isPrivate,
+          files: conversionData.files,
+          sourceUrl: conversionData.sourceUrl,
         }),
       });
 
@@ -520,13 +546,13 @@ export default function Home() {
 
                 {/* Primary Action Buttons */}
                 <div className="flex flex-wrap items-center gap-3">
-                  <a
-                    href={`/api/download/${conversionData.jobId}`}
-                    className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#FF7300] hover:bg-[#e65c00] text-white text-sm font-semibold shadow-lg shadow-[#FF7300]/25 transition-all"
+                  <Button
+                    onPress={handleDownload}
+                    className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#FF7300] hover:bg-[#e65c00] text-white text-sm font-semibold shadow-lg shadow-[#FF7300]/25 transition-all border-0"
                   >
                     <Download className="w-4 h-4" />
                     <span>Download Project (.ZIP)</span>
-                  </a>
+                  </Button>
 
                   <Button
                     appearance="outline"
@@ -656,6 +682,7 @@ export default function Home() {
                   }}
                 >
                   <iframe
+                    srcDoc={conversionData.previewHtml}
                     src={`/api/preview/${conversionData.jobId}`}
                     title="Converted Site Preview"
                     className="w-full h-full border-0"

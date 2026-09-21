@@ -4,29 +4,40 @@ import { getJob } from "@/lib/store";
 
 export async function POST(req: NextRequest) {
   try {
-    const { jobId, token, repoName, isPrivate, description } = await req.json();
+    const { jobId, token, repoName, isPrivate, description, files: incomingFiles, sourceUrl } = await req.json();
 
-    if (!jobId || !token || !repoName) {
+    if ((!jobId && !incomingFiles) || !token || !repoName) {
       return NextResponse.json(
-        { error: "Missing required fields (jobId, token, or repoName)." },
+        { error: "Missing required fields (token, repoName, or project data)." },
         { status: 400 }
       );
     }
 
-    const report = getJob(jobId);
-    if (!report) {
+    const report = jobId ? getJob(jobId) : null;
+    let files = report?.files;
+
+    if (!files && incomingFiles && Array.isArray(incomingFiles)) {
+      files = incomingFiles.map((f: any) => ({
+        path: f.path,
+        content: f.content,
+        binary: f.binaryBase64 ? Buffer.from(f.binaryBase64, "base64") : undefined,
+      }));
+    }
+
+    if (!files || files.length === 0) {
       return NextResponse.json(
-        { error: "Job has expired. Please convert your Framer site again." },
+        { error: "Job session has expired. Please reconvert your site below to refresh files and push." },
         { status: 404 }
       );
     }
 
+    const siteSource = report?.sourceUrl || sourceUrl || "site";
     const result = await pushToGitHub({
       token: token.trim(),
       repoName: repoName.trim(),
       isPrivate: Boolean(isPrivate),
-      description: description || `Next.js site converted from ${report.sourceUrl} with Framer2NextJS`,
-      files: report.files,
+      description: description || `Next.js site converted from ${siteSource} with Site2NextJS`,
+      files,
     });
 
     return NextResponse.json({

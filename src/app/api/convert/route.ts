@@ -29,6 +29,15 @@ export async function POST(req: NextRequest) {
     const jobId = crypto.randomUUID();
     saveJob(jobId, report);
 
+    let zipBase64: string | undefined;
+    try {
+      const { createProjectZip } = await import("@/lib/zip");
+      const zipBuf = await createProjectZip(report.files);
+      zipBase64 = Buffer.from(zipBuf).toString("base64");
+    } catch (zipErr) {
+      console.warn("Could not pre-generate zip buffer:", zipErr);
+    }
+
     return NextResponse.json({
       jobId,
       sourceUrl: report.sourceUrl,
@@ -38,6 +47,13 @@ export async function POST(req: NextRequest) {
       notes: report.notes,
       logs,
       fileCount: report.files.length,
+      previewHtml: report.previewHtml,
+      zipBase64,
+      files: report.files.map((f) => ({
+        path: f.path,
+        content: f.content,
+        binaryBase64: f.binary ? f.binary.toString("base64") : undefined,
+      })),
     });
   } catch (err: unknown) {
     console.error("Conversion error:", err);
