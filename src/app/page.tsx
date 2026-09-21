@@ -308,59 +308,57 @@ export default function Home() {
       {/* Dynamic Ambient Hero Background (Shader grid + Particle Mesh + Orange Glows) */}
       <HeroBackground />
 
-      {/* Floating Navigation Header (Framer-exact framer-1s20bs2-container) */}
-      <div className="fixed top-4 sm:top-5 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl pointer-events-auto">
-        <header className="squircle-pill px-5 sm:px-7 py-3 sm:py-3.5 bg-black/40 backdrop-blur-2xl border border-white/10 shadow-2xl flex items-center justify-between transition-all">
-          <div className="flex items-center gap-3">
-            <SiteLogo className="w-7 h-7 sm:w-8 sm:h-8" />
-            <div className="flex items-center gap-2">
-              <span className="font-sans font-semibold text-lg sm:text-xl tracking-tight text-white">
-                Site2NextJS
-              </span>
-              <span className="hidden sm:inline-flex squircle-pill px-2 py-0.5 text-[10px] font-medium bg-[#F65023]/15 text-[#F65023] border border-[#F65023]/30">
-                Universal Parity
-              </span>
-            </div>
-          </div>
+      {/* Floating Navigation Header (Framer-exact framer-1s20bs2-container: top 16px, width 90%, max 1200px) */}
+      <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[1200px] pointer-events-auto">
+        <header className="squircle-pill px-6 py-6 bg-white/[0.08] backdrop-blur-[30px] border border-white/10 shadow-2xl flex items-center justify-between transition-all">
+          {/* Logo Section (framer-kbkj1k: gap-1.5, 30px icon, clean typography) */}
+          <a href="#" className="flex items-center gap-1.5 cursor-pointer select-none">
+            <SiteLogo className="w-[30px] h-[30px]" />
+            <span className="font-sans font-medium text-xl sm:text-2xl tracking-tight text-white">
+              Site2NextJS
+            </span>
+          </a>
 
-          <nav className="hidden md:flex items-center gap-7 text-xs sm:text-sm text-white/70 font-medium">
-            <a href="#how-it-works" className="hover:text-white transition-colors">
-              How it works
-            </a>
-            <a href="#about" className="hover:text-white transition-colors">
-              About
-            </a>
-            <a href="#architecture" className="hover:text-white transition-colors">
-              Architecture
-            </a>
-            <a href="#faq" className="hover:text-white transition-colors">
-              FAQ
-            </a>
-          </nav>
+          {/* Navigation Links (framer-gpi5w4: gap 28px, links gap 20px) */}
+          <div className="flex items-center gap-7">
+            <nav className="hidden md:flex items-center gap-5 text-[15px] text-white/60 font-medium">
+              <a href="#how-it-works" className="hover:text-white transition-colors">
+                How it works
+              </a>
+              <a href="#about" className="hover:text-white transition-colors">
+                About
+              </a>
+              <a href="#architecture" className="hover:text-white transition-colors">
+                Architecture
+              </a>
+              <a href="#faq" className="hover:text-white transition-colors">
+                FAQ
+              </a>
+              <a
+                href="https://github.com/surajkale/framer2nextjs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors inline-flex items-center gap-1.5"
+              >
+                <HugeiconsIcon icon={GithubIcon} size={15} />
+                <span>GitHub</span>
+              </a>
+            </nav>
 
-          <div className="flex items-center gap-2.5">
-            <a
-              href="https://github.com/surajkale/framer2nextjs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="squircle-pill inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 text-xs font-semibold bg-white/[0.08] border border-white/10 text-white/90 hover:text-white hover:border-[#F65023]/50 transition-all"
-            >
-              <HugeiconsIcon icon={GithubIcon} size={14} />
-              <span className="hidden sm:inline">GitHub</span>
-            </a>
+            {/* CTA Button (framer-u7v8j: padding 8px 18px, squircle-pill) */}
             <a
               href="#converter"
-              className="squircle-pill inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs font-semibold bg-[#F65023] hover:bg-[#e04318] text-white shadow-lg shadow-[#F65023]/25 transition-all"
+              className="squircle-pill inline-flex items-center gap-1.5 px-[18px] py-2 text-[15px] font-medium bg-[#F65023] hover:bg-[#e04318] text-white shadow-lg shadow-[#F65023]/25 transition-all"
             >
               <span>Convert Site</span>
-              <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
+              <HugeiconsIcon icon={ArrowRight01Icon} size={14} />
             </a>
           </div>
         </header>
       </div>
 
-      {/* Main Container */}
-      <main className="relative z-10 flex-1 mx-auto max-w-6xl px-6 pt-28 sm:pt-32 pb-28 w-full">
+      {/* Main Container (Framer-exact hero section padding: 200px 0 142px) */}
+      <main className="relative z-10 flex-1 mx-auto max-w-6xl px-6 pt-44 sm:pt-48 pb-28 w-full">
         {/* Hero Section */}
         <section id="converter" className="text-center max-w-3xl mx-auto mb-10">
           {/* H1 Heading ONLY uses Geist Pixel */}
