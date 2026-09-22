@@ -19,6 +19,8 @@ import {
   Layers01Icon,
   FlashIcon,
   SecurityCheckIcon,
+  DashboardSpeed01Icon,
+  LockIcon,
   ArrowDown01Icon,
   ArrowUp01Icon,
   Copy01Icon,
@@ -930,18 +932,13 @@ export default function Home() {
             </h2>
           </div>
 
-          {/* 2 Stats Cards (1st card removed per user instruction; 1:1 Framer notch & inverted fillets) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[570px] mx-auto justify-items-center">
-            {/* Card 1: Growth increase */}
+          {/* 3 Stats Cards for Site2NextJS (1st false card removed; styled with Framer 1:1 notch & inverted fillets) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-[880px] mx-auto justify-items-center">
+            {/* Card 1: Animation Parity */}
             <div className="relative w-full max-w-[277px] h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
               {/* Signature Framer Top-Left Cutout Notch (48x48 black with 18px radius) */}
               <div className="absolute top-0 left-0 w-[48px] h-[48px] bg-black rounded-br-[18px] flex items-center justify-center z-10">
-                {/* Brand Orange SVG Icon */}
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#F65023]">
-                  <path d="M 0.152 10.125 C -0.655 5.77 1.826 1.476 6.002 0 L 6.002 6.75 Z" fill="currentColor" fillOpacity="1" transform="translate(2.998 3.516)" />
-                  <path d="M 0.152 10.125 C -0.655 5.77 1.826 1.476 6.002 0 L 6.002 6.75 Z" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(2.998 3.516)" />
-                  <path d="M 7.761 9.039 L 7.761 0 C 12.119 0.001 15.851 3.125 16.619 7.415 C 17.386 11.706 14.969 15.93 10.88 17.441 C 6.792 18.953 2.208 17.318 0 13.56 Z" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(4.239 3)" />
-                </svg>
+                <HugeiconsIcon icon={FlashIcon} size={20} className="text-[#F65023]" />
 
                 {/* Bottom Inverted Fillet (Seamless curve into card edge) */}
                 <div className="absolute -bottom-[24px] left-0 w-[24px] h-[24px] pointer-events-none">
@@ -962,44 +959,33 @@ export default function Home() {
               <div className="p-4 flex flex-col gap-3.5 w-full z-0">
                 <div className="flex flex-col gap-0.5">
                   <div className="font-sans font-medium text-[32px] text-white leading-none tracking-tight">
-                    80x
+                    100%
                   </div>
                   <div className="font-sans font-medium text-sm text-white">
-                    Growth increase
+                    Animation Parity
                   </div>
                 </div>
                 <div className="h-[1px] w-full bg-white/10" />
                 <p className="font-sans text-[13px] text-white/60 leading-snug">
-                  Our automation helps businesses scale faster and operate efficiently
+                  Preserved React Suspense markers, Framer Motion springs, and responsive layouts automatically.
                 </p>
               </div>
             </div>
 
-            {/* Card 2: Team members */}
+            {/* Card 2: Payload Reduction */}
             <div className="relative w-full max-w-[277px] h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
               {/* Signature Framer Top-Left Cutout Notch (48x48 black with 18px radius) */}
               <div className="absolute top-0 left-0 w-[48px] h-[48px] bg-black rounded-br-[18px] flex items-center justify-center z-10">
-                {/* Brand Orange SVG Icon */}
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#F65023]">
-                  <path d="M 0 3.75 C 0 1.679 1.679 0 3.75 0 C 5.821 0 7.5 1.679 7.5 3.75 C 7.5 5.821 5.821 7.5 3.75 7.5 C 1.679 7.5 0 5.821 0 3.75 Z" fill="currentColor" fillOpacity="1" transform="translate(8.25 9.75)" />
-                  <path d="M 0 3 C 0 1.343 1.343 0 3 0 C 4.657 0 6 1.343 6 3 C 6 4.657 4.657 6 3 6 C 1.343 6 0 4.657 0 3 Z" fill="currentColor" fillOpacity="1" transform="translate(3 5.25)" />
-                  <path d="M 0 3 C 0 1.343 1.343 0 3 0 C 4.657 0 6 1.343 6 3 C 6 4.657 4.657 6 3 6 C 1.343 6 0 4.657 0 3 Z" fill="currentColor" fillOpacity="1" transform="translate(15 5.25)" />
-                  <path d="M 0 0 C 1.771 -0.001 3.439 0.833 4.5 2.25" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(18 11.25)" />
-                  <path d="M 0 2.25 C 1.061 0.833 2.729 -0.001 4.5 0" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(1.5 11.25)" />
-                  <path d="M 0 3.75 C 0 1.679 1.679 0 3.75 0 C 5.821 0 7.5 1.679 7.5 3.75 C 7.5 5.821 5.821 7.5 3.75 7.5 C 1.679 7.5 0 5.821 0 3.75 Z" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(8.25 9.75)" />
-                  <path d="M 0 3 C 1.095 1.141 3.092 0 5.25 0 C 7.408 0 9.405 1.141 10.5 3" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(6.75 17.25)" />
-                  <path d="M 0 2.25 C 0.39 0.741 1.87 -0.218 3.407 0.043 C 4.944 0.304 6.025 1.698 5.894 3.252 C 5.764 4.805 4.465 6 2.906 6" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(15.094 5.25)" />
-                  <path d="M 2.999 6 C 1.44 6 0.141 4.805 0.011 3.252 C -0.12 1.698 0.961 0.304 2.498 0.043 C 4.034 -0.218 5.515 0.741 5.905 2.25" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(3.001 5.25)" />
-                </svg>
+                <HugeiconsIcon icon={DashboardSpeed01Icon} size={20} className="text-[#F65023]" />
 
-                {/* Bottom Inverted Fillet */}
+                {/* Bottom Inverted Fillet (Seamless curve into card edge) */}
                 <div className="absolute -bottom-[24px] left-0 w-[24px] h-[24px] pointer-events-none">
                   <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
                     <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
                   </svg>
                 </div>
 
-                {/* Right Inverted Fillet */}
+                {/* Right Inverted Fillet (Seamless curve into top edge) */}
                 <div className="absolute top-0 -right-[24px] w-[24px] h-[24px] pointer-events-none">
                   <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
                     <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
@@ -1011,15 +997,53 @@ export default function Home() {
               <div className="p-4 flex flex-col gap-3.5 w-full z-0">
                 <div className="flex flex-col gap-0.5">
                   <div className="font-sans font-medium text-[32px] text-white leading-none tracking-tight">
-                    30+
+                    70%
                   </div>
                   <div className="font-sans font-medium text-sm text-white">
-                    Team members
+                    Payload Reduction
                   </div>
                 </div>
                 <div className="h-[1px] w-full bg-white/10" />
                 <p className="font-sans text-[13px] text-white/60 leading-snug">
-                  Our skilled team builds, manages, and optimizes automation systems
+                  Sharp WebP image re-encoding and self-hosted local fonts completely eliminate layout shift.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 3: Monthly CMS Fees */}
+            <div className="relative w-full max-w-[277px] h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
+              {/* Signature Framer Top-Left Cutout Notch (48x48 black with 18px radius) */}
+              <div className="absolute top-0 left-0 w-[48px] h-[48px] bg-black rounded-br-[18px] flex items-center justify-center z-10">
+                <HugeiconsIcon icon={LockIcon} size={20} className="text-[#F65023]" />
+
+                {/* Bottom Inverted Fillet (Seamless curve into card edge) */}
+                <div className="absolute -bottom-[24px] left-0 w-[24px] h-[24px] pointer-events-none">
+                  <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
+                    <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
+                  </svg>
+                </div>
+
+                {/* Right Inverted Fillet (Seamless curve into top edge) */}
+                <div className="absolute top-0 -right-[24px] w-[24px] h-[24px] pointer-events-none">
+                  <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
+                    <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Card Bottom Content */}
+              <div className="p-4 flex flex-col gap-3.5 w-full z-0">
+                <div className="flex flex-col gap-0.5">
+                  <div className="font-sans font-medium text-[32px] text-white leading-none tracking-tight">
+                    $0
+                  </div>
+                  <div className="font-sans font-medium text-sm text-white">
+                    Monthly CMS Fees
+                  </div>
+                </div>
+                <div className="h-[1px] w-full bg-white/10" />
+                <p className="font-sans text-[13px] text-white/60 leading-snug">
+                  Eliminate recurring per-site subscription fees by deploying free to Vercel, Netlify, or Cloudflare.
                 </p>
               </div>
             </div>
