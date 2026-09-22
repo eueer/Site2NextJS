@@ -509,96 +509,99 @@ export default function HomePageClient({ initialData }: { initialData?: LandingP
               />
             </div>
 
-            {/* Checkmark: Ownership & Authorization Requirement */}
-            <label
-              className={`group flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer transition-all duration-200 select-none ${
-                showAuthWarning
-                  ? "bg-[#F65023]/15 border border-[#F65023] ring-2 ring-[#F65023]/40 shadow-md shadow-[#F65023]/25"
-                  : "text-white/60 hover:text-white/90 border border-transparent"
-              }`}
-            >
-              <div className="relative flex items-center justify-center shrink-0">
-                <input
-                  type="checkbox"
-                  checked={isAuthorized}
-                  onChange={(e) => {
-                    setIsAuthorized(e.target.checked);
-                    if (e.target.checked) setShowAuthWarning(false);
-                  }}
-                  className="sr-only"
-                />
-                <div
-                  className={`w-4 h-4 rounded-[4px] border flex items-center justify-center transition-all ${
-                    isAuthorized
-                      ? "bg-[#F65023] border-[#F65023] text-white"
-                      : showAuthWarning
-                      ? "border-[#F65023] bg-[#F65023]/25 ring-2 ring-[#F65023]"
-                      : "border-white/30 bg-white/5 group-hover:border-white/50"
-                  }`}
-                >
-                  {isAuthorized && (
-                    <svg
-                      className="w-3 h-3 text-white stroke-[3]"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                  )}
-                </div>
-              </div>
-              <span
-                className={`text-xs font-sans tracking-tight transition-colors ${
+            {/* Bottom Controls Area */}
+            <div className="flex flex-col">
+              {/* Checkmark: Ownership & Authorization Requirement - Placed 8px above the settings button */}
+              <label
+                className={`w-fit group flex items-center gap-2.5 px-2 py-1 mb-[8px] rounded-lg cursor-pointer transition-all duration-200 select-none ${
                   showAuthWarning
-                    ? "text-[#F65023] font-medium"
-                    : "text-white/70 group-hover:text-white"
+                    ? "bg-[#F65023]/15 border border-[#F65023] ring-2 ring-[#F65023]/40 shadow-md shadow-[#F65023]/25"
+                    : "text-white/60 hover:text-white/90 border border-transparent"
                 }`}
               >
-                I own or am authorised to clone this site.
-              </span>
-            </label>
-
-            {/* Bottom Action Menu Row */}
-            <div className="flex items-center justify-between pt-1">
-              {/* Left: Advanced Settings Pill Toggle */}
-              <button
-                type="button"
-                onClick={() => setShowOptions(!showOptions)}
-                className="squircle-pill inline-flex items-center gap-1.5 px-3 py-1.5 text-xs text-white/80 hover:text-white bg-white/[0.08] hover:bg-white/[0.14] border border-white/10 transition-all font-sans"
-              >
-                <HugeiconsIcon icon={Settings02Icon} size={13} className="text-white" />
-                <span>Advanced Settings</span>
-                <HugeiconsIcon icon={showOptions ? ArrowUp01Icon : ArrowDown01Icon} size={11} className="text-white/60" />
-              </button>
-
-              {/* Right: Convert to NextJS Pill Button */}
-              <div
-                onClick={() => {
-                  if (!isAuthorized) {
-                    setShowAuthWarning(true);
-                  }
-                }}
-              >
-                <button
-                  type="submit"
-                  disabled={loading || !url.trim() || !isAuthorized}
-                  className="squircle-pill inline-flex items-center gap-1.5 h-[28px] px-3.5 bg-[#F65023] hover:bg-[#e04318] text-white text-xs font-semibold shadow-lg shadow-[#F65023]/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-sans"
+                <div className="relative flex items-center justify-center shrink-0">
+                  <input
+                    type="checkbox"
+                    checked={isAuthorized}
+                    onChange={(e) => {
+                      setIsAuthorized(e.target.checked);
+                      if (e.target.checked) setShowAuthWarning(false);
+                    }}
+                    className="sr-only"
+                  />
+                  <div
+                    className={`w-4 h-4 rounded-[4px] border flex items-center justify-center transition-all ${
+                      isAuthorized
+                        ? "bg-[#F65023] border-[#F65023] text-white"
+                        : showAuthWarning
+                        ? "border-[#F65023] bg-[#F65023]/25 ring-2 ring-[#F65023]"
+                        : "border-white/30 bg-white/5 group-hover:border-white/50"
+                    }`}
+                  >
+                    {isAuthorized && (
+                      <svg
+                        className="w-3 h-3 text-white stroke-[3]"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    )}
+                  </div>
+                </div>
+                <span
+                  className={`text-xs font-sans tracking-tight transition-colors ${
+                    showAuthWarning
+                      ? "text-[#F65023] font-medium"
+                      : "text-white/70 group-hover:text-white"
+                  }`}
                 >
-                  {loading ? (
-                    <>
-                      <HugeiconsIcon icon={RefreshIcon} size={13} className="animate-spin text-white" />
-                      <span>Converting...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Convert to NextJS</span>
-                      <HugeiconsIcon icon={ArrowRight01Icon} size={13} className="text-white" />
-                    </>
-                  )}
+                  I own or am authorised to clone this site.
+                </span>
+              </label>
+
+              {/* Bottom Action Menu Row */}
+              <div className="flex items-center justify-between">
+                {/* Left: Advanced Settings Pill Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setShowOptions(!showOptions)}
+                  className="squircle-pill inline-flex items-center gap-1.5 px-3 py-1.5 text-xs text-white/80 hover:text-white bg-white/[0.08] hover:bg-white/[0.14] border border-white/10 transition-all font-sans"
+                >
+                  <HugeiconsIcon icon={Settings02Icon} size={13} className="text-white" />
+                  <span>Advanced Settings</span>
+                  <HugeiconsIcon icon={showOptions ? ArrowUp01Icon : ArrowDown01Icon} size={11} className="text-white/60" />
                 </button>
+
+                {/* Right: Convert to NextJS Pill Button */}
+                <div
+                  onClick={() => {
+                    if (!isAuthorized) {
+                      setShowAuthWarning(true);
+                    }
+                  }}
+                >
+                  <button
+                    type="submit"
+                    disabled={loading || !url.trim() || !isAuthorized}
+                    className="squircle-pill inline-flex items-center gap-1.5 h-[28px] px-3.5 bg-[#F65023] hover:bg-[#e04318] text-white text-xs font-semibold shadow-lg shadow-[#F65023]/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-sans"
+                  >
+                    {loading ? (
+                      <>
+                        <HugeiconsIcon icon={RefreshIcon} size={13} className="animate-spin text-white" />
+                        <span>Converting...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Convert to NextJS</span>
+                        <HugeiconsIcon icon={ArrowRight01Icon} size={13} className="text-white" />
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
 
