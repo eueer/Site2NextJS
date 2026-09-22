@@ -112,10 +112,8 @@ export default function Home() {
           }
         }
       }
-      const savedToken = localStorage.getItem("framer2nextjs_github_token");
-      if (savedToken) {
-        setGithubToken(savedToken);
-      }
+      // Actively purge any legacy stored token from previous versions for security
+      localStorage.removeItem("framer2nextjs_github_token");
     } catch {}
   }, []);
 
@@ -258,11 +256,12 @@ export default function Home() {
       }
 
       setGitSuccessUrl(data.repoUrl);
-      try {
-        localStorage.setItem("framer2nextjs_github_token", githubToken.trim());
-      } catch {}
     } catch (err: unknown) {
-      setGitError(err instanceof Error ? err.message : "Error pushing to GitHub.");
+      const rawMsg = err instanceof Error ? err.message : "Error pushing to GitHub.";
+      const safeMsg = rawMsg
+        .replaceAll(githubToken.trim(), "[REDACTED]")
+        .replace(/(ghp_[a-zA-Z0-9]{36}|github_pat_[a-zA-Z0-9_]{82})/g, "[REDACTED]");
+      setGitError(safeMsg);
     } finally {
       setGitPushing(false);
     }
@@ -283,7 +282,7 @@ export default function Home() {
   const faqItems = [
     {
       q: "Will this work for non-Framer sites like Webflow, WordPress, or plain HTML?",
-      a: "Yes! While specially optimized with comment-preservation for Framer React hydration, the engine supports any public website. It crawls all pages, converts raster images to modern WebP with Sharp, downloads web fonts locally, and resolves relative stylesheets and scripts so that any website runs cleanly in Next.js without broken assets.",
+      a: "Yes! You can clone any website, provided you either own it or are authorized to clone it by the owner. While specially optimized with comment-preservation for Framer React hydration, the engine supports any public website (Webflow, WordPress, static HTML, and more). It crawls all pages, converts raster images to modern WebP with Sharp, downloads web fonts locally, and resolves relative stylesheets and scripts so that your site runs cleanly in Next.js without broken assets.",
     },
     {
       q: "Why does exporting to raw JSX break Framer animations?",
@@ -722,7 +721,7 @@ export default function Home() {
                     src={`/api/preview/${conversionData.jobId}`}
                     title="Converted Site Preview"
                     className="w-full h-full border-0"
-                    sandbox="allow-scripts allow-same-origin"
+                    sandbox="allow-scripts"
                   />
                 </div>
               </div>
@@ -819,34 +818,44 @@ export default function Home() {
               ) : (
                 <form onSubmit={handlePushToGithub} className="mt-5 space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-white/80 mb-1.5">
-                      GitHub Personal Access Token
-                    </label>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-xs font-semibold text-white/80">
+                        GitHub Personal Access Token
+                      </label>
+                      {githubToken && (
+                        <button
+                          type="button"
+                          onClick={() => setGithubToken("")}
+                          className="text-[11px] text-red-400 hover:text-red-300 font-medium"
+                        >
+                          Clear Token
+                        </button>
+                      )}
+                    </div>
                     <input
                       type="password"
                       required
-                      placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                      placeholder="ghp_xxxxxxxxxxxxxxxxxxxx or github_pat_..."
                       value={githubToken}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setGithubToken(val);
-                        try {
-                          localStorage.setItem("framer2nextjs_github_token", val.trim());
-                        } catch {}
-                      }}
-                      className="w-full bg-black/60 border border-white/10 squircle-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-white/30 focus:border-[#F65023] focus:outline-none"
+                      onChange={(e) => setGithubToken(e.target.value)}
+                      className="w-full bg-black/60 border border-white/10 squircle-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-white/30 focus:border-[#F65023] focus:outline-none font-mono"
                     />
-                    <p className="text-[11px] text-white/50 mt-1">
-                      Needs <code>repo</code> scope.{" "}
-                      <a
-                        href="https://github.com/settings/tokens/new?scopes=repo&description=Site2NextJS"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#F65023] underline hover:text-orange-400"
-                      >
-                        Generate token on GitHub ↗
-                      </a>
-                    </p>
+                    <div className="mt-1.5 flex flex-col gap-1 text-[11px] text-white/50">
+                      <p className="flex items-center gap-1.5 text-emerald-400/90 font-medium">
+                        <span>🔒 In-memory only: Never saved to localStorage, disk, or client logs.</span>
+                      </p>
+                      <p>
+                        Needs <code>repo</code> scope (or fine-grained <code>Repository: Contents (Write)</code>).{" "}
+                        <a
+                          href="https://github.com/settings/tokens/new?scopes=repo&description=Site2NextJS"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#F65023] underline hover:text-orange-400"
+                        >
+                          Generate token on GitHub ↗
+                        </a>
+                      </p>
+                    </div>
                   </div>
 
                   <div>
