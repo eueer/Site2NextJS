@@ -3,6 +3,8 @@ import path from "node:path";
 import os from "node:os";
 import { ConversionReport, ProjectFile } from "./types";
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 // On Vercel / serverless, process.cwd() is read-only.
 // Use os.tmpdir() which is always writable.
 const CACHE_ROOT = path.join(os.tmpdir(), "site2nextjs-cache");
@@ -24,7 +26,19 @@ export function getCachedAsset(assetPath: string): Buffer | null {
   return assetCache.get(normalized) || null;
 }
 
+function isSafeFilePath(filePath: string): boolean {
+  if (!filePath || filePath.startsWith("/") || filePath.startsWith("\\")) return false;
+  const normalized = path.normalize(filePath);
+  if (normalized.startsWith("..") || normalized.includes(`..${path.sep}`)) return false;
+  return true;
+}
+
 export function saveJob(id: string, report: ConversionReport) {
+  if (!id || !UUID_REGEX.test(id)) {
+    console.error("Invalid job ID for saveJob:", id);
+    return;
+  }
+
   // 1. Save to L1 memory cache
   memoryCache.set(id, report);
 
@@ -52,10 +66,12 @@ export function saveJob(id: string, report: ConversionReport) {
       stats: report.stats,
       notes: report.notes,
       createdAt: Date.now(),
-      filesMeta: report.files.map((f) => ({
-        path: f.path,
-        isBinary: Boolean(f.binary),
-      })),
+      filesMeta: report.files
+        .filter((f) => isSafeFilePath(f.path))
+        .map((f) => ({
+          path: f.path,
+          isBinary: Boolean(f.binary),
+        })),
     };
     fs.writeFileSync(path.join(jobDir, "meta.json"), JSON.stringify(meta, null, 2), "utf8");
 
@@ -66,8 +82,20 @@ export function saveJob(id: string, report: ConversionReport) {
 
     // 4. Save project files
     const filesDir = path.join(jobDir, "files");
+    const canonicalFilesDir = path.resolve(filesDir);
+
     for (const f of report.files) {
-      const fullPath = path.join(filesDir, f.path);
+      if (!isSafeFilePath(f.path)) {
+        console.warn("Blocked potentially unsafe file path from writing:", f.path);
+        continue;
+      }
+
+      const fullPath = path.resolve(filesDir, f.path);
+      if (!fullPath.startsWith(canonicalFilesDir + path.sep)) {
+        console.warn("Path traversal blocked:", f.path);
+        continue;
+      }
+
       fs.mkdirSync(path.dirname(fullPath), { recursive: true });
       if (typeof f.content === "string") {
         fs.writeFileSync(fullPath, f.content, "utf8");
@@ -78,12 +106,17 @@ export function saveJob(id: string, report: ConversionReport) {
       // If file is an asset under public/assets/, also mirror to ASSETS_DIR in tmp
       if (f.path.startsWith("public/assets/")) {
         const relAssetPath = f.path.replace(/^public\/assets\//, "");
-        const globalAssetPath = path.join(ASSETS_DIR, relAssetPath);
-        fs.mkdirSync(path.dirname(globalAssetPath), { recursive: true });
-        if (f.binary) {
-          fs.writeFileSync(globalAssetPath, f.binary);
-        } else if (typeof f.content === "string") {
-          fs.writeFileSync(globalAssetPath, f.content, "utf8");
+        if (isSafeFilePath(relAssetPath)) {
+          const globalAssetPath = path.resolve(ASSETS_DIR, relAssetPath);
+          const canonicalAssetsDir = path.resolve(ASSETS_DIR);
+          if (globalAssetPath.startsWith(canonicalAssetsDir + path.sep)) {
+            fs.mkdirSync(path.dirname(globalAssetPath), { recursive: true });
+            if (f.binary) {
+              fs.writeFileSync(globalAssetPath, f.binary);
+            } else if (typeof f.content === "string") {
+              fs.writeFileSync(globalAssetPath, f.content, "utf8");
+            }
+          }
         }
       }
     }
@@ -105,6 +138,10 @@ export function saveJob(id: string, report: ConversionReport) {
 }
 
 export function getJob(id: string): ConversionReport | null {
+  if (!id || !UUID_REGEX.test(id)) {
+    return null;
+  }
+
   // Check L1 memory cache first
   if (memoryCache.has(id)) {
     return memoryCache.get(id)!;
@@ -120,6 +157,7 @@ export function getJob(id: string): ConversionReport | null {
   try {
     const meta = JSON.parse(fs.readFileSync(metaPath, "utf8"));
     const filesDir = path.join(jobDir, "files");
+    const canonicalFilesDir = path.resolve(filesDir);
 
     // Load preview.html
     let previewHtml = meta.previewHtml || "";
@@ -130,7 +168,10 @@ export function getJob(id: string): ConversionReport | null {
 
     const files: ProjectFile[] = [];
     for (const fm of meta.filesMeta) {
-      const fullPath = path.join(filesDir, fm.path);
+      if (!isSafeFilePath(fm.path)) continue;
+      const fullPath = path.resolve(filesDir, fm.path);
+      if (!fullPath.startsWith(canonicalFilesDir + path.sep)) continue;
+
       if (fs.existsSync(fullPath)) {
         if (fm.isBinary) {
           files.push({

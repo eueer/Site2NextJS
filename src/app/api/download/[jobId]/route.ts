@@ -2,11 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { getJob } from "@/lib/store";
 import { createProjectZip } from "@/lib/zip";
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export async function GET(
   _req: NextRequest,
   { params }: { params: { jobId: string } }
 ) {
   const { jobId } = params;
+
+  if (!jobId || !UUID_REGEX.test(jobId)) {
+    return NextResponse.json(
+      { error: "Invalid job identifier." },
+      { status: 400 }
+    );
+  }
+
   const report = getJob(jobId);
 
   if (!report) {
@@ -20,9 +30,9 @@ export async function GET(
     const zipBuffer = await createProjectZip(report.files);
     const domainName = (() => {
       try {
-        return new URL(report.sourceUrl).hostname.replace(/^www\./, "").replace(/\./g, "-");
+        return new URL(report.sourceUrl).hostname.replace(/^www\./, "").replace(/[^a-zA-Z0-9-]/g, "-");
       } catch {
-        return "framer-project";
+        return "project";
       }
     })();
 
@@ -31,6 +41,7 @@ export async function GET(
         "Content-Type": "application/zip",
         "Content-Disposition": `attachment; filename="${domainName}-nextjs.zip"`,
         "Content-Length": zipBuffer.length.toString(),
+        "X-Content-Type-Options": "nosniff",
       },
     });
   } catch (err: unknown) {

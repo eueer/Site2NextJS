@@ -2,24 +2,57 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { convertSite } from "@/lib/converter";
 import { saveJob } from "@/lib/store";
+import { convertRateLimiter, getClientIp } from "@/lib/rateLimit";
 
 export const maxDuration = 60; // Compatible with standard Vercel serverless functions
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { url, maxPages, maxImages } = body;
-
-    if (!url || typeof url !== "string") {
-      return NextResponse.json({ error: "Please provide a valid website URL (e.g. https://example.com)." }, { status: 400 });
+    // 1. Enforce rate limiting per client IP
+    const clientIp = getClientIp(req);
+    const rateCheck = convertRateLimiter.check(clientIp);
+    if (!rateCheck.success) {
+      return NextResponse.json(
+        {
+          error: `Rate limit exceeded. Please wait ${rateCheck.resetSeconds} seconds before converting another site.`,
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": rateCheck.resetSeconds.toString(),
+            "X-RateLimit-Limit": rateCheck.limit.toString(),
+            "X-RateLimit-Remaining": rateCheck.remaining.toString(),
+          },
+        }
+      );
     }
+
+    // 2. Validate request payload
+    let body: any;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON payload." }, { status: 400 });
+    }
+
+    const { url, maxPages, maxImages } = body || {};
+
+    if (!url || typeof url !== "string" || url.trim().length === 0 || url.length > 2048) {
+      return NextResponse.json(
+        { error: "Please provide a valid website URL (e.g. https://example.com)." },
+        { status: 400 }
+      );
+    }
+
+    const safeMaxPages = Math.min(Math.max(1, Number(maxPages) || 15), 25);
+    const safeMaxImages = Math.min(Math.max(1, Number(maxImages) || 150), 200);
 
     const logs: string[] = [];
     const report = await convertSite(
-      url,
+      url.trim(),
       {
-        maxPages: maxPages ? Math.min(Number(maxPages), 25) : 15,
-        maxImages: maxImages ? Math.min(Number(maxImages), 200) : 150,
+        maxPages: safeMaxPages,
+        maxImages: safeMaxImages,
       },
       (msg) => {
         logs.push(msg);
