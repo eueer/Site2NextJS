@@ -282,7 +282,7 @@ export default function HomePageClient({ initialData }: { initialData?: LandingP
 
   const faqItems = [
     {
-      q: "Will this work for non-Framer sites like Webflow, WordPress, or plain HTML?",
+      q: "Will this work with all sites?",
       a: "Yes! You can clone any website, provided you either own it or are authorized to clone it by the owner. While specially optimized with comment-preservation for Framer React hydration, the engine supports any public website (Webflow, WordPress, static HTML, and more). It crawls all pages, converts raster images to modern WebP with Sharp, downloads web fonts locally, and resolves relative stylesheets and scripts so that your site runs cleanly in Next.js without broken assets.",
     },
     {
@@ -380,7 +380,10 @@ export default function HomePageClient({ initialData }: { initialData?: LandingP
     "Everything you need to know about exporting, animation parity, and hosting.";
   const faqList =
     initialData?.faqItems && initialData.faqItems.length > 0
-      ? initialData.faqItems.map((item) => ({ q: item.question, a: item.answer }))
+      ? initialData.faqItems.map((item, idx) => ({
+          q: idx === 0 ? "Will this work with all sites?" : item.question,
+          a: item.answer,
+        }))
       : faqItems;
 
   const footerTagline =
