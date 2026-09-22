@@ -27,7 +27,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. Validate request payload
+    // 2. Enforce request payload size limit (2MB max)
+    const contentLength = parseInt(req.headers.get("content-length") || "0", 10);
+    if (contentLength > 2 * 1024 * 1024) {
+      return NextResponse.json({ error: "Payload exceeds maximum allowed size (2MB)." }, { status: 413 });
+    }
+
+    // 3. Validate request payload
     let body: any;
     try {
       body = await req.json();
@@ -89,9 +95,24 @@ export async function POST(req: NextRequest) {
       })),
     });
   } catch (err: unknown) {
-    console.error("Conversion error:", err);
+    const rawError = err instanceof Error ? err.message : "An unexpected conversion error occurred.";
+    console.error("Conversion error:", rawError);
+
+    // Sanitize error messages: disclose safe validation/security errors, sanitize system/network traces
+    const isSafeError =
+      rawError.includes("blocked for security reasons") ||
+      rawError.includes("Security violation") ||
+      rawError.includes("Forbidden protocol") ||
+      rawError.includes("Invalid URL") ||
+      rawError.includes("Direct connection to private") ||
+      rawError.includes("Rate limit");
+
+    const safeMessage = isSafeError
+      ? rawError
+      : "Failed to convert site. Please ensure the target URL is reachable and publicly accessible.";
+
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "An unexpected conversion error occurred." },
+      { error: safeMessage },
       { status: 500 }
     );
   }

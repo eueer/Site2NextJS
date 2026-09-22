@@ -30,7 +30,6 @@
     "jszip": "^3.10.1",
     "lucide-react": "^0.460.0",
     "next": "14.2.35",
-    "next-sanity": "^9.12.3",
     "react": "^18.3.1",
     "react-aria-components": "^1.21.1",
     "react-dom": "^18.3.1",

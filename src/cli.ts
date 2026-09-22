@@ -42,7 +42,29 @@ async function main() {
     console.log(`\nWriting project files to ${targetDir}...`);
 
     for (const f of report.files) {
-      const fullPath = path.join(targetDir, f.path);
+      if (!f.path || f.path.startsWith("/") || f.path.startsWith("\\")) {
+        console.warn(`  ⚠ Skipping file with absolute path: ${f.path}`);
+        continue;
+      }
+      const normalized = path.normalize(f.path);
+      if (normalized.startsWith("..") || normalized.includes(`..${path.sep}`)) {
+        console.warn(`  ⚠ Skipping path traversal candidate: ${f.path}`);
+        continue;
+      }
+      if (
+        normalized.startsWith(".github") ||
+        normalized.startsWith(".git")
+      ) {
+        console.warn(`  ⚠ Skipping reserved security path: ${f.path}`);
+        continue;
+      }
+
+      const fullPath = path.resolve(targetDir, f.path);
+      if (!fullPath.startsWith(targetDir + path.sep)) {
+        console.warn(`  ⚠ Path traversal blocked: ${f.path}`);
+        continue;
+      }
+
       fs.mkdirSync(path.dirname(fullPath), { recursive: true });
 
       if (typeof f.content === "string") {

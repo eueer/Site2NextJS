@@ -7,6 +7,8 @@ const BLOCKED_HOSTNAMES = new Set([
   "metadata.google.internal",
   "metadata.goog",
   "instance-data",
+  "100.100.100.200",
+  "169.254.169.254",
 ]);
 
 /**
@@ -18,13 +20,16 @@ function isPrivateIPv4(ip: string): boolean {
     return true; // Malformed IPv4 is treated as unsafe
   }
 
-  const [a, b, c] = parts;
+  const [a, b, c, d] = parts;
 
   // 0.0.0.0/8 (Current network)
   if (a === 0) return true;
 
   // 10.0.0.0/8 (Private)
   if (a === 10) return true;
+
+  // 100.100.100.200 (Alibaba Cloud Metadata)
+  if (a === 100 && b === 100 && c === 100 && d === 200) return true;
 
   // 100.64.0.0/10 (Shared Address Space / CGNAT)
   if (a === 100 && b >= 64 && b <= 127) return true;
@@ -136,8 +141,22 @@ export async function assertSafeUrl(urlInput: string | URL): Promise<URL> {
     throw new Error("Invalid URL: missing hostname.");
   }
 
-  if (BLOCKED_HOSTNAMES.has(hostname) || hostname.endsWith(".local") || hostname.endsWith(".internal")) {
+  if (
+    BLOCKED_HOSTNAMES.has(hostname) ||
+    hostname.endsWith(".local") ||
+    hostname.endsWith(".internal") ||
+    hostname.endsWith(".localhost") ||
+    hostname.endsWith(".arpa") ||
+    hostname.endsWith(".home") ||
+    hostname.endsWith(".corp") ||
+    hostname.endsWith(".lan")
+  ) {
     throw new Error(`Access to ${hostname} is blocked for security reasons.`);
+  }
+
+  // Reject decimal IP representations or raw numeric hostnames (e.g. http://2130706433)
+  if (/^\d+$/.test(hostname)) {
+    throw new Error(`Access to decimal IP format (${hostname}) is blocked.`);
   }
 
   // 3. If hostname is a raw IP literal, check it directly
@@ -166,7 +185,7 @@ export async function assertSafeUrl(urlInput: string | URL): Promise<URL> {
     if (err instanceof Error && err.message.includes("Security violation")) {
       throw err;
     }
-    throw new Error(`DNS resolution failed for ${hostname}: ${err instanceof Error ? err.message : String(err)}`);
+    throw new Error(`Could not securely resolve hostname: ${hostname}.`);
   }
 
   return parsed;

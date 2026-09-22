@@ -90,22 +90,57 @@ export const gitPushRateLimiter = new SlidingWindowRateLimiter({
   maxRequests: 10,
 });
 
+function isValidIp(ip: string): boolean {
+  if (!ip || ip.length > 45) return false;
+  // Check IPv4
+  const ipv4Match = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(ip);
+  if (ipv4Match) {
+    return ipv4Match.slice(1).every((octet) => {
+      const num = parseInt(octet, 10);
+      return num >= 0 && num <= 255 && (octet === "0" || !octet.startsWith("0"));
+    });
+  }
+  // Check IPv6
+  return /^[0-9a-fA-F:]{2,39}$/.test(ip) && ip.includes(":");
+}
+
 /**
- * Extracts client IP safely from NextRequest headers
+ * Extracts client IP safely from NextRequest headers, prioritizing trusted edge
+ * headers and using the rightmost IP from X-Forwarded-For to defeat spoofing.
  */
 export function getClientIp(req: NextRequest): string {
-  const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) {
-    const first = forwarded.split(",")[0].trim();
-    if (first) return first;
+  // 1. Trusted edge / CDN headers that cannot be forged by clients
+  const vercelIp = req.headers.get("x-vercel-forwarded-for");
+  if (vercelIp && isValidIp(vercelIp.trim())) {
+    return vercelIp.trim();
   }
 
-  const realIp = req.headers.get("x-real-ip");
-  if (realIp) return realIp.trim();
+  const cfIp = req.headers.get("cf-connecting-ip");
+  if (cfIp && isValidIp(cfIp.trim())) {
+    return cfIp.trim();
+  }
 
-  // Next.js request IP if available
-  const ip = (req as any).ip;
-  if (ip && typeof ip === "string") return ip.trim();
+  // 2. Next.js native request IP
+  const nextIp = (req as any).ip;
+  if (nextIp && typeof nextIp === "string" && isValidIp(nextIp.trim())) {
+    return nextIp.trim();
+  }
+
+  // 3. Direct proxy remote address header
+  const realIp = req.headers.get("x-real-ip");
+  if (realIp && isValidIp(realIp.trim())) {
+    return realIp.trim();
+  }
+
+  // 4. X-Forwarded-For: take the rightmost IP (closest to upstream trusted proxy)
+  const forwarded = req.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const parts = forwarded.split(",").map((p) => p.trim()).filter(Boolean);
+    if (parts.length > 0) {
+      const rightmost = parts[parts.length - 1];
+      if (isValidIp(rightmost)) return rightmost;
+    }
+  }
 
   return "127.0.0.1";
 }

@@ -32,6 +32,22 @@ function isPathConfined(targetPath: string, allowedRoot: string): boolean {
   );
 }
 
+function createAssetHeaders(contentType: string): Record<string, string> {
+  const headers: Record<string, string> = {
+    "Content-Type": contentType,
+    "Cache-Control": "public, max-age=31536000, immutable",
+    "X-Content-Type-Options": "nosniff",
+  };
+
+  // Prevent Stored XSS via SVGs: enforce strict CSP sandbox and safe disposition
+  if (contentType.includes("image/svg+xml")) {
+    headers["Content-Security-Policy"] = "default-src 'none'; style-src 'unsafe-inline'";
+    headers["Content-Disposition"] = "inline";
+  }
+
+  return headers;
+}
+
 export async function GET(
   _req: NextRequest,
   { params }: { params: { path: string[] } }
@@ -61,11 +77,7 @@ export async function GET(
     const memData = getCachedAsset(`/assets/${relPath}`);
     if (memData) {
       return new Response(new Uint8Array(memData), {
-        headers: {
-          "Content-Type": contentType,
-          "Cache-Control": "public, max-age=31536000, immutable",
-          "X-Content-Type-Options": "nosniff",
-        },
+        headers: createAssetHeaders(contentType),
       });
     }
 
@@ -116,11 +128,7 @@ export async function GET(
     const data = fs.readFileSync(target);
 
     return new Response(new Uint8Array(data), {
-      headers: {
-        "Content-Type": resolvedContentType,
-        "Cache-Control": "public, max-age=31536000, immutable",
-        "X-Content-Type-Options": "nosniff",
-      },
+      headers: createAssetHeaders(resolvedContentType),
     });
   } catch (err) {
     console.error("Asset serving error:", err);

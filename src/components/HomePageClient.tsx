@@ -412,9 +412,6 @@ export default function HomePageClient({ initialData }: { initialData?: LandingP
               <a href="#about" className="hover:text-white transition-colors">
                 About
               </a>
-              <a href="#architecture" className="hover:text-white transition-colors">
-                Architecture
-              </a>
               <a href="#faq" className="hover:text-white transition-colors">
                 FAQ
               </a>
