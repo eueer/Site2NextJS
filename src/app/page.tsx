@@ -921,7 +921,7 @@ export default function Home() {
         )}
 
         {/* About / Stats Section (1:1 Framer Parity) */}
-        <section id="about" className="mt-32 pt-16 border-t border-white/10">
+        <section id="about" className="py-[72px]">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-white/[0.08] border border-white/10 text-xs font-medium text-white/80 mb-4 backdrop-blur-md">
               <HugeiconsIcon icon={AiSparklesIcon} size={14} className="text-[#F65023]" />
@@ -1051,7 +1051,7 @@ export default function Home() {
         </section>
 
         {/* How It Works / Technical Architecture Section */}
-        <section id="architecture" className="mt-32 pt-16 border-t border-white/10">
+        <section id="architecture" className="py-[72px]">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-white/[0.08] border border-white/10 text-xs font-medium text-white/80 mb-4 backdrop-blur-md">
               <HugeiconsIcon icon={AiSparklesIcon} size={14} className="text-[#F65023]" />
@@ -1174,7 +1174,7 @@ export default function Home() {
         </section>
 
         {/* FAQ Accordion Section (Matching Framer FAQ style) */}
-        <section id="faq" className="mt-32 pt-16 border-t border-white/10">
+        <section id="faq" className="py-[72px]">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-white/[0.08] border border-white/10 text-xs font-medium text-white/80 mb-4 backdrop-blur-md">
               <HugeiconsIcon icon={AiSparklesIcon} size={14} className="text-[#F65023]" />
@@ -1220,7 +1220,7 @@ export default function Home() {
       </main>
 
       {/* Footer (Matching Framer Footer 1:1) */}
-      <footer className="w-full max-w-[1200px] mx-auto px-6 pt-24 pb-12">
+      <footer className="w-full max-w-[1200px] mx-auto px-6 py-12">
         <div className="flex flex-col gap-16">
           <div className="max-w-md flex flex-col gap-4">
             <div className="flex items-center gap-3">
