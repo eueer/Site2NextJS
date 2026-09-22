@@ -932,10 +932,10 @@ export default function Home() {
             </h2>
           </div>
 
-          {/* 3 Stats Cards for Site2NextJS (1st false card removed; styled with Framer 1:1 notch & inverted fillets) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-[880px] mx-auto justify-items-center">
+          {/* 3 Stats Cards for Site2NextJS (Fill width; styled with Framer 1:1 notch & inverted fillets) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
             {/* Card 1: Animation Parity */}
-            <div className="relative w-full max-w-[277px] h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
+            <div className="relative w-full h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
               {/* Signature Framer Top-Left Cutout Notch (48x48 black with 18px radius) */}
               <div className="absolute top-0 left-0 w-[48px] h-[48px] bg-black rounded-br-[18px] flex items-center justify-center z-10">
                 <HugeiconsIcon icon={FlashIcon} size={20} className="text-[#F65023]" />
@@ -956,7 +956,7 @@ export default function Home() {
               </div>
 
               {/* Card Bottom Content */}
-              <div className="p-4 flex flex-col gap-3.5 w-full z-0">
+              <div className="p-5 flex flex-col gap-3.5 w-full z-0">
                 <div className="flex flex-col gap-0.5">
                   <div className="font-sans font-medium text-[32px] text-white leading-none tracking-tight">
                     100%
@@ -973,7 +973,7 @@ export default function Home() {
             </div>
 
             {/* Card 2: Payload Reduction */}
-            <div className="relative w-full max-w-[277px] h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
+            <div className="relative w-full h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
               {/* Signature Framer Top-Left Cutout Notch (48x48 black with 18px radius) */}
               <div className="absolute top-0 left-0 w-[48px] h-[48px] bg-black rounded-br-[18px] flex items-center justify-center z-10">
                 <HugeiconsIcon icon={DashboardSpeed01Icon} size={20} className="text-[#F65023]" />
@@ -994,7 +994,7 @@ export default function Home() {
               </div>
 
               {/* Card Bottom Content */}
-              <div className="p-4 flex flex-col gap-3.5 w-full z-0">
+              <div className="p-5 flex flex-col gap-3.5 w-full z-0">
                 <div className="flex flex-col gap-0.5">
                   <div className="font-sans font-medium text-[32px] text-white leading-none tracking-tight">
                     70%
@@ -1011,7 +1011,7 @@ export default function Home() {
             </div>
 
             {/* Card 3: Monthly CMS Fees */}
-            <div className="relative w-full max-w-[277px] h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
+            <div className="relative w-full h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
               {/* Signature Framer Top-Left Cutout Notch (48x48 black with 18px radius) */}
               <div className="absolute top-0 left-0 w-[48px] h-[48px] bg-black rounded-br-[18px] flex items-center justify-center z-10">
                 <HugeiconsIcon icon={LockIcon} size={20} className="text-[#F65023]" />
@@ -1032,7 +1032,7 @@ export default function Home() {
               </div>
 
               {/* Card Bottom Content */}
-              <div className="p-4 flex flex-col gap-3.5 w-full z-0">
+              <div className="p-5 flex flex-col gap-3.5 w-full z-0">
                 <div className="flex flex-col gap-0.5">
                   <div className="font-sans font-medium text-[32px] text-white leading-none tracking-tight">
                     $0
