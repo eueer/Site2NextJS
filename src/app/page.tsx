@@ -1066,43 +1066,109 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 hover:border-[#F65023]/40 transition-all">
-              <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-5">
-                <HugeiconsIcon icon={Layers01Icon} size={20} />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+            {/* Card 1: Preserved Comment Markers */}
+            <div className="relative w-full min-h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
+              {/* Signature Framer Top-Left Cutout Notch (48x48 black with 18px radius) */}
+              <div className="absolute top-0 left-0 w-[48px] h-[48px] bg-black rounded-br-[18px] flex items-center justify-center z-10">
+                <HugeiconsIcon icon={Layers01Icon} size={20} className="text-[#F65023]" />
+
+                {/* Bottom Inverted Fillet (Seamless curve into card edge) */}
+                <div className="absolute -bottom-[24px] left-0 w-[24px] h-[24px] pointer-events-none">
+                  <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
+                    <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
+                  </svg>
+                </div>
+
+                {/* Right Inverted Fillet (Seamless curve into top edge) */}
+                <div className="absolute top-0 -right-[24px] w-[24px] h-[24px] pointer-events-none">
+                  <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
+                    <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
+                  </svg>
+                </div>
               </div>
-              {/* H3 heading using semibold Figtree */}
-              <h3 className="font-sans font-semibold text-lg text-white mb-2">Preserved Comment Markers</h3>
-              <p className="text-xs text-white/60 leading-relaxed font-sans">
-                Framer’s runtime relies on React Suspense HTML comment markers (<code>&lt;!--$--&gt;</code>) to hydrate
-                instantly. Converting to raw JSX strips these comments, breaking hydration. Site2NextJS uses App Router
-                Route Handlers to deliver identical markup and instant hydration.
-              </p>
+
+              {/* Card Bottom Content */}
+              <div className="p-5 pt-14 flex flex-col gap-3.5 w-full z-0">
+                <div className="font-sans font-semibold text-lg text-white">
+                  Preserved Comment Markers
+                </div>
+                <div className="h-[1px] w-full bg-white/10" />
+                <p className="text-xs sm:text-[13px] text-white/60 leading-relaxed font-sans">
+                  Framer’s runtime relies on React Suspense HTML comment markers (<code>&lt;!--$--&gt;</code>) to hydrate
+                  instantly. Converting to raw JSX strips these comments, breaking hydration. Site2NextJS uses App Router
+                  Route Handlers to deliver identical markup and instant hydration.
+                </p>
+              </div>
             </div>
 
-            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 hover:border-[#F65023]/40 transition-all">
-              <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-5">
-                <HugeiconsIcon icon={FlashIcon} size={20} />
+            {/* Card 2: WebP & Font Optimization */}
+            <div className="relative w-full min-h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
+              {/* Signature Framer Top-Left Cutout Notch (48x48 black with 18px radius) */}
+              <div className="absolute top-0 left-0 w-[48px] h-[48px] bg-black rounded-br-[18px] flex items-center justify-center z-10">
+                <HugeiconsIcon icon={FlashIcon} size={20} className="text-[#F65023]" />
+
+                {/* Bottom Inverted Fillet (Seamless curve into card edge) */}
+                <div className="absolute -bottom-[24px] left-0 w-[24px] h-[24px] pointer-events-none">
+                  <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
+                    <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
+                  </svg>
+                </div>
+
+                {/* Right Inverted Fillet (Seamless curve into top edge) */}
+                <div className="absolute top-0 -right-[24px] w-[24px] h-[24px] pointer-events-none">
+                  <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
+                    <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
+                  </svg>
+                </div>
               </div>
-              {/* H3 heading using semibold Figtree */}
-              <h3 className="font-sans font-semibold text-lg text-white mb-2">WebP & Font Optimization</h3>
-              <p className="text-xs text-white/60 leading-relaxed font-sans">
-                All raster images from external CDNs are compressed to modern WebP format using Sharp (cutting payload by up to
-                70%). Web fonts are downloaded to <code>public/assets/fonts/</code> with <code>font-display: swap</code> forced
-                to eliminate layout shift.
-              </p>
+
+              {/* Card Bottom Content */}
+              <div className="p-5 pt-14 flex flex-col gap-3.5 w-full z-0">
+                <div className="font-sans font-semibold text-lg text-white">
+                  WebP & Font Optimization
+                </div>
+                <div className="h-[1px] w-full bg-white/10" />
+                <p className="text-xs sm:text-[13px] text-white/60 leading-relaxed font-sans">
+                  All raster images from external CDNs are compressed to modern WebP format using Sharp (cutting payload by up to
+                  70%). Web fonts are downloaded to <code>public/assets/fonts/</code> with <code>font-display: swap</code> forced
+                  to eliminate layout shift.
+                </p>
+              </div>
             </div>
 
-            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 hover:border-[#F65023]/40 transition-all">
-              <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-5">
-                <HugeiconsIcon icon={SecurityCheckIcon} size={20} />
+            {/* Card 3: Zero Monthly Hosting Fees */}
+            <div className="relative w-full min-h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
+              {/* Signature Framer Top-Left Cutout Notch (48x48 black with 18px radius) */}
+              <div className="absolute top-0 left-0 w-[48px] h-[48px] bg-black rounded-br-[18px] flex items-center justify-center z-10">
+                <HugeiconsIcon icon={SecurityCheckIcon} size={20} className="text-[#F65023]" />
+
+                {/* Bottom Inverted Fillet (Seamless curve into card edge) */}
+                <div className="absolute -bottom-[24px] left-0 w-[24px] h-[24px] pointer-events-none">
+                  <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
+                    <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
+                  </svg>
+                </div>
+
+                {/* Right Inverted Fillet (Seamless curve into top edge) */}
+                <div className="absolute top-0 -right-[24px] w-[24px] h-[24px] pointer-events-none">
+                  <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
+                    <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
+                  </svg>
+                </div>
               </div>
-              {/* H3 heading using semibold Figtree */}
-              <h3 className="font-sans font-semibold text-lg text-white mb-2">Zero Monthly Hosting Fees</h3>
-              <p className="text-xs text-white/60 leading-relaxed font-sans">
-                No monthly Framer or CMS subscriptions. Statically prerendered App Router outputs can be hosted completely
-                free on Vercel, Netlify, or Cloudflare Pages with zero bandwidth caps and enterprise global edge caching.
-              </p>
+
+              {/* Card Bottom Content */}
+              <div className="p-5 pt-14 flex flex-col gap-3.5 w-full z-0">
+                <div className="font-sans font-semibold text-lg text-white">
+                  Zero Monthly Hosting Fees
+                </div>
+                <div className="h-[1px] w-full bg-white/10" />
+                <p className="text-xs sm:text-[13px] text-white/60 leading-relaxed font-sans">
+                  No monthly Framer or CMS subscriptions. Statically prerendered App Router outputs can be hosted completely
+                  free on Vercel, Netlify, or Cloudflare Pages with zero bandwidth caps and enterprise global edge caching.
+                </p>
+              </div>
             </div>
           </div>
         </section>
