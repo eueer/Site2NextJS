@@ -305,9 +305,6 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-[#000000] text-slate-100 flex flex-col font-sans selection:bg-[#F65023] selection:text-white">
-      {/* Dynamic Ambient Hero Background (Shader grid + Particle Mesh + Orange Glows) */}
-      <HeroBackground />
-
       {/* Floating Navigation Header (Sleek floating pill with uniform padding on all sides) */}
       <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[1200px] pointer-events-auto">
         <header className="squircle-pill p-3.5 sm:p-4 bg-white/[0.08] backdrop-blur-[30px] border border-white/10 shadow-2xl flex items-center justify-between transition-all">
@@ -358,25 +355,34 @@ export default function Home() {
       </div>
 
       {/* Main Container */}
-      <main className="relative z-10 flex-1 mx-auto max-w-6xl px-6 pt-32 sm:pt-36 pb-28 w-full">
-        {/* Hero Section */}
-        <section id="converter" className="text-center max-w-3xl mx-auto mb-10">
-          {/* H1 Heading ONLY uses Geist Pixel */}
-          <h1 className="font-pixel text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.12] text-white">
-            Convert any website to{" "}
-            <span className="text-[#F65023]">
-              production-ready Next.js
-            </span>
-          </h1>
+      <main className="relative z-10 flex-1 w-full">
+        {/* Hero Section (100vh Full Viewport) */}
+        <section
+          id="converter"
+          className="relative min-h-screen min-h-[100dvh] w-full flex flex-col justify-center items-center px-6 pt-24 sm:pt-28 pb-16 overflow-hidden"
+        >
+          {/* Dynamic Ambient Hero Background (Shader grid + Particle Mesh + Orange Glows) */}
+          <HeroBackground />
 
-          <p className="mt-5 text-base sm:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed font-sans">
-            Transform Framer, Webflow, or static sites into optimized Next.js App Router codebases
-            with preserved animations and 0 monthly fees.
-          </p>
-        </section>
+          <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center justify-center my-auto">
+            {/* Hero Heading */}
+            <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+              {/* H1 Heading ONLY uses Geist Pixel */}
+              <h1 className="font-pixel text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.12] text-white">
+                Convert any website to{" "}
+                <span className="text-[#F65023]">
+                  production-ready Next.js
+                </span>
+              </h1>
 
-        {/* Framer-exact Prompt Box Container (framer-dw6nb0 style) */}
-        <div className="max-w-[550px] mx-auto">
+              <p className="mt-5 text-base sm:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed font-sans">
+                Transform Framer, Webflow, or static sites into optimized Next.js App Router codebases
+                with preserved animations and 0 monthly fees.
+              </p>
+            </div>
+
+            {/* Framer-exact Prompt Box Container (framer-dw6nb0 style) */}
+            <div className="w-full max-w-[550px] mx-auto">
           <form
             onSubmit={handleConvert}
             className="p-3 sm:p-3.5 squircle-2xl bg-white/[0.08] backdrop-blur-2xl border border-white/10 shadow-2xl flex flex-col justify-between gap-14 sm:gap-20 transition-all focus-within:border-[#F65023]/60 focus-within:ring-2 focus-within:ring-[#F65023]/20"
@@ -919,9 +925,13 @@ export default function Home() {
             </div>
           </div>
         )}
+          </div>
+        </section>
 
-        {/* About / Stats Section (1:1 Framer Parity) */}
-        <section id="about" className="py-[72px]">
+        {/* Content Sections Container */}
+        <div className="relative z-10 mx-auto max-w-6xl px-6 w-full">
+          {/* About / Stats Section (1:1 Framer Parity) */}
+          <section id="about" className="py-[72px]">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-white/[0.08] border border-white/10 text-xs font-medium text-white/80 mb-4 backdrop-blur-md">
               <HugeiconsIcon icon={AiSparklesIcon} size={14} className="text-[#F65023]" />
@@ -1051,7 +1061,8 @@ export default function Home() {
         </section>
 
         {/* How It Works / Technical Architecture Section */}
-        <section id="architecture" className="py-[72px]">
+        <section id="architecture" className="py-[72px] relative">
+          <div id="how-it-works" className="absolute -top-24" />
           <div className="text-center max-w-2xl mx-auto mb-14">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-white/[0.08] border border-white/10 text-xs font-medium text-white/80 mb-4 backdrop-blur-md">
               <HugeiconsIcon icon={AiSparklesIcon} size={14} className="text-[#F65023]" />
@@ -1217,6 +1228,7 @@ export default function Home() {
             })}
           </div>
         </section>
+        </div>
       </main>
 
       {/* Footer (Matching Framer Footer 1:1) */}

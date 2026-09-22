@@ -5,7 +5,7 @@ import { LiquidGradientShader } from "./LiquidGradientShader";
 
 export function HeroBackground() {
   return (
-    <div className="pointer-events-none absolute top-0 left-0 w-full h-[880px] sm:h-[940px] overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 w-full h-full overflow-hidden">
       {/* Exact Framer Liquid Gradient WebGL Shader */}
       <LiquidGradientShader />
 
