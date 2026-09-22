@@ -19,8 +19,6 @@ import {
   Layers01Icon,
   FlashIcon,
   SecurityCheckIcon,
-  DashboardSpeed01Icon,
-  LockIcon,
   ArrowDown01Icon,
   ArrowUp01Icon,
   Copy01Icon,
@@ -920,92 +918,108 @@ export default function Home() {
           </div>
         )}
 
-        {/* About / Stats Section (Matching Framer AboutUs & StatsCard style) */}
+        {/* About / Stats Section (1:1 Framer Parity) */}
         <section id="about" className="mt-32 pt-16 border-t border-white/10">
-          <div className="text-center max-w-2xl mx-auto mb-14">
+          <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 squircle-pill bg-white/[0.08] border border-white/10 text-xs font-medium text-white/80 mb-4 backdrop-blur-md">
               <HugeiconsIcon icon={AiSparklesIcon} size={14} className="text-[#F65023]" />
               <span>About Site to NextJS</span>
             </div>
-            {/* H2 heading using semibold Figtree */}
-            <h2 className="font-sans font-semibold text-3xl sm:text-4xl text-white tracking-tight">
-              Engineered for speed, fidelity, and developer freedom
+            <h2 className="font-sans font-medium text-2xl sm:text-[30px] text-white/75 tracking-tight text-center max-w-[600px] mx-auto leading-[1.4]">
+              This is a free tool you can use to convert any site to NextJS. Push right to your git, or download the File.
             </h2>
-            <p className="text-white/60 text-sm mt-3">
-              Why designers, agencies, and engineering teams are migrating their sites to standard Next.js.
-            </p>
           </div>
 
-          {/* 4 Stats Cards Grid (Matching Framer StatsCard style) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 relative overflow-hidden flex flex-col justify-between group hover:border-[#F65023]/40 transition-all">
-              <div className="absolute top-0 right-0 w-36 h-36 bg-[#F65023]/10 rounded-full blur-[45px] pointer-events-none" />
-              <div>
-                <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
-                  <HugeiconsIcon icon={AiSparklesIcon} size={20} className="text-[#F65023]" />
+          {/* 2 Stats Cards (1st card removed per user instruction; 1:1 Framer notch & inverted fillets) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[570px] mx-auto justify-items-center">
+            {/* Card 1: Growth increase */}
+            <div className="relative w-full max-w-[277px] h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
+              {/* Signature Framer Top-Left Cutout Notch (48x48 black with 18px radius) */}
+              <div className="absolute top-0 left-0 w-[48px] h-[48px] bg-black rounded-br-[18px] flex items-center justify-center z-10">
+                {/* Brand Orange SVG Icon */}
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#F65023]">
+                  <path d="M 0.152 10.125 C -0.655 5.77 1.826 1.476 6.002 0 L 6.002 6.75 Z" fill="currentColor" fillOpacity="1" transform="translate(2.998 3.516)" />
+                  <path d="M 0.152 10.125 C -0.655 5.77 1.826 1.476 6.002 0 L 6.002 6.75 Z" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(2.998 3.516)" />
+                  <path d="M 7.761 9.039 L 7.761 0 C 12.119 0.001 15.851 3.125 16.619 7.415 C 17.386 11.706 14.969 15.93 10.88 17.441 C 6.792 18.953 2.208 17.318 0 13.56 Z" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(4.239 3)" />
+                </svg>
+
+                {/* Bottom Inverted Fillet (Seamless curve into card edge) */}
+                <div className="absolute -bottom-[24px] left-0 w-[24px] h-[24px] pointer-events-none">
+                  <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
+                    <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
+                  </svg>
                 </div>
-                <div className="font-sans font-semibold text-4xl text-white mb-2 tracking-tight">
-                  10K+
+
+                {/* Right Inverted Fillet (Seamless curve into top edge) */}
+                <div className="absolute top-0 -right-[24px] w-[24px] h-[24px] pointer-events-none">
+                  <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
+                    <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
+                  </svg>
                 </div>
-                <div className="font-sans font-semibold text-slate-200 text-base mb-2">
-                  Projects Delivered
+              </div>
+
+              {/* Card Bottom Content */}
+              <div className="p-4 flex flex-col gap-3.5 w-full z-0">
+                <div className="flex flex-col gap-0.5">
+                  <div className="font-sans font-medium text-[32px] text-white leading-none tracking-tight">
+                    80x
+                  </div>
+                  <div className="font-sans font-medium text-sm text-white">
+                    Growth increase
+                  </div>
                 </div>
-                <p className="text-xs text-white/60 leading-relaxed font-sans">
-                  Developers and agencies worldwide rely on our conversion engine to migrate websites seamlessly.
+                <div className="h-[1px] w-full bg-white/10" />
+                <p className="font-sans text-[13px] text-white/60 leading-snug">
+                  Our automation helps businesses scale faster and operate efficiently
                 </p>
               </div>
             </div>
 
-            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 relative overflow-hidden flex flex-col justify-between group hover:border-[#F65023]/40 transition-all">
-              <div className="absolute top-0 right-0 w-36 h-36 bg-[#F65023]/10 rounded-full blur-[45px] pointer-events-none" />
-              <div>
-                <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
-                  <HugeiconsIcon icon={FlashIcon} size={20} className="text-[#F65023]" />
-                </div>
-                <div className="font-sans font-semibold text-4xl text-white mb-2 tracking-tight">
-                  100%
-                </div>
-                <div className="font-sans font-semibold text-slate-200 text-base mb-2">
-                  Animation Parity
-                </div>
-                <p className="text-xs text-white/60 leading-relaxed font-sans">
-                  Preserved React Suspense markers, Framer Motion springs, and responsive layouts automatically.
-                </p>
-              </div>
-            </div>
+            {/* Card 2: Team members */}
+            <div className="relative w-full max-w-[277px] h-[248px] bg-[#1a1a1a] rounded-[24px] squircle-3xl overflow-hidden flex flex-col justify-end items-start group hover:border-[#F65023]/30 transition-all">
+              {/* Signature Framer Top-Left Cutout Notch (48x48 black with 18px radius) */}
+              <div className="absolute top-0 left-0 w-[48px] h-[48px] bg-black rounded-br-[18px] flex items-center justify-center z-10">
+                {/* Brand Orange SVG Icon */}
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#F65023]">
+                  <path d="M 0 3.75 C 0 1.679 1.679 0 3.75 0 C 5.821 0 7.5 1.679 7.5 3.75 C 7.5 5.821 5.821 7.5 3.75 7.5 C 1.679 7.5 0 5.821 0 3.75 Z" fill="currentColor" fillOpacity="1" transform="translate(8.25 9.75)" />
+                  <path d="M 0 3 C 0 1.343 1.343 0 3 0 C 4.657 0 6 1.343 6 3 C 6 4.657 4.657 6 3 6 C 1.343 6 0 4.657 0 3 Z" fill="currentColor" fillOpacity="1" transform="translate(3 5.25)" />
+                  <path d="M 0 3 C 0 1.343 1.343 0 3 0 C 4.657 0 6 1.343 6 3 C 6 4.657 4.657 6 3 6 C 1.343 6 0 4.657 0 3 Z" fill="currentColor" fillOpacity="1" transform="translate(15 5.25)" />
+                  <path d="M 0 0 C 1.771 -0.001 3.439 0.833 4.5 2.25" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(18 11.25)" />
+                  <path d="M 0 2.25 C 1.061 0.833 2.729 -0.001 4.5 0" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(1.5 11.25)" />
+                  <path d="M 0 3.75 C 0 1.679 1.679 0 3.75 0 C 5.821 0 7.5 1.679 7.5 3.75 C 7.5 5.821 5.821 7.5 3.75 7.5 C 1.679 7.5 0 5.821 0 3.75 Z" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(8.25 9.75)" />
+                  <path d="M 0 3 C 1.095 1.141 3.092 0 5.25 0 C 7.408 0 9.405 1.141 10.5 3" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(6.75 17.25)" />
+                  <path d="M 0 2.25 C 0.39 0.741 1.87 -0.218 3.407 0.043 C 4.944 0.304 6.025 1.698 5.894 3.252 C 5.764 4.805 4.465 6 2.906 6" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(15.094 5.25)" />
+                  <path d="M 2.999 6 C 1.44 6 0.141 4.805 0.011 3.252 C -0.12 1.698 0.961 0.304 2.498 0.043 C 4.034 -0.218 5.515 0.741 5.905 2.25" fill="transparent" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="translate(3.001 5.25)" />
+                </svg>
 
-            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 relative overflow-hidden flex flex-col justify-between group hover:border-[#F65023]/40 transition-all">
-              <div className="absolute top-0 right-0 w-36 h-36 bg-[#F65023]/10 rounded-full blur-[45px] pointer-events-none" />
-              <div>
-                <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
-                  <HugeiconsIcon icon={DashboardSpeed01Icon} size={20} className="text-[#F65023]" />
+                {/* Bottom Inverted Fillet */}
+                <div className="absolute -bottom-[24px] left-0 w-[24px] h-[24px] pointer-events-none">
+                  <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
+                    <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
+                  </svg>
                 </div>
-                <div className="font-sans font-semibold text-4xl text-white mb-2 tracking-tight">
-                  70%
-                </div>
-                <div className="font-sans font-semibold text-slate-200 text-base mb-2">
-                  Payload Reduction
-                </div>
-                <p className="text-xs text-white/60 leading-relaxed font-sans">
-                  Sharp WebP image re-encoding and self-hosted local fonts completely eliminate layout shift.
-                </p>
-              </div>
-            </div>
 
-            <div className="p-7 squircle-3xl bg-[#1a1a1a] border border-white/10 relative overflow-hidden flex flex-col justify-between group hover:border-[#F65023]/40 transition-all">
-              <div className="absolute top-0 right-0 w-36 h-36 bg-[#F65023]/10 rounded-full blur-[45px] pointer-events-none" />
-              <div>
-                <div className="w-10 h-10 squircle-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#F65023] mb-6">
-                  <HugeiconsIcon icon={LockIcon} size={20} className="text-[#F65023]" />
+                {/* Right Inverted Fillet */}
+                <div className="absolute top-0 -right-[24px] w-[24px] h-[24px] pointer-events-none">
+                  <svg viewBox="0 0 90 90" className="w-[24px] h-[24px] text-black fill-current">
+                    <path d="M 6.131 30.712 C 0 42.746 0 58.497 0 90 L 0 0 L 90 0 C 58.497 0 42.746 0 30.714 6.131 C 20.129 11.524 11.524 20.129 6.13 30.712 Z" />
+                  </svg>
                 </div>
-                <div className="font-sans font-semibold text-4xl text-white mb-2 tracking-tight">
-                  $0
+              </div>
+
+              {/* Card Bottom Content */}
+              <div className="p-4 flex flex-col gap-3.5 w-full z-0">
+                <div className="flex flex-col gap-0.5">
+                  <div className="font-sans font-medium text-[32px] text-white leading-none tracking-tight">
+                    30+
+                  </div>
+                  <div className="font-sans font-medium text-sm text-white">
+                    Team members
+                  </div>
                 </div>
-                <div className="font-sans font-semibold text-slate-200 text-base mb-2">
-                  Monthly CMS Fees
-                </div>
-                <p className="text-xs text-white/60 leading-relaxed font-sans">
-                  Eliminate recurring per-site subscription fees by deploying free to Vercel, Netlify, or Cloudflare.
+                <div className="h-[1px] w-full bg-white/10" />
+                <p className="font-sans text-[13px] text-white/60 leading-snug">
+                  Our skilled team builds, manages, and optimizes automation systems
                 </p>
               </div>
             </div>
@@ -1115,34 +1129,39 @@ export default function Home() {
         </section>
       </main>
 
-      {/* Footer (Matching Framer Footer style) */}
-      <footer className="border-t border-white/10 bg-black/80 py-12 px-6">
-        <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <SiteLogo className="w-7 h-7" />
-            <span className="font-sans font-semibold text-xl text-white tracking-tight">
-              Site2NextJS
-            </span>
+      {/* Footer (Matching Framer Footer 1:1) */}
+      <footer className="w-full max-w-[1200px] mx-auto px-6 pt-24 pb-12">
+        <div className="flex flex-col gap-16">
+          <div className="max-w-md flex flex-col gap-4">
+            <div className="flex items-center gap-3">
+              <SiteLogo className="w-7 h-7" />
+              <span className="font-sans font-medium text-[30px] text-white tracking-[-0.03em]">
+                Site2NextJS
+              </span>
+            </div>
+            <p className="text-white/60 text-sm font-sans leading-relaxed">
+              High-quality Framer template crafted for AI automation agencies to launch fast and scale effortlessly
+            </p>
           </div>
 
-          <p className="text-xs text-white/50 text-center md:text-left max-w-md font-sans">
-            Universal site converter crafted to transform any website into clean, production-ready Next.js App Router code.
-          </p>
+          <div className="w-full bg-[#1a1a1a] border border-white/10 rounded-[14px] squircle p-[22px] flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden">
+            <div className="w-[250px] h-[250px] bg-[#F65023] blur-[100px] rounded-full opacity-30 absolute -top-[116px] -right-[50px] pointer-events-none" />
 
-          <div className="flex items-center gap-4 text-xs text-white/50 font-sans">
-            <span>© All rights reserved</span>
-            <span>•</span>
-            <span>
-              Built by{" "}
-              <a
-                href="https://x.com/Suraj_kaleux"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white hover:text-[#F65023] underline transition-colors"
-              >
-                Suraj
-              </a>
-            </span>
+            <div className="flex items-center gap-2 text-xs text-white/60 font-sans z-10">
+              <span>© All right reserved</span>
+              <span className="w-1 h-1 rounded-full bg-white/50 inline-block" />
+              <span>
+                Built by{" "}
+                <a
+                  href="https://x.com/Suraj_kaleux"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-[#F65023] transition-colors"
+                >
+                  Suraj
+                </a>
+              </span>
+            </div>
           </div>
         </div>
       </footer>
