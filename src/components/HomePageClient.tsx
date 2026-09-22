@@ -87,6 +87,10 @@ export default function HomePageClient({ initialData }: { initialData?: LandingP
   // Active accordion index
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
+  // Site ownership & authorization checkmark
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [showAuthWarning, setShowAuthWarning] = useState(false);
+
   const steps = [
     "Connecting & detecting site platform",
     "Discovering all routes & sitemaps",
@@ -123,6 +127,8 @@ export default function HomePageClient({ initialData }: { initialData?: LandingP
     setUrl("");
     setError(null);
     setGitSuccessUrl(null);
+    setIsAuthorized(false);
+    setShowAuthWarning(false);
     try {
       localStorage.removeItem("framer2nextjs_active_job");
     } catch {}
@@ -131,6 +137,11 @@ export default function HomePageClient({ initialData }: { initialData?: LandingP
   const handleConvert = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!url.trim()) return;
+
+    if (!isAuthorized) {
+      setShowAuthWarning(true);
+      return;
+    }
 
     setLoading(true);
     setError(null);
@@ -471,7 +482,9 @@ export default function HomePageClient({ initialData }: { initialData?: LandingP
             <div className="w-full max-w-[550px] mx-auto">
           <form
             onSubmit={handleConvert}
-            className="p-3 sm:p-3.5 squircle-2xl bg-white/[0.08] backdrop-blur-2xl border border-white/10 shadow-2xl flex flex-col justify-between gap-14 sm:gap-20 transition-all focus-within:border-[#F65023]/60 focus-within:ring-2 focus-within:ring-[#F65023]/20"
+            className={`p-3 sm:p-3.5 squircle-2xl bg-white/[0.08] backdrop-blur-2xl border ${
+              showAuthWarning ? "border-[#F65023]/60 ring-2 ring-[#F65023]/20" : "border-white/10"
+            } shadow-2xl flex flex-col justify-between gap-4 sm:gap-5 transition-all focus-within:border-[#F65023]/60 focus-within:ring-2 focus-within:ring-[#F65023]/20`}
           >
             {/* Top Prompt Input Area */}
             <div className="flex items-start gap-2.5 pt-1 px-1">
@@ -484,13 +497,69 @@ export default function HomePageClient({ initialData }: { initialData?: LandingP
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
-                    handleConvert(e);
+                    if (!isAuthorized) {
+                      setShowAuthWarning(true);
+                    } else {
+                      handleConvert(e);
+                    }
                   }
                 }}
                 disabled={loading}
                 className="w-full bg-transparent border-0 p-0 text-white placeholder:text-white/40 text-sm font-sans resize-none focus:outline-none focus:ring-0 leading-relaxed"
               />
             </div>
+
+            {/* Checkmark: Ownership & Authorization Requirement */}
+            <label
+              className={`group flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer transition-all duration-200 select-none ${
+                showAuthWarning
+                  ? "bg-[#F65023]/15 border border-[#F65023] ring-2 ring-[#F65023]/40 shadow-md shadow-[#F65023]/25"
+                  : "text-white/60 hover:text-white/90 border border-transparent"
+              }`}
+            >
+              <div className="relative flex items-center justify-center shrink-0">
+                <input
+                  type="checkbox"
+                  checked={isAuthorized}
+                  onChange={(e) => {
+                    setIsAuthorized(e.target.checked);
+                    if (e.target.checked) setShowAuthWarning(false);
+                  }}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-4 h-4 rounded-[4px] border flex items-center justify-center transition-all ${
+                    isAuthorized
+                      ? "bg-[#F65023] border-[#F65023] text-white"
+                      : showAuthWarning
+                      ? "border-[#F65023] bg-[#F65023]/25 ring-2 ring-[#F65023]"
+                      : "border-white/30 bg-white/5 group-hover:border-white/50"
+                  }`}
+                >
+                  {isAuthorized && (
+                    <svg
+                      className="w-3 h-3 text-white stroke-[3]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+              <span
+                className={`text-xs font-sans tracking-tight transition-colors ${
+                  showAuthWarning
+                    ? "text-[#F65023] font-medium"
+                    : "text-white/70 group-hover:text-white"
+                }`}
+              >
+                I own or am authorised to clone this site.
+              </span>
+            </label>
 
             {/* Bottom Action Menu Row */}
             <div className="flex items-center justify-between pt-1">
@@ -506,23 +575,31 @@ export default function HomePageClient({ initialData }: { initialData?: LandingP
               </button>
 
               {/* Right: Convert to NextJS Pill Button */}
-              <button
-                type="submit"
-                disabled={loading || !url.trim()}
-                className="squircle-pill inline-flex items-center gap-1.5 h-[28px] px-3.5 bg-[#F65023] hover:bg-[#e04318] text-white text-xs font-semibold shadow-lg shadow-[#F65023]/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-sans"
+              <div
+                onClick={() => {
+                  if (!isAuthorized) {
+                    setShowAuthWarning(true);
+                  }
+                }}
               >
-                {loading ? (
-                  <>
-                    <HugeiconsIcon icon={RefreshIcon} size={13} className="animate-spin text-white" />
-                    <span>Converting...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Convert to NextJS</span>
-                    <HugeiconsIcon icon={ArrowRight01Icon} size={13} className="text-white" />
-                  </>
-                )}
-              </button>
+                <button
+                  type="submit"
+                  disabled={loading || !url.trim() || !isAuthorized}
+                  className="squircle-pill inline-flex items-center gap-1.5 h-[28px] px-3.5 bg-[#F65023] hover:bg-[#e04318] text-white text-xs font-semibold shadow-lg shadow-[#F65023]/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-sans"
+                >
+                  {loading ? (
+                    <>
+                      <HugeiconsIcon icon={RefreshIcon} size={13} className="animate-spin text-white" />
+                      <span>Converting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Convert to NextJS</span>
+                      <HugeiconsIcon icon={ArrowRight01Icon} size={13} className="text-white" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Expandable Advanced Options Panel */}
