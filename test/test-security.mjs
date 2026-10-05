@@ -135,10 +135,7 @@ async function testRateLimiting() {
 function testIframeIsolation() {
   console.log("3. Testing Iframe Sandbox Isolation in page.tsx / HomePageClient.tsx...");
 
-  const pagePath = fs.existsSync(path.join(process.cwd(), "src/components/HomePageClient.tsx"))
-    ? path.join(process.cwd(), "src/components/HomePageClient.tsx")
-    : path.join(process.cwd(), "src/app/page.tsx");
-  const pageContent = fs.readFileSync(pagePath, "utf8");
+  const pageContent = fs.readFileSync(path.join(process.cwd(), "src/components/site/conversion-results.tsx"), "utf8");
 
   // Must have sandbox="allow-scripts"
   assert.ok(pageContent.includes('sandbox="allow-scripts"'), "Iframe must have sandbox='allow-scripts'");
@@ -154,10 +151,7 @@ function testIframeIsolation() {
 function testTokenZeroPersistence() {
   console.log("4. Testing Zero-Persistence of GitHub Access Tokens...");
 
-  const pagePath = fs.existsSync(path.join(process.cwd(), "src/components/HomePageClient.tsx"))
-    ? path.join(process.cwd(), "src/components/HomePageClient.tsx")
-    : path.join(process.cwd(), "src/app/page.tsx");
-  const pageContent = fs.readFileSync(pagePath, "utf8");
+  const pageContent = ["src/hooks/use-conversion.ts", "src/components/site/github-export-dialog.tsx"].map(file => fs.readFileSync(path.join(process.cwd(), file), "utf8")).join("\n");
 
   // Must NOT store token into localStorage
   assert.ok(

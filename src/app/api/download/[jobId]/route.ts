@@ -2,18 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { getJob } from "@/lib/store";
 import { createProjectZip } from "@/lib/zip";
 
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { jobId: string } }
+  props: { params: Promise<{ jobId: string }> },
 ) {
+  const params = await props.params;
   const { jobId } = params;
 
   if (!jobId || !UUID_REGEX.test(jobId)) {
     return NextResponse.json(
       { error: "Invalid job identifier." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -21,8 +23,10 @@ export async function GET(
 
   if (!report) {
     return NextResponse.json(
-      { error: "Conversion job not found or has expired. Please convert again." },
-      { status: 404 }
+      {
+        error: "Conversion job not found or has expired. Please convert again.",
+      },
+      { status: 404 },
     );
   }
 
@@ -30,7 +34,9 @@ export async function GET(
     const zipBuffer = await createProjectZip(report.files);
     const domainName = (() => {
       try {
-        return new URL(report.sourceUrl).hostname.replace(/^www\./, "").replace(/[^a-zA-Z0-9-]/g, "-");
+        return new URL(report.sourceUrl).hostname
+          .replace(/^www\./, "")
+          .replace(/[^a-zA-Z0-9-]/g, "-");
       } catch {
         return "project";
       }
@@ -48,7 +54,7 @@ export async function GET(
     console.error("ZIP Generation error:", err);
     return NextResponse.json(
       { error: "Failed to generate ZIP archive." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

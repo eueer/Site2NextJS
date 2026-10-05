@@ -1,30 +1,20 @@
 "use client";
-
-import React from "react";
+import { useSyncExternalStore } from "react";
 import { LiquidGradientShader } from "./LiquidGradientShader";
-
+const subscribe = (cb: () => void) => {
+  const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
 export function HeroBackground() {
+  const reduced = useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    () => true,
+  );
   return (
-    <div className="pointer-events-none absolute inset-0 w-full h-full overflow-hidden">
-      {/* Exact Framer Liquid Gradient WebGL Shader */}
-      <LiquidGradientShader />
-
-      {/* Subtle top ambient accent glow matching brand orange */}
-      <div className="absolute -top-36 left-1/2 -translate-x-1/2 w-[700px] h-[450px] rounded-full bg-[#F65023]/15 blur-[140px] pointer-events-none" />
-
-      {/* Subtle ambient grid overlay with radial vignette */}
-      <div
-        className="absolute inset-0 opacity-[0.08] pointer-events-none"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-          maskImage:
-            "radial-gradient(ellipse 70% 60% at 50% 35%, black 20%, transparent 85%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 70% 60% at 50% 35%, black 20%, transparent 85%)",
-        }}
-      />
+    <div className="hero-background" aria-hidden="true">
+      {!reduced && <LiquidGradientShader />}
     </div>
   );
 }

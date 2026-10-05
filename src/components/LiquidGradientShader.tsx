@@ -375,23 +375,11 @@ void main() {
 }
 `;
 
-// Exact palette from Framer:
-// 1. rgb(94, 42, 0)
-// 2. rgb(0, 0, 26)
-// 3. rgb(24, 24, 27)
+// Restrained neutral palette; the surrounding CSS surface adapts to each theme.
 const PALETTE_COLORS = new Float32Array([
-  94 / 255, 42 / 255, 0 / 255, 1.0,
-  0 / 255, 0 / 255, 26 / 255, 1.0,
-  24 / 255, 24 / 255, 27 / 255, 1.0,
-  0, 0, 0, 0,
-  0, 0, 0, 0,
-  0, 0, 0, 0,
-  0, 0, 0, 0,
-  0, 0, 0, 0,
+  .4,.4,.4,1, .15,.15,.15,1, .25,.25,.25,1,
+  0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,
 ]);
-
-const FALLBACK_IMAGE_URL =
-  "https://framerusercontent.com/images/pcnnc0DW1bOzsNMAvbppkxiAy8.png?scale-down-to=1200&width=2400&height=1698";
 
 export function LiquidGradientShader() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -706,7 +694,7 @@ export function LiquidGradientShader() {
 
     // Animation Loop
     let animId = 0;
-    let startTime = performance.now();
+    const startTime = performance.now();
     let lastTime = startTime;
     let isVisible = true;
 
@@ -824,17 +812,6 @@ export function LiquidGradientShader() {
       className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none"
       style={{ zIndex: 0 }}
     >
-      {/* High-res Framer fallback image for instant display before WebGL mounts */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={FALLBACK_IMAGE_URL}
-        alt=""
-        aria-hidden="true"
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-          isReady ? "opacity-0" : "opacity-100"
-        }`}
-      />
-
       {/* WebGL2 Liquid Gradient Canvas */}
       <canvas
         ref={canvasRef}
@@ -844,14 +821,6 @@ export function LiquidGradientShader() {
         style={{ display: "block", width: "100%", height: "100%" }}
       />
 
-      {/* Subtle bottom gradient mask for seamless blending into deep black page background */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 65%, rgba(0,0,0,0.85) 90%, #000000 100%)",
-        }}
-      />
     </div>
   );
 }
