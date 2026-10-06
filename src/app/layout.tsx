@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
-import { Figtree } from "next/font/google";
-import { GeistPixelSquare } from "geist/font/pixel";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import "@/components/arc/foundation.css";
 import "./globals.css";
-
-const figtree = Figtree({
-  subsets: ["latin"],
-  variable: "--font-figtree",
-  display: "swap",
-  weight: ["300", "400", "500", "600", "700", "800"],
-});
+import { ThemeProvider, themeScript } from "@/components/site/theme-provider";
 
 export const metadata: Metadata = {
   title: "Site2NextJS | Convert Any Site to 100% Fidelity Next.js",
@@ -24,12 +19,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark ${figtree.variable} ${GeistPixelSquare.variable}`}
+      suppressHydrationWarning
+      data-accent="neutral"
+      data-theme="dark"
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
     >
-      <body
-        className={`${figtree.className} min-h-screen bg-[#000000] text-slate-100 antialiased selection:bg-[#F65023] selection:text-white`}
-      >
-        {children}
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

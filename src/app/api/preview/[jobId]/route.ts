@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getJob } from "@/lib/store";
 
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { jobId: string } }
+  props: { params: Promise<{ jobId: string }> },
 ) {
+  const params = await props.params;
   const { jobId } = params;
   if (!jobId || !UUID_REGEX.test(jobId)) {
     return new NextResponse("Invalid Job Identifier", { status: 400 });
@@ -23,15 +25,17 @@ export async function GET(
       "Content-Type": "text/html; charset=utf-8",
       "X-Frame-Options": "SAMEORIGIN",
       "X-Content-Type-Options": "nosniff",
-      "Content-Security-Policy": "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; frame-ancestors 'self'",
+      "Content-Security-Policy":
+        "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; frame-ancestors 'self'",
     },
   });
 }
 
 export async function HEAD(
   _req: NextRequest,
-  { params }: { params: { jobId: string } }
+  props: { params: Promise<{ jobId: string }> },
 ) {
+  const params = await props.params;
   const { jobId } = params;
   if (!jobId || !UUID_REGEX.test(jobId)) {
     return new NextResponse(null, { status: 400 });

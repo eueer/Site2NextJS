@@ -39,9 +39,8 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    serverComponentsExternalPackages: ["sharp"],
-  },
+  outputFileTracingIncludes: { "/assets/[...path]": ["./public/assets/**/*"] },
+  serverExternalPackages: ["sharp"],
   async headers() {
     return [
       {
