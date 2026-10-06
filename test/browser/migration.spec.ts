@@ -228,22 +228,18 @@ for (const width of [390, 768, 1440])
       expect(errors).toEqual([]);
       expect(await page.locator(".hero-background canvas").count()).toBe(0);
     });
-test("system theme follows changes; selector persists explicit choice", async ({
+test("dark default ignores system preference; UIArc switch persists choice", async ({
   page,
 }) => {
-  await page.emulateMedia({ colorScheme: "dark" });
+  await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await page.emulateMedia({ colorScheme: "light" });
+  await page.getByRole("button", { name: "Switch to light mode" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-  await page.getByRole("combobox", { name: "Theme" }).click();
-  await page.getByRole("option", { name: "Dark", exact: true }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.getByRole("button", { name: "Switch to dark mode" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  expect(
-    await page.evaluate(() => localStorage.getItem("site2nextjs_theme")),
-  ).toBe("dark");
 });
 test("malformed stored job still clears legacy token and renders fallback", async ({
   page,
@@ -337,7 +333,38 @@ test("application theme leaves the converted website unchanged", async ({
   await restore(page);
   const body = page.frameLocator("iframe").locator("body");
   await expect(body).toHaveCSS("background-color", "rgb(255, 255, 255)");
-  await page.getByRole("combobox", { name: "Theme" }).click();
-  await page.getByRole("option", { name: "Dark", exact: true }).click();
+  await page.getByRole("button", { name: "Switch to light mode" }).click();
   await expect(body).toHaveCSS("background-color", "rgb(255, 255, 255)");
+});
+
+test("authorization first line aligns, number fields are compact, and Arc radii are restored", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 1000 });
+  await page.goto("/");
+  const checkbox = await page
+    .getByRole("checkbox", { name: /I own/ })
+    .boundingBox();
+  const line = await page
+    .locator('label[for="authorization"]')
+    .evaluate((el) => {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const r = range.getClientRects()[0];
+      return { top: r.top, height: r.height };
+    });
+  expect(
+    Math.abs(checkbox!.y + checkbox!.height / 2 - (line.top + line.height / 2)),
+  ).toBeLessThan(3);
+  await page.getByRole("button", { name: "Advanced settings" }).click();
+  const widths = await page
+    .locator('.settings-grid [class*="__control"]')
+    .evaluateAll((els) => els.map((el) => el.getBoundingClientRect().width));
+  expect(widths).toHaveLength(2);
+  for (const width of widths) expect(width).toBeLessThanOrEqual(160);
+  expect(
+    await page
+      .locator(".converter-form")
+      .evaluate((el) => getComputedStyle(el).borderTopLeftRadius),
+  ).toBe("34px");
 });

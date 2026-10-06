@@ -8,7 +8,7 @@ Official free UIArc registry sources live in `src/components/arc`. Foundation CS
 
 The conversion controller is in `src/hooks/use-conversion.ts`. Presentation components live in `src/components/site`. Sanity fields and fallback copy are in `src/lib/landing-content.ts`; page revalidation remains 60 seconds.
 
-System is the initial theme. A small head script applies the selected theme before paint. Only the System/Light/Dark choice is saved under `site2nextjs_theme`; System continues following device changes. Geist Sans and Geist Mono are bundled and self-hosted. The hero uses a neutral palette, and reduced motion uses the static CSS background without mounting WebGL.
+Dark is the initial theme. A small head script applies the selected theme before paint. The official UIArc ThemeSwitch toggles Light/Dark, saving the choice under `site2nextjs_theme`. Existing explicit choices are preserved; missing or legacy System choices default to Dark. Geist Sans and Geist Mono are bundled and self-hosted. The hero uses a neutral palette, and reduced motion uses the static CSS background without mounting WebGL.
 
 GitHub tokens stay in React memory. Legacy stored tokens are removed even when a stored job is malformed. Dialogs and drawers use Radix focus handling through UIArc. The preview remains `sandbox="allow-scripts"` and cannot inherit the host's theme. Loading reports estimated activity with an indeterminate progress bar.
 
@@ -18,9 +18,9 @@ GitHub tokens stay in React memory. Legacy stored tokens are removed even when a
 - `npx tsc --noEmit`: strict type checking.
 - `npm run lint`: explicit ESLint command. Registry-vendored UIArc sources are excluded; application code and tests are checked. Existing backend `any`/unused-symbol warnings remain warnings. The download fallback intentionally uses full navigation to a binary API response.
 - `npm run build`: production build.
-- `npx playwright install chromium`, then `npm run test:browser`: 20 browser cases, including mocked conversion/GitHub export, settings, failures, restoration, expired jobs, ZIP and server download fallback, clipboard feedback, focus restoration, mobile drawer, FAQ, isolated preview, and both themes at 390/768/1440px. GitHub tests create no repositories or commits.
+- `npx playwright install chromium`, then `npm run test:browser`: 21 browser cases, including mocked conversion/GitHub export, settings, failures, restoration, expired jobs, ZIP and server download fallback, clipboard feedback, focus restoration, mobile drawer, FAQ, isolated preview, and both themes at 390/768/1440px. GitHub tests create no repositories or commits.
 
-Baseline Next.js 14 pipeline/security tests, TypeScript, and production build passed before migration. Final local checks and all 20 browser cases passed. The Next.js 16 filesystem tracing annotations exclude runtime-generated asset paths from build-time project tracing while explicitly retaining public assets.
+Baseline Next.js 14 pipeline/security tests, TypeScript, and production build passed before migration. Final local checks and all 21 browser cases passed. The Next.js 16 filesystem tracing annotations exclude runtime-generated asset paths from build-time project tracing while explicitly retaining public assets.
 
 ## Rollout
 

@@ -2,13 +2,13 @@
 import { useState } from "react";
 import { Menu, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/arc/button/button";
-import { Select } from "@/components/arc/select/select";
+import { ThemeSwitch } from "@/components/arc/theme-switch/theme-switch";
 import {
   Drawer,
   DrawerContent,
   DrawerTrigger,
 } from "@/components/arc/drawer/drawer";
-import { useTheme, type ThemeChoice } from "./theme-provider";
+import { useTheme } from "./theme-provider";
 const links = [
   { href: "#about", label: "About" },
   { href: "#how-it-works", label: "How it works" },
@@ -43,16 +43,7 @@ export function Navigation() {
         </nav>
         <div className="nav-actions">
           <div className="theme-control">
-            <Select
-              label="Theme"
-              value={choice}
-              onValueChange={(v) => setChoice(v as ThemeChoice)}
-              options={[
-                { value: "system", label: "System" },
-                { value: "light", label: "Light" },
-                { value: "dark", label: "Dark" },
-              ]}
-            />
+            <ThemeSwitch theme={choice} onThemeChange={setChoice} iconOnly />
           </div>
           <div className="mobile-nav">
             <Drawer open={open} onOpenChange={setOpen}>

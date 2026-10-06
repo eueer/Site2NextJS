@@ -6,9 +6,9 @@
   --font-body: var(--font-geist-sans), sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
   --muted-foreground: var(--text-secondary);
-  --radius-control: 12px;
-  --radius-panel: 20px;
-  --radius-surface: 24px;
+  --radius-control: 18px;
+  --radius-panel: 26px;
+  --radius-surface: 34px;
   --brand-orange: #c74419;
 }
 :root[data-theme="dark"] {
@@ -128,7 +128,7 @@ pre {
   font-size: 14px;
   border: 1px solid var(--border);
   padding: 8px;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
 }
 .brand-mark span {
   color: var(--brand-orange);
@@ -156,20 +156,12 @@ pre {
 }
 .theme-control {
   display: flex;
-  gap: 8px;
   align-items: center;
-}
-.theme-control > div {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.theme-control label {
-  font-size: 12px;
-  color: var(--muted-foreground);
 }
 .theme-control button {
-  min-width: 100px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: var(--radius-control);
 }
 .mobile-nav {
   display: none;
@@ -239,7 +231,7 @@ h1 span {
 .converter-form {
   padding: 24px;
   border: 1px solid var(--border);
-  border-radius: 24px;
+  border-radius: var(--radius-surface);
   background: var(--surface);
   display: flex;
   flex-direction: column;
@@ -265,7 +257,8 @@ h1 span {
 }
 .settings-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  --number-field-width: 160px;
+  grid-template-columns: repeat(2, minmax(0, 160px));
   gap: 24px;
   padding: 8px 0;
 }
@@ -323,7 +316,7 @@ h1 span {
   background: var(--surface-muted);
   padding: 16px;
   overflow: auto;
-  border-radius: 12px;
+  border-radius: var(--radius-panel);
 }
 .preview-stage iframe {
   display: block;
@@ -527,7 +520,7 @@ h1 span {
     gap: 16px;
   }
   .theme-control button {
-    min-width: 88px;
+    min-width: 44px;
   }
   .brand {
     font-size: 16px;
@@ -577,11 +570,6 @@ h1 span {
 :root :is(button, a, input, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--foreground);
   outline-offset: 3px;
-}
-.converter-form label[for="authorization"] {
-  min-height: 44px;
-  display: flex;
-  align-items: center;
 }
 .command-copy {
   min-height: 44px;

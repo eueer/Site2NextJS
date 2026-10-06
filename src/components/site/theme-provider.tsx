@@ -6,15 +6,15 @@ import {
   useState,
   type ReactNode,
 } from "react";
-export type ThemeChoice = "system" | "light" | "dark";
+export type ThemeChoice = "light" | "dark";
 const themeKey = "site2nextjs_theme";
-export const themeScript = `(()=>{try{const t=localStorage.getItem("${themeKey}");const dark=t==="dark"||((t!=="light")&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.theme=dark?"dark":"light";}catch{document.documentElement.dataset.theme=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}})();`;
+export const themeScript = `(()=>{let t="dark";try{if(localStorage.getItem("${themeKey}")==="light")t="light";}catch{}document.documentElement.dataset.theme=t;})();`;
 const ThemeContext = createContext<{
   choice: ThemeChoice;
   setChoice: (value: ThemeChoice) => void;
-}>({ choice: "system", setChoice: () => {} });
+}>({ choice: "dark", setChoice: () => {} });
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [choice, setChoice] = useState<ThemeChoice>("system");
+  const [choice, setChoice] = useState<ThemeChoice>("dark");
   const [ready, setReady] = useState(false);
   useEffect(() => {
     try {
@@ -25,17 +25,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, []);
   useEffect(() => {
     if (!ready) return;
-    const media = matchMedia("(prefers-color-scheme: dark)");
-    const apply = () => {
-      document.documentElement.dataset.theme =
-        choice === "system" ? (media.matches ? "dark" : "light") : choice;
-    };
-    apply();
-    media.addEventListener("change", apply);
+    document.documentElement.dataset.theme = choice;
     try {
       localStorage.setItem(themeKey, choice);
     } catch {}
-    return () => media.removeEventListener("change", apply);
   }, [choice, ready]);
   return (
     <ThemeContext.Provider value={{ choice, setChoice }}>
